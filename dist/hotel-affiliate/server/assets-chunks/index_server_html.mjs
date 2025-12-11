@@ -4,6 +4,7 @@ export default `<!doctype html>
   <meta charset="utf-8">
   <title>HotelAffiliate</title>
   <base href="/">
+  <meta name="agd-partner-manual-verification"/>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 <link rel="stylesheet" href="styles-ZT36SWQW.css"></head>
