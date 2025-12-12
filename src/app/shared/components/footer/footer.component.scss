@@ -1,3 +1,99 @@
+// Footer Special Deals Section
+.special-deals {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+
+  .footer-title {
+    color: white !important;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.1rem;
+
+    .material-icons {
+      color: #fef3c7;
+      font-size: 1.25rem;
+    }
+  }
+
+  .partner-links {
+    li {
+      margin-bottom: 0.75rem;
+    }
+
+    .partner-link {
+      color: rgba(255, 255, 255, 0.95) !important;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      transition: all 0.3s ease;
+      padding: 0.75rem;
+      border-radius: 0.75rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid transparent;
+
+      .partner-logo {
+        height: 24px;
+        width: auto;
+        max-width: 100px;
+        object-fit: contain;
+        background: white;
+        padding: 4px 8px;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      &:hover {
+        background: white;
+        color: var(--partner-color, #667eea) !important;
+        transform: translateX(6px) scale(1.02);
+        border-color: rgba(255, 255, 255, 0.3);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+        .partner-logo {
+          transform: scale(1.05);
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+      }
+    }
+  }
+}
+
+.footer-widget-cta {
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+
+  .footer-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: white;
+    color: #667eea;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+    .material-icons {
+      font-size: 1.25rem;
+    }
+
+    &:hover {
+      background: #fef3c7;
+      color: #764ba2;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    }
+  }
+}
+
 .footer {
   background: #1a202c;
   color: #e2e8f0;

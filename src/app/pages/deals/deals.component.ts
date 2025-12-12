@@ -105,7 +105,7 @@ export class DealsComponent implements OnInit {
       discount: '50% OFF',
       validUntil: '2025-12-20',
       platform: 'Agoda',
-      affiliateUrl: this.analytics.addUTMToUrl('https://www.agoda.com/deals/bangalore?cid=REPLACE_WITH_AFFILIATE_ID', 'tripsaver_deals', 'affiliate'),
+      affiliateUrl: this.analytics.addUTMToUrl('https://www.agoda.com/deals/bangalore?cid=1955073', 'tripsaver_deals', 'affiliate'),
       featured: false
     },
     {
@@ -161,7 +161,7 @@ export class DealsComponent implements OnInit {
       discount: '26% OFF',
       validUntil: '2025-12-24',
       platform: 'Agoda',
-      affiliateUrl: this.analytics.addUTMToUrl('https://www.agoda.com/packages/ooty?cid=REPLACE_WITH_AFFILIATE_ID', 'tripsaver_deals', 'affiliate'),
+      affiliateUrl: this.analytics.addUTMToUrl('https://www.agoda.com/packages/ooty?cid=1955073', 'tripsaver_deals', 'affiliate'),
       featured: false
     }
     ];

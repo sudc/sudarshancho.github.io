@@ -52,6 +52,34 @@
             </li>
           </ul>
         </div>
+
+        <!-- Special Deals Section -->
+        <div class="footer-section special-deals">
+          <h4 class="footer-title">
+            <span class="material-icons">local_offer</span>
+            Special Deals
+          </h4>
+          <ul class="footer-links partner-links">
+            <li *ngFor="let partner of partnerLinks">
+              <a 
+                [href]="partner.url" 
+                target="_blank"
+                rel="nofollow sponsored noopener"
+                (click)="onPartnerClick(partner.name, $event)"
+                class="partner-link"
+                [style.--partner-color]="partner.brandColor">
+                <img [src]="partner.logo" [alt]="partner.name + ' logo'" class="partner-logo" />
+                {{ partner.name }}
+              </a>
+            </li>
+          </ul>
+          <div class="footer-widget-cta">
+            <a routerLink="/deals" class="footer-cta-btn">
+              <span class="material-icons">search</span>
+              Search All Deals
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   </div>

@@ -53,7 +53,7 @@ export class HotelsComponent implements OnInit {
       popularHotels: 250,
       avgPrice: '₹2,500',
       bookingUrl: this.analytics.addUTMToUrl('https://www.booking.com/searchresults.html?ss=Goa&aid=REPLACE_WITH_AFFILIATE_ID', 'tripsaver_hotels', 'affiliate'),
-      agodaUrl: this.analytics.addUTMToUrl('https://www.agoda.com/search?city=9558&cid=REPLACE_WITH_AFFILIATE_ID', 'tripsaver_hotels', 'affiliate'),
+      agodaUrl: this.analytics.addUTMToUrl('https://www.agoda.com/search?city=9558&cid=1955073', 'tripsaver_hotels', 'affiliate'),
       mmtUrl: this.analytics.addUTMToUrl('https://www.makemytrip.com/hotels/hotels-in-goa.html?campaign=REPLACE_WITH_AFFILIATE_ID', 'tripsaver_hotels', 'affiliate')
     },
     {
@@ -63,7 +63,7 @@ export class HotelsComponent implements OnInit {
       popularHotels: 180,
       avgPrice: '₹3,000',
       bookingUrl: this.analytics.addUTMToUrl('https://www.booking.com/searchresults.html?ss=Bangalore&aid=REPLACE_WITH_AFFILIATE_ID', 'tripsaver_hotels', 'affiliate'),
-      agodaUrl: this.analytics.addUTMToUrl('https://www.agoda.com/search?city=11304&cid=REPLACE_WITH_AFFILIATE_ID', 'tripsaver_hotels', 'affiliate'),
+      agodaUrl: this.analytics.addUTMToUrl('https://www.agoda.com/search?city=11304&cid=1955073', 'tripsaver_hotels', 'affiliate'),
       mmtUrl: this.analytics.addUTMToUrl('https://www.makemytrip.com/hotels/hotels-in-bangalore.html?campaign=REPLACE_WITH_AFFILIATE_ID', 'tripsaver_hotels', 'affiliate')
     },
     {
@@ -73,7 +73,7 @@ export class HotelsComponent implements OnInit {
       popularHotels: 120,
       avgPrice: '₹2,800',
       bookingUrl: this.analytics.addUTMToUrl('https://www.booking.com/searchresults.html?ss=Manali&aid=REPLACE_WITH_AFFILIATE_ID', 'tripsaver_hotels', 'affiliate'),
-      agodaUrl: this.analytics.addUTMToUrl('https://www.agoda.com/search?city=11058&cid=REPLACE_WITH_AFFILIATE_ID', 'tripsaver_hotels', 'affiliate'),
+      agodaUrl: this.analytics.addUTMToUrl('https://www.agoda.com/search?city=11058&cid=1955073', 'tripsaver_hotels', 'affiliate'),
       mmtUrl: this.analytics.addUTMToUrl('https://www.makemytrip.com/hotels/hotels-in-manali.html?campaign=REPLACE_WITH_AFFILIATE_ID', 'tripsaver_hotels', 'affiliate')
     },
     {
@@ -83,7 +83,7 @@ export class HotelsComponent implements OnInit {
       popularHotels: 95,
       avgPrice: '₹2,200',
       bookingUrl: this.analytics.addUTMToUrl('https://www.booking.com/searchresults.html?ss=Ooty&aid=REPLACE_WITH_AFFILIATE_ID', 'tripsaver_hotels', 'affiliate'),
-      agodaUrl: this.analytics.addUTMToUrl('https://www.agoda.com/search?city=12640&cid=REPLACE_WITH_AFFILIATE_ID', 'tripsaver_hotels', 'affiliate'),
+      agodaUrl: this.analytics.addUTMToUrl('https://www.agoda.com/search?city=12640&cid=1955073', 'tripsaver_hotels', 'affiliate'),
       mmtUrl: this.analytics.addUTMToUrl('https://www.makemytrip.com/hotels/hotels-in-ooty.html?campaign=REPLACE_WITH_AFFILIATE_ID', 'tripsaver_hotels', 'affiliate')
     },
     {
@@ -93,7 +93,7 @@ export class HotelsComponent implements OnInit {
       popularHotels: 150,
       avgPrice: '₹2,600',
       bookingUrl: this.analytics.addUTMToUrl('https://www.booking.com/searchresults.html?ss=Jaipur&aid=REPLACE_WITH_AFFILIATE_ID', 'tripsaver_hotels', 'affiliate'),
-      agodaUrl: this.analytics.addUTMToUrl('https://www.agoda.com/search?city=11097&cid=REPLACE_WITH_AFFILIATE_ID', 'tripsaver_hotels', 'affiliate'),
+      agodaUrl: this.analytics.addUTMToUrl('https://www.agoda.com/search?city=11097&cid=1955073', 'tripsaver_hotels', 'affiliate'),
       mmtUrl: this.analytics.addUTMToUrl('https://www.makemytrip.com/hotels/hotels-in-jaipur.html?campaign=REPLACE_WITH_AFFILIATE_ID', 'tripsaver_hotels', 'affiliate')
     },
     {
@@ -103,7 +103,7 @@ export class HotelsComponent implements OnInit {
       popularHotels: 200,
       avgPrice: '₹3,200',
       bookingUrl: this.analytics.addUTMToUrl('https://www.booking.com/searchresults.html?ss=Kerala&aid=REPLACE_WITH_AFFILIATE_ID', 'tripsaver_hotels', 'affiliate'),
-      agodaUrl: this.analytics.addUTMToUrl('https://www.agoda.com/search?city=17249&cid=REPLACE_WITH_AFFILIATE_ID', 'tripsaver_hotels', 'affiliate'),
+      agodaUrl: this.analytics.addUTMToUrl('https://www.agoda.com/search?city=17249&cid=1955073', 'tripsaver_hotels', 'affiliate'),
       mmtUrl: this.analytics.addUTMToUrl('https://www.makemytrip.com/hotels/hotels-in-kerala.html?campaign=REPLACE_WITH_AFFILIATE_ID', 'tripsaver_hotels', 'affiliate')
     }
     ];

@@ -1,15 +1,26 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { getPartnerLink, getActivePartners } from '../../../core/config/partner-links.config';
 
 @Component({
   selector: 'app-footer',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss']
 })
 export class FooterComponent {
   currentYear = new Date().getFullYear();
+
+  // Partner links for Special Deals section - automatically populated from active partners
+  partnerLinks = getActivePartners().map(({ id, config }) => ({
+    id: id,
+    name: config.displayName,
+    url: getPartnerLink(id),
+    logo: config.logo,
+    brandColor: config.brandColor
+  }));
 
   socialLinks = [
     { name: 'Facebook', icon: 'facebook', url: '#' },
@@ -44,5 +55,10 @@ export class FooterComponent {
       event.preventDefault();
       console.log('Link not yet configured');
     }
+  }
+
+  onPartnerClick(partnerName: string, event: Event): void {
+    console.log(`Partner clicked: ${partnerName}`);
+    // Track analytics here if needed
   }
 }
