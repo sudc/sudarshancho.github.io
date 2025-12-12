@@ -80,9 +80,55 @@ export class HomeComponent implements OnInit {
       .subscribe({
         next: (data) => {
           this.categories = data.categories;
+          console.log('Categories loaded:', this.categories);
         },
         error: (error) => {
           console.error('Error loading categories:', error);
+          // Fallback: Load sample categories if JSON fails
+          this.categories = [
+            {
+              id: 'hotels',
+              name: 'Hotels',
+              description: 'Find the best hotel deals and save on your accommodation',
+              icon: 'hotel',
+              affiliates: [
+                { name: 'Booking.com', baseUrl: 'https://www.booking.com/', active: true },
+                { name: 'Agoda', baseUrl: 'https://www.agoda.com/?cid=1955073', active: true },
+                { name: 'MakeMyTrip', baseUrl: 'https://www.makemytrip.com/hotels/', active: true }
+              ]
+            },
+            {
+              id: 'flights',
+              name: 'Flights',
+              description: 'Compare and book cheap flights to your destination',
+              icon: 'flight',
+              affiliates: [
+                { name: 'Cleartrip', baseUrl: 'https://www.cleartrip.com/', active: true },
+                { name: 'MakeMyTrip', baseUrl: 'https://www.makemytrip.com/flights/', active: true }
+              ]
+            },
+            {
+              id: 'health-labs',
+              name: 'Health & Labs',
+              description: 'Book health checkups and lab tests online',
+              icon: 'medical_services',
+              affiliates: [
+                { name: 'Thyrocare', baseUrl: 'https://www.thyrocare.com/', active: true },
+                { name: '1mg Labs', baseUrl: 'https://www.1mg.com/labs', active: true }
+              ]
+            },
+            {
+              id: 'electronics',
+              name: 'Electronics',
+              description: 'Best deals on smartphones, laptops and gadgets',
+              icon: 'devices',
+              affiliates: [
+                { name: 'Amazon', baseUrl: 'https://www.amazon.in/electronics', active: true },
+                { name: 'Flipkart', baseUrl: 'https://www.flipkart.com/electronics', active: true }
+              ]
+            }
+          ];
+          console.log('Loaded fallback categories:', this.categories);
         }
       });
   }
