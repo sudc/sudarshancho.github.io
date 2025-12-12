@@ -1,1 +1,25 @@
-/* Home component styles */
+/* Home Page - Orchestrates all components */
+/* Individual component styles are in their respective files */
+
+:host {
+  display: block;
+}
+
+/* Section spacing */
+section {
+  padding: 3rem 1rem;
+  
+  @media (min-width: 768px) {
+    padding: 4rem 2rem;
+  }
+}
+
+/* Light background sections */
+.light {
+  background: white;
+}
+
+/* Alternate background sections */
+.alt {
+  background: #f9fafb;
+}

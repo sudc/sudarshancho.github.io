@@ -1,0 +1,55 @@
+<section class="featured-deals">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">🔥 Trending Deals & Offers</h2>
+      <p class="section-subtitle">Don't miss out on these hot deals!</p>
+    </div>
+
+    <div class="deals-grid">
+      <div 
+        *ngFor="let deal of deals" 
+        class="deal-card"
+        (click)="onDealClick(deal)"
+      >
+        <div class="deal-badge">{{ deal.discount }}</div>
+        
+        <div class="deal-image" *ngIf="deal.image">
+          <img [src]="deal.image" [alt]="deal.title">
+        </div>
+        <div class="deal-image placeholder" *ngIf="!deal.image">
+          <span class="material-icons">local_offer</span>
+        </div>
+
+        <div class="deal-content">
+          <span class="deal-category">{{ deal.category }}</span>
+          <h3 class="deal-title">{{ deal.title }}</h3>
+          <p class="deal-description">{{ deal.description }}</p>
+          
+          <div class="deal-footer">
+            <span class="deal-platform">
+              <span class="material-icons">store</span>
+              {{ deal.platform }}
+            </span>
+            <span class="deal-expiry" *ngIf="getDaysRemaining(deal.expiryDate) !== null">
+              <span class="material-icons">schedule</span>
+              {{ getDaysRemaining(deal.expiryDate) }}d left
+            </span>
+          </div>
+
+          <button class="deal-button" [attr.data-category]="deal.category.toLowerCase()">
+            <span *ngIf="deal.category === 'Hotels' || deal.category === 'Flights'">Book Now</span>
+            <span *ngIf="deal.category === 'Health'">Book Test</span>
+            <span *ngIf="deal.category === 'Insurance'">Get Quote</span>
+            <span *ngIf="deal.category === 'Deals'">View Deal</span>
+            <span class="material-icons">arrow_forward</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="no-deals" *ngIf="deals.length === 0">
+      <span class="material-icons">hourglass_empty</span>
+      <p>No deals available at the moment. Check back soon!</p>
+    </div>
+  </div>
+</section>

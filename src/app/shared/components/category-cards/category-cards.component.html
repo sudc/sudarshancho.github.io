@@ -1,0 +1,25 @@
+<div class="category-grid">
+  <div 
+    *ngFor="let category of categories" 
+    class="category-card"
+    [attr.data-category]="category.id"
+    (click)="onCategoryClick(category)"
+  >
+    <div class="category-icon">
+      <span class="material-icons">{{ category.icon }}</span>
+    </div>
+    <h3 class="category-title">{{ category.name }}</h3>
+    <p class="category-description">{{ category.description }}</p>
+    
+    <div class="category-affiliates">
+      <span 
+        *ngFor="let affiliate of category.affiliates" 
+        class="affiliate-badge"
+        [class.inactive]="!affiliate.active"
+        (click)="onAffiliateClick($event, affiliate.baseUrl)"
+      >
+        {{ affiliate.name }}
+      </span>
+    </div>
+  </div>
+</div>

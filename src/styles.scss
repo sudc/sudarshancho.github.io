@@ -1,62 +1,41 @@
-/* Import app-level styles for header, hero, sections */
-@use './app/app.scss';
+/* Global Styles - Clean & Minimalist Design */
 
-/* Global base styles (fallback, no Tailwind required) */
-:root {
-  --bg: #ffffff;
-  --muted: #6b7280;
-  --brand: #2563eb;
-  --accent-from: #f97316;
-  --accent-to: #ec4899;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-* { box-sizing: border-box; }
-html, body, #root { height: 100%; }
+html {
+  scroll-behavior: smooth;
+}
 
 body {
-  margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  background: var(--bg);
-  color: #111827;
+  background: #f9fafb;
+  color: #1f2937;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Basic helpers used across components */
-.container { 
-  max-width: 1280px; 
-  margin: 0 auto; 
-  padding: 0 1rem; 
+/* Remove default button styles */
+button {
+  font-family: inherit;
+  border: none;
+  background: none;
+  cursor: pointer;
 }
 
-.btn { 
-  display: inline-block; 
-  padding: 0.5rem 1rem; 
-  border-radius: 0.5rem; 
-  text-decoration: none; 
+/* Remove default link underlines */
+a {
+  text-decoration: none;
+  color: inherit;
 }
 
-.btn-primary { 
-  background: linear-gradient(135deg, var(--brand), #06b6d4); 
-  color: white; 
-  font-weight: 600; 
-}
-
-.btn-accent { 
-  background: linear-gradient(135deg, var(--accent-from), var(--accent-to)); 
-  color: white; 
-  font-weight: 600; 
-}
-
-.card {
-  background: white;
-  border-radius: 0.75rem;
-  box-shadow: 0 8px 20px rgba(2, 6, 23, 0.08);
-}
-
-/* Simple responsive utilities */
-@media (min-width: 640px) { 
-  .sm\:grid-cols-2 { 
-    grid-template-columns: repeat(2, 1fr); 
-  } 
+/* Ensure images are responsive */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
 }
