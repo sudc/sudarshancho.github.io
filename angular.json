@@ -27,6 +27,21 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "standalone-index.html",
+                "input": ".",
+                "output": "."
+              },
+              {
+                "glob": "hotels-goa.html",
+                "input": ".",
+                "output": "."
+              },
+              {
+                "glob": "test.html",
+                "input": ".",
+                "output": "."
               }
             ],
             "styles": [

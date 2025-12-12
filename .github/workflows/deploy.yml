@@ -31,6 +31,8 @@ jobs:
 
       - name: Build site
         run: npm run build
+        # Builds Angular app to dist/hotel-affiliate/browser
+        # Includes standalone HTML files via assets config
 
       - name: Deploy to GitHub Pages (gh-pages)
         uses: JamesIves/github-pages-deploy-action@v4
