@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
+import { Observable, map, of, forkJoin } from 'rxjs';
+import { catchError, switchMap } from 'rxjs/operators';
 
 export interface AgodaHotel {
   hotelId: string;
@@ -20,24 +21,126 @@ export interface AgodaHotel {
     longitude: number;
   };
   affiliateUrl: string;
-  // Add more fields based on your CSV structure
+}
+
+export interface CityIndex {
+  cities: {
+    [cityName: string]: {
+      filename: string;
+      hotel_count: number;
+      size_mb: number;
+    }
+  };
+  total_cities: number;
+  total_hotels: number;
+  csv_headers: string[];
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class AgodaDataService {
-  private csvPath = 'assets/E342B777-64FD-4A49-9C9F-FEF4BA635863_EN.csv';
+  // Path to split CSV files by city
+  private readonly DATA_DIR = 'assets/data/hotels';
+  private readonly INDEX_PATH = `${this.DATA_DIR}/index.json`;
+  
+  private cityIndex: CityIndex | null = null;
+  private cityCache = new Map<string, AgodaHotel[]>();
 
   constructor(private http: HttpClient) {}
 
   /**
-   * Load and parse Agoda hotel data from CSV
+   * Load city index to see available cities
+   */
+  private loadCityIndex(): Observable<CityIndex> {
+    if (this.cityIndex) {
+      return of(this.cityIndex);
+    }
+    
+    return this.http.get<CityIndex>(this.INDEX_PATH).pipe(
+      map((index: CityIndex) => {
+        this.cityIndex = index;
+        return index;
+      }),
+      catchError((error: any) => {
+        console.error('Failed to load city index:', error);
+        return of({ cities: {}, total_cities: 0, total_hotels: 0, csv_headers: [] });
+      })
+    );
+  }
+
+  /**
+   * Load hotels for a specific city
+   */
+  loadHotelsByCity(cityName: string): Observable<AgodaHotel[]> {
+    // Check cache first
+    if (this.cityCache.has(cityName)) {
+      return of(this.cityCache.get(cityName)!);
+    }
+
+    return this.loadCityIndex().pipe(
+      map((index: CityIndex) => {
+        const cityInfo = index.cities[cityName];
+        if (!cityInfo) {
+          throw new Error(`City '${cityName}' not found in index`);
+        }
+        return cityInfo.filename;
+      }),
+      switchMap((filename: string) => {
+        const csvPath = `${this.DATA_DIR}/${filename}`;
+        return this.http.get(csvPath, { responseType: 'text' }).pipe(
+          map((csvData: string) => {
+            const hotels = this.parseCSV(csvData);
+            this.cityCache.set(cityName, hotels);
+            return hotels;
+          })
+        );
+      }),
+      catchError((error: any) => {
+        console.error(`Failed to load hotels for ${cityName}:`, error);
+        return of([]);
+      })
+    );
+  }
+
+  /**
+   * Load hotels from multiple cities
+   */
+  loadHotelsByCities(cityNames: string[]): Observable<AgodaHotel[]> {
+    const observables = cityNames.map(city => 
+      this.loadHotelsByCity(city).pipe(
+        catchError((error: any) => {
+          console.warn(`Failed to load hotels for ${city}:`, error);
+          return of([]);
+        })
+      )
+    );
+
+    return forkJoin(observables).pipe(
+      map((results: AgodaHotel[][]) => results.flat())
+    );
+  }
+
+  /**
+   * Get list of all available cities
+   */
+  getAvailableCities(): Observable<string[]> {
+    return this.loadCityIndex().pipe(
+      map((index: CityIndex) => Object.keys(index.cities).sort())
+    );
+  }
+
+  /**
+   * Load featured hotels from popular cities
    */
   loadHotelData(): Observable<AgodaHotel[]> {
-    return this.http.get(this.csvPath, { responseType: 'text' }).pipe(
-      map(csvData => this.parseCSV(csvData))
-    );
+    // Load from top cities by default
+    const popularCities = [
+      'Mumbai', 'Delhi', 'Bangalore', 'Goa', 'Jaipur',
+      'Chennai', 'Kolkata', 'Hyderabad', 'Pune', 'Udaipur'
+    ];
+    
+    return this.loadHotelsByCities(popularCities);
   }
 
   /**
@@ -132,13 +235,19 @@ export class AgodaDataService {
   }
 
   /**
-   * Filter hotels by city
+   * Filter hotels by city (uses optimized city-based loading)
    */
   getHotelsByCity(city: string): Observable<AgodaHotel[]> {
-    return this.loadHotelData().pipe(
-      map(hotels => hotels.filter(h => 
-        h.city.toLowerCase().includes(city.toLowerCase())
-      ))
+    // Try exact city match first
+    return this.loadHotelsByCity(city).pipe(
+      catchError(() => {
+        // Fallback: load from popular cities and filter
+        return this.loadHotelData().pipe(
+          map((hotels: AgodaHotel[]) => hotels.filter((h: AgodaHotel) => 
+            h.city.toLowerCase().includes(city.toLowerCase())
+          ))
+        );
+      })
     );
   }
 
@@ -147,9 +256,9 @@ export class AgodaDataService {
    */
   getTopRatedHotels(limit: number = 10): Observable<AgodaHotel[]> {
     return this.loadHotelData().pipe(
-      map(hotels => hotels
-        .filter(h => h.reviewScore > 0)
-        .sort((a, b) => b.reviewScore - a.reviewScore)
+      map((hotels: AgodaHotel[]) => hotels
+        .filter((h: AgodaHotel) => h.reviewScore > 0)
+        .sort((a: AgodaHotel, b: AgodaHotel) => b.reviewScore - a.reviewScore)
         .slice(0, limit)
       )
     );
@@ -160,7 +269,7 @@ export class AgodaDataService {
    */
   searchHotels(query: string): Observable<AgodaHotel[]> {
     return this.loadHotelData().pipe(
-      map(hotels => hotels.filter(h => 
+      map((hotels: AgodaHotel[]) => hotels.filter((h: AgodaHotel) => 
         h.hotelName.toLowerCase().includes(query.toLowerCase()) ||
         h.city.toLowerCase().includes(query.toLowerCase())
       ))
@@ -172,7 +281,7 @@ export class AgodaDataService {
    */
   getHotelsByPriceRange(min: number, max: number): Observable<AgodaHotel[]> {
     return this.loadHotelData().pipe(
-      map(hotels => hotels.filter(h => 
+      map((hotels: AgodaHotel[]) => hotels.filter((h: AgodaHotel) => 
         h.priceFrom >= min && h.priceFrom <= max
       ))
     );
@@ -183,9 +292,9 @@ export class AgodaDataService {
    */
   getFeaturedHotels(limit: number = 6): Observable<AgodaHotel[]> {
     return this.loadHotelData().pipe(
-      map(hotels => hotels
-        .filter(h => h.rating >= 4 && h.reviewScore >= 8 && h.numberOfReviews >= 50)
-        .sort((a, b) => b.reviewScore - a.reviewScore)
+      map((hotels: AgodaHotel[]) => hotels
+        .filter((h: AgodaHotel) => h.rating >= 4 && h.reviewScore >= 8 && h.numberOfReviews >= 50)
+        .sort((a: AgodaHotel, b: AgodaHotel) => b.reviewScore - a.reviewScore)
         .slice(0, limit)
       )
     );

@@ -40,3 +40,8 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+# Large data files (split into smaller files instead)
+src/assets/E342B777-64FD-4A49-9C9F-FEF4BA635863_EN.csv
+*.csv
+!src/assets/data/hotels/*.csv
