@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { Title, Meta } from '@angular/platform-browser';
 import { PopularDestinationsComponent } from '../../shared/components/popular-destinations/popular-destinations.component';
 import { TopDealsComponent } from '../../shared/components/top-deals/top-deals.component';
 import { HeroBannerComponent } from '../../shared/components/hero-banner/hero-banner.component';
@@ -32,7 +34,9 @@ interface Deal {
   selector: 'app-home',
   standalone: true,
   imports: [
-    CommonModule, 
+    CommonModule,
+    RouterLink,
+    RouterLinkActive,
     PopularDestinationsComponent, 
     TopDealsComponent,
     HeroBannerComponent,
@@ -47,9 +51,25 @@ export class HomeComponent implements OnInit {
   categories: Category[] = [];
   featuredDeals: Deal[] = [];
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private titleService: Title,
+    private metaService: Meta
+  ) {}
 
   ngOnInit(): void {
+    // Set SEO meta tags
+    this.titleService.setTitle('TripSaver - Compare Hotels, Flights & Travel Deals | Save More on Bookings');
+    this.metaService.updateTag({ 
+      name: 'description', 
+      content: 'Find the best hotel deals and travel offers on TripSaver. Compare prices across Booking.com, MakeMyTrip, Agoda & more. Book hotels, flights & deals with easy links. Save money on every trip!' 
+    });
+    this.metaService.updateTag({ 
+      name: 'keywords', 
+      content: 'hotel deals, flight booking, travel deals, cheap hotels, flight comparison, TripSaver, hotel booking India, discount travel' 
+    });
+    
+    // Load data
     this.loadCategories();
     this.loadFeaturedDeals();
   }

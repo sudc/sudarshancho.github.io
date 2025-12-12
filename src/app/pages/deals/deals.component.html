@@ -1,0 +1,177 @@
+<section class="deals-page">
+  <div class="page-header">
+    <h1>🎉 Weekly Travel Deals</h1>
+    <p>Don't miss out on these incredible savings - Limited time offers!</p>
+  </div>
+
+  <!-- SEO Content Section -->
+  <div class="seo-content">
+    <h2>Best Travel Deals & Discount Offers Today</h2>
+    <p>
+      Discover amazing travel deals updated daily! Save big on hotels, flights, and holiday packages with exclusive 
+      discounts up to 50% off. Our team handpicks the best offers from trusted platforms like Booking.com, MakeMyTrip, 
+      Agoda, and Goibibo so you don't have to search everywhere.
+    </p>
+    <p>
+      Find budget hotels under ₹2,000, cheap flight tickets, and complete holiday packages at unbeatable prices. 
+      Whether you're planning a weekend getaway or a long vacation, TripSaver brings you verified deals that help 
+      you travel more while spending less. Subscribe to never miss a great deal!
+    </p>
+  </div>
+
+  <!-- Featured Deals Section -->
+  <div class="featured-section" *ngIf="featuredDeals.length > 0">
+    <h2 class="section-title">
+      <span class="material-icons">star</span>
+      Featured Deals
+    </h2>
+    
+    <div class="featured-grid">
+      <article class="deal-card featured" *ngFor="let deal of featuredDeals">
+        <div class="deal-badge featured-badge">
+          <span class="material-icons">flash_on</span>
+          FEATURED
+        </div>
+        
+        <div class="deal-image">
+          <img [src]="deal.image" [alt]="deal.title" loading="lazy">
+          <div class="deal-overlay"></div>
+          <div class="category-badge" [style.background]="getCategoryColor(deal.category)">
+            <span class="material-icons">{{ getCategoryIcon(deal.category) }}</span>
+            {{ deal.category | titlecase }}
+          </div>
+        </div>
+        
+        <div class="deal-content">
+          <h3>{{ deal.title }}</h3>
+          <p class="deal-description">{{ deal.description }}</p>
+          
+          <div class="deal-pricing">
+            <div class="price-group">
+              <span class="old-price">{{ deal.originalPrice }}</span>
+              <span class="new-price">{{ deal.discountedPrice }}</span>
+            </div>
+            <span class="discount-badge">{{ deal.discount }}</span>
+          </div>
+          
+          <div class="deal-footer">
+            <div class="deal-info">
+              <span class="platform">
+                <span class="material-icons">business</span>
+                {{ deal.platform }}
+              </span>
+              <span class="validity">
+                <span class="material-icons">schedule</span>
+                Valid till {{ deal.validUntil | date:'MMM dd' }}
+              </span>
+            </div>
+            
+            <a 
+              [href]="deal.affiliateUrl" 
+              target="_blank"
+              class="deal-btn"
+              (click)="trackDealClick(deal)"
+              rel="nofollow sponsored noopener">
+              See Deal Now
+              <span class="material-icons">arrow_forward</span>
+            </a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+
+  <!-- All Deals Section -->
+  <div class="all-deals-section">
+    <h2 class="section-title">All Deals</h2>
+    
+    <div class="filter-tabs">
+      <button 
+        class="filter-tab"
+        [class.active]="selectedCategory === 'all'"
+        (click)="filterDeals('all')">
+        All Deals
+      </button>
+      <button 
+        class="filter-tab"
+        [class.active]="selectedCategory === 'hotel'"
+        (click)="filterDeals('hotel')">
+        <span class="material-icons">hotel</span>
+        Hotels
+      </button>
+      <button 
+        class="filter-tab"
+        [class.active]="selectedCategory === 'flight'"
+        (click)="filterDeals('flight')">
+        <span class="material-icons">flight</span>
+        Flights
+      </button>
+      <button 
+        class="filter-tab"
+        [class.active]="selectedCategory === 'package'"
+        (click)="filterDeals('package')">
+        <span class="material-icons">card_travel</span>
+        Packages
+      </button>
+    </div>
+    
+    <div class="deals-grid">
+      <article class="deal-card" *ngFor="let deal of filteredDeals">
+        <div class="deal-image">
+          <img [src]="deal.image" [alt]="deal.title" loading="lazy">
+          <div class="deal-overlay"></div>
+          <div class="category-badge" [style.background]="getCategoryColor(deal.category)">
+            <span class="material-icons">{{ getCategoryIcon(deal.category) }}</span>
+            {{ deal.category | titlecase }}
+          </div>
+        </div>
+        
+        <div class="deal-content">
+          <h3>{{ deal.title }}</h3>
+          <p class="deal-description">{{ deal.description }}</p>
+          
+          <div class="deal-pricing">
+            <div class="price-group">
+              <span class="old-price">{{ deal.originalPrice }}</span>
+              <span class="new-price">{{ deal.discountedPrice }}</span>
+            </div>
+            <span class="discount-badge">{{ deal.discount }}</span>
+          </div>
+          
+          <div class="deal-footer">
+            <div class="deal-info">
+              <span class="platform">
+                <span class="material-icons">business</span>
+                {{ deal.platform }}
+              </span>
+              <span class="validity">
+                <span class="material-icons">schedule</span>
+                Valid till {{ deal.validUntil | date:'MMM dd' }}
+              </span>
+            </div>
+            
+            <a 
+              [href]="deal.affiliateUrl" 
+              target="_blank"
+              class="deal-btn"
+              (click)="trackDealClick(deal)"
+              rel="nofollow sponsored noopener">
+              See Deal Now
+              <span class="material-icons">arrow_forward</span>
+            </a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+
+  <!-- Newsletter Section -->
+  <div class="newsletter-section">
+    <h2>📬 Never Miss a Deal!</h2>
+    <p>Subscribe to get weekly deals delivered to your inbox</p>
+    <div class="newsletter-form">
+      <input type="email" placeholder="Enter your email address" class="email-input">
+      <button class="subscribe-btn">Subscribe</button>
+    </div>
+  </div>
+</section>

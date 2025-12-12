@@ -1,0 +1,161 @@
+<section class="about-page">
+  <div class="page-header">
+    <h1>About TripSaver</h1>
+    <p>Your trusted partner in finding the best travel deals</p>
+  </div>
+
+  <!-- Hero Section -->
+  <div class="hero-section">
+    <div class="hero-content">
+      <h2>🌟 Our Mission</h2>
+      <p class="hero-text">
+        At TripSaver, we're on a mission to make travel more accessible and affordable for everyone. 
+        We believe that everyone deserves to explore the world without breaking the bank. By partnering 
+        with leading travel platforms, we help you compare prices, discover amazing deals, and save money 
+        on every booking.
+      </p>
+    </div>
+  </div>
+
+  <!-- Stats Section -->
+  <div class="stats-section">
+    <div class="stats-grid">
+      <div class="stat-card" *ngFor="let stat of stats">
+        <span class="material-icons stat-icon">{{ stat.icon }}</span>
+        <h3 class="stat-value">{{ stat.value }}</h3>
+        <p class="stat-label">{{ stat.label }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Story Section -->
+  <div class="story-section">
+    <div class="story-content">
+      <div class="story-text">
+        <h2>📖 Our Story</h2>
+        <p>
+          TripSaver was born out of a simple frustration - spending hours comparing prices across 
+          different booking platforms. Our founders, avid travelers themselves, realized there had 
+          to be a better way.
+        </p>
+        <p>
+          In 2024, we launched TripSaver with a simple goal: create a single platform where travelers 
+          could instantly compare prices, discover the best deals, and book with confidence. Today, 
+          we've helped thousands of travelers save millions on their trips.
+        </p>
+        <p>
+          We're not just about finding cheap deals - we're about finding the best value. Whether 
+          you're looking for a luxury resort or a budget-friendly hostel, we help you make informed 
+          decisions and get the most out of your travel budget.
+        </p>
+      </div>
+      <div class="story-image">
+        <img src="https://picsum.photos/600/400?random=30" alt="TripSaver team" loading="lazy">
+      </div>
+    </div>
+  </div>
+
+  <!-- Features Section -->
+  <div class="features-section">
+    <h2>✨ Why Choose TripSaver?</h2>
+    <div class="features-grid">
+      <div class="feature-card" *ngFor="let feature of features">
+        <div class="feature-icon">
+          <span class="material-icons">{{ feature.icon }}</span>
+        </div>
+        <h3>{{ feature.title }}</h3>
+        <p>{{ feature.description }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Values Section -->
+  <div class="values-section">
+    <h2>💎 Our Core Values</h2>
+    <div class="values-grid">
+      <div class="value-card" *ngFor="let value of values">
+        <span class="value-icon">{{ value.icon }}</span>
+        <h3>{{ value.title }}</h3>
+        <p>{{ value.description }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- How It Works Section -->
+  <div class="how-it-works">
+    <h2>🔍 How TripSaver Works</h2>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <span class="material-icons step-icon">search</span>
+        <h3>Search & Compare</h3>
+        <p>Browse our curated deals or use our comparison tools to find the best prices across multiple platforms.</p>
+      </div>
+      
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <span class="material-icons step-icon">touch_app</span>
+        <h3>Choose Your Deal</h3>
+        <p>Select the option that best fits your needs and budget from our trusted partner platforms.</p>
+      </div>
+      
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <span class="material-icons step-icon">credit_card</span>
+        <h3>Book with Confidence</h3>
+        <p>Complete your booking securely on the partner platform. We earn a small commission at no extra cost to you.</p>
+      </div>
+      
+      <div class="step-card">
+        <div class="step-number">4</div>
+        <span class="material-icons step-icon">celebration</span>
+        <h3>Enjoy Your Trip</h3>
+        <p>Travel knowing you got the best deal possible. Your satisfaction is our success!</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Partners Section -->
+  <div class="partners-section">
+    <h2>🤝 Our Trusted Partners</h2>
+    <p class="partners-subtitle">We work with the best in the industry to bring you great deals</p>
+    <div class="partners-grid">
+      <div class="partner-card">
+        <div class="partner-logo">🌐</div>
+        <h3>Booking.com</h3>
+        <p>Leading hotel booking platform</p>
+      </div>
+      <div class="partner-card">
+        <div class="partner-logo">⭐</div>
+        <h3>Agoda</h3>
+        <p>Best prices on accommodations</p>
+      </div>
+      <div class="partner-card">
+        <div class="partner-logo">✈️</div>
+        <h3>MakeMyTrip</h3>
+        <p>India's leading travel portal</p>
+      </div>
+      <div class="partner-card">
+        <div class="partner-logo">🎫</div>
+        <h3>Goibibo</h3>
+        <p>Smart travel booking platform</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA Section -->
+  <div class="cta-section">
+    <h2>Ready to Start Saving?</h2>
+    <p>Join thousands of smart travelers who trust TripSaver</p>
+    <div class="cta-buttons">
+      <a routerLink="/deals" class="cta-btn primary">
+        <span class="material-icons">local_offer</span>
+        See All Deals
+      </a>
+      <a routerLink="/contact" class="cta-btn secondary">
+        <span class="material-icons">email</span>
+        Get in Touch
+      </a>
+    </div>
+  </div>
+</section>

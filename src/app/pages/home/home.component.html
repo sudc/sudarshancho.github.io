@@ -1,16 +1,17 @@
 <!-- HEADER -->
-<!-- <header>
-  <div>
+<header>
+  <div class="header-container">
     <div class="logo">TripSaver</div>
     <nav>
-      <a href="/">Home</a>
-      <a href="#categories">Categories</a>
-      <a href="#deals">Deals</a>
-      <a href="#">Guides</a>
-      <a href="#footer">Contact</a>
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
+      <a routerLink="/hotels" routerLinkActive="active">Hotels</a>
+      <a routerLink="/flights" routerLinkActive="active">Flights</a>
+      <a routerLink="/deals" routerLinkActive="active">Deals</a>
+      <a routerLink="/contact" routerLinkActive="active">Contact</a>
+      <a routerLink="/about" routerLinkActive="active">About</a>
     </nav>
   </div>
-</header> -->
+</header>
 
 <!-- HERO BANNER -->
 <app-hero-banner></app-hero-banner>

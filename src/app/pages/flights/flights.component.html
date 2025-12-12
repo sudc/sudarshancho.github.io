@@ -1,0 +1,138 @@
+<section class="flights-page">
+  <div class="page-header">
+    <h1>✈️ Find the Best Flight Deals</h1>
+    <p>Compare prices across top flight booking platforms and save on airfare</p>
+  </div>
+
+  <!-- SEO Content Section -->
+  <div class="seo-content">
+    <h2>Compare Flight Prices & Book Cheap Air Tickets</h2>
+    <p>
+      Search and compare flight prices across India's top airlines and booking platforms. TripSaver makes finding 
+      cheap flights easy by showing you prices from Booking.com, MakeMyTrip, and Goibibo all in one place. 
+      Book domestic flights to popular destinations like Goa, Mumbai, Delhi, Bangalore, and more at the lowest fares.
+    </p>
+    <p>
+      Whether you're flying for business or leisure, our flight comparison tool helps you find the best deals on air tickets. 
+      Compare airlines, flight times, and prices to get the most value for your money. Book direct with trusted platforms 
+      and enjoy hassle-free travel planning.
+    </p>
+  </div>
+
+  <div class="routes-container">
+    <h2 class="section-title">Popular Routes</h2>
+    
+    <div class="routes-grid">
+      <article class="route-card" *ngFor="let route of routes" [class.popular]="route.popular">
+        <div class="route-badge" *ngIf="route.popular">
+          <span class="material-icons">trending_up</span>
+          Popular
+        </div>
+        
+        <div class="route-header">
+          <div class="city-info">
+            <h3>{{ route.from }}</h3>
+            <span class="city-code">{{ route.fromCode }}</span>
+          </div>
+          
+          <div class="route-middle">
+            <span class="material-icons plane-icon">flight</span>
+            <div class="route-line"></div>
+            <span class="duration">{{ route.duration }}</span>
+          </div>
+          
+          <div class="city-info">
+            <h3>{{ route.to }}</h3>
+            <span class="city-code">{{ route.toCode }}</span>
+          </div>
+        </div>
+        
+        <div class="price-section">
+          <span class="price-label">Starting from</span>
+          <span class="price">{{ route.avgPrice }}</span>
+          <span class="price-note">per person</span>
+        </div>
+        
+        <div class="booking-buttons">
+          <a 
+            [href]="route.bookingUrl" 
+            target="_blank"
+            class="flight-btn booking"
+            (click)="trackFlightClick('Booking.com', route.from + '-' + route.to)"
+            rel="nofollow sponsored noopener">
+            <span class="btn-icon">🌐</span>
+            <span class="btn-text">
+              <strong>Find Flights on Booking.com</strong>
+              <small>Compare all airlines</small>
+            </span>
+            <span class="material-icons">arrow_forward</span>
+          </a>
+          
+          <a 
+            [href]="route.mmtUrl" 
+            target="_blank"
+            class="flight-btn mmt"
+            (click)="trackFlightClick('MakeMyTrip', route.from + '-' + route.to)"
+            rel="nofollow sponsored noopener">
+            <span class="btn-icon">✈️</span>
+            <span class="btn-text">
+              <strong>Book Flights on MakeMyTrip</strong>
+              <small>Instant confirmation</small>
+            </span>
+            <span class="material-icons">arrow_forward</span>
+          </a>
+          
+          <a 
+            [href]="route.goibiboUrl" 
+            target="_blank"
+            class="flight-btn goibibo"
+            (click)="trackFlightClick('Goibibo', route.from + '-' + route.to)"
+            rel="nofollow sponsored noopener">
+            <span class="btn-icon">🎫</span>
+            <span class="btn-text">
+              <strong>Search Flights on Goibibo</strong>
+              <small>Earn goCash rewards</small>
+            </span>
+            <span class="material-icons">arrow_forward</span>
+          </a>
+        </div>
+      </article>
+    </div>
+  </div>
+
+  <div class="tips-section">
+    <h2>💡 Flight Booking Tips</h2>
+    <div class="tips-grid">
+      <div class="tip-card">
+        <span class="tip-icon">📅</span>
+        <h3>Book on Tuesday</h3>
+        <p>Airlines often release deals on Monday nights, making Tuesday the best day to book</p>
+      </div>
+      <div class="tip-card">
+        <span class="tip-icon">🕐</span>
+        <h3>Early Morning Flights</h3>
+        <p>6 AM flights are usually 20-30% cheaper and less likely to be delayed</p>
+      </div>
+      <div class="tip-card">
+        <span class="tip-icon">🔔</span>
+        <h3>Set Price Alerts</h3>
+        <p>Use price tracking tools to get notified when fares drop on your route</p>
+      </div>
+      <div class="tip-card">
+        <span class="tip-icon">📆</span>
+        <h3>Book 2-3 Months Ahead</h3>
+        <p>For domestic flights, the sweet spot is 6-8 weeks before departure</p>
+      </div>
+      <div class="tip-card">
+        <span class="tip-icon">🔄</span>
+        <h3>Compare All Platforms</h3>
+        <p>Prices can vary significantly - always check multiple booking sites</p>
+      </div>
+      <div class="tip-card">
+        <span class="tip-icon">💳</span>
+        <h3>Use Travel Cards</h3>
+        <p>Get extra discounts and cashback with airline co-branded credit cards</p>
+      </div>
+    </div>
+  </div>
+</section>

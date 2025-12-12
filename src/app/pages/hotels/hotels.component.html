@@ -1,0 +1,112 @@
+<section class="hotels-page">
+  <div class="page-header">
+    <h1>Find the Best Hotels</h1>
+    <p>Compare prices across top booking platforms and save on your stay</p>
+  </div>
+
+  <!-- SEO Content Section -->
+  <div class="seo-content">
+    <h2>Book Hotels at the Best Prices in India</h2>
+    <p>
+      Looking for the perfect hotel for your next trip? TripSaver helps you find and compare hotel prices across 
+      top booking platforms like Booking.com, Agoda, and MakeMyTrip. Whether you're planning a beach vacation in Goa, 
+      a hill station retreat in Manali, or a business trip to Bangalore, we've got you covered with the best hotel deals.
+    </p>
+    <p>
+      Our platform makes it easy to discover affordable hotels with great reviews and unbeatable prices. Compare rates, 
+      read genuine reviews, and book your perfect accommodation with just a few clicks. Save time and money by checking 
+      all major booking sites in one place.
+    </p>
+  </div>
+
+  <div class="destinations-container">
+    <div class="destinations-grid">
+      <article class="destination-card" *ngFor="let dest of destinations">
+        <div class="dest-image">
+          <img [src]="dest.image" [alt]="dest.name + ' hotels'" loading="lazy">
+          <div class="dest-overlay"></div>
+          <div class="dest-badge">
+            <span class="material-icons">hotel</span>
+            {{ dest.popularHotels }}+ Hotels
+          </div>
+        </div>
+        
+        <div class="dest-content">
+          <h2>{{ dest.name }}</h2>
+          <p class="dest-description">{{ dest.description }}</p>
+          
+          <div class="dest-price">
+            <span class="label">Avg. Price:</span>
+            <span class="price">{{ dest.avgPrice }}</span>
+            <span class="period">per night</span>
+          </div>
+          
+          <div class="booking-buttons">
+            <a 
+              [href]="dest.bookingUrl" 
+              target="_blank"
+              class="booking-btn booking-com"
+              (click)="trackAffiliateClick('Booking.com', dest.name)"
+              rel="nofollow sponsored noopener">
+              <span class="btn-icon">🏨</span>
+              <span class="btn-text">
+                <strong>Check Prices on Booking.com</strong>
+                <small>Free cancellation available</small>
+              </span>
+              <span class="material-icons arrow">arrow_forward</span>
+            </a>
+            
+            <a 
+              [href]="dest.agodaUrl" 
+              target="_blank"
+              class="booking-btn agoda"
+              (click)="trackAffiliateClick('Agoda', dest.name)"
+              rel="nofollow sponsored noopener">
+              <span class="btn-icon">⭐</span>
+              <span class="btn-text">
+                <strong>Book Hotels on Agoda</strong>
+                <small>Exclusive member deals</small>
+              </span>
+              <span class="material-icons arrow">arrow_forward</span>
+            </a>
+            
+            <a 
+              [href]="dest.mmtUrl" 
+              target="_blank"
+              class="booking-btn mmt"
+              (click)="trackAffiliateClick('MakeMyTrip', dest.name)"
+              rel="nofollow sponsored noopener">
+              <span class="btn-icon">✈️</span>
+              <span class="btn-text">
+                <strong>Book Hotels on MakeMyTrip</strong>
+                <small>Best prices guaranteed</small>
+              </span>
+              <span class="material-icons arrow">arrow_forward</span>
+            </a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+
+  <div class="tips-section">
+    <h2>💡 Booking Tips</h2>
+    <div class="tips-grid">
+      <div class="tip-card">
+        <span class="tip-icon">📅</span>
+        <h3>Book in Advance</h3>
+        <p>Save up to 30% by booking 2-3 months ahead for popular destinations</p>
+      </div>
+      <div class="tip-card">
+        <span class="tip-icon">🔍</span>
+        <h3>Compare Prices</h3>
+        <p>Check all three platforms - prices can vary by 15-20% for the same hotel</p>
+      </div>
+      <div class="tip-card">
+        <span class="tip-icon">⏰</span>
+        <h3>Best Time to Book</h3>
+        <p>Tuesday afternoons often have the best deals and lowest prices</p>
+      </div>
+    </div>
+  </div>
+</section>
