@@ -1,13 +1,54 @@
 <form class="search-form" aria-label="Hotel search" (submit)="onSubmit($event)">
   <div class="search-field destination">
     <label for="sb-destination" class="sr-only">Destination</label>
-    <input id="sb-destination" name="destination" type="text" placeholder="Where are you going?" aria-label="Destination"
+    <input id="sb-destination" name="destination" type="text" placeholder="Search hotels, cities, or destinations..." aria-label="Destination"
       (input)="onInputChange($any($event.target).value)"
-      [value]="destination" autocomplete="off" class="input-text">
+      (blur)="onBlur()"
+      [value]="destination" 
+      autocomplete="off" 
+      class="input-text">
 
-    <ul *ngIf="filtered.length" class="autocomplete">
-      <li *ngFor="let d of filtered" (click)="onInputChange(d.name); destination = d.name;" class="autocomplete-item">{{d.name}}</li>
-    </ul>
+    <!-- Smart search dropdown with hotel details -->
+    <div *ngIf="showDropdown || isSearching" class="search-dropdown">
+      <div *ngIf="isSearching" class="search-loading">
+        <div class="spinner"></div>
+        <span>Searching...</span>
+      </div>
+      
+      <ul *ngIf="!isSearching && searchResults.length > 0" class="search-results">
+        <li *ngFor="let hotel of searchResults" 
+            (click)="onHotelSelect(hotel)" 
+            class="search-result-item">
+          <div class="hotel-image">
+            <img [src]="hotel.imageUrl" [alt]="hotel.hotelName" />
+          </div>
+          <div class="hotel-info">
+            <h4 class="hotel-name">{{ hotel.hotelName }}</h4>
+            <p class="hotel-location">
+              <i class="fas fa-map-marker-alt"></i>
+              {{ hotel.city }}, {{ hotel.country }}
+            </p>
+            <div class="hotel-meta">
+              <span class="hotel-rating">
+                <i class="fas fa-star"></i>
+                {{ hotel.rating }}
+              </span>
+              <span class="hotel-price">
+                From {{ hotel.currency }} {{ hotel.priceFrom }}
+              </span>
+            </div>
+          </div>
+          <div class="hotel-arrow">
+            <i class="fas fa-chevron-right"></i>
+          </div>
+        </li>
+      </ul>
+
+      <div *ngIf="!isSearching && searchResults.length === 0 && destination.length >= 2" class="no-results">
+        <i class="fas fa-search"></i>
+        <p>No hotels found. Try a different search term.</p>
+      </div>
+    </div>
   </div>
 
   <div class="search-field date">

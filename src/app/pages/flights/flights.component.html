@@ -9,12 +9,12 @@
     <h2>Compare Flight Prices & Book Cheap Air Tickets</h2>
     <p>
       Search and compare flight prices across India's top airlines and booking platforms. TripSaver makes finding 
-      cheap flights easy by showing you prices from Booking.com, MakeMyTrip, and Goibibo all in one place. 
+      cheap flights easy by showing you prices from Agoda in one place. 
       Book domestic flights to popular destinations like Goa, Mumbai, Delhi, Bangalore, and more at the lowest fares.
     </p>
     <p>
-      Whether you're flying for business or leisure, our flight comparison tool helps you find the best deals on air tickets. 
-      Compare airlines, flight times, and prices to get the most value for your money. Book direct with trusted platforms 
+      Whether you're flying for business or leisure, our flight search tool helps you find the best deals on air tickets. 
+      Compare airlines, flight times, and prices to get the most value for your money. Book direct with Agoda 
       and enjoy hassle-free travel planning.
     </p>
   </div>
@@ -55,43 +55,15 @@
         
         <div class="booking-buttons">
           <a 
-            [href]="route.bookingUrl" 
+            [href]="route.agodaUrl" 
             target="_blank"
-            class="flight-btn booking"
-            (click)="trackFlightClick('Booking.com', route.from + '-' + route.to)"
-            rel="nofollow sponsored noopener">
-            <span class="btn-icon">🌐</span>
-            <span class="btn-text">
-              <strong>Find Flights on Booking.com</strong>
-              <small>Compare all airlines</small>
-            </span>
-            <span class="material-icons">arrow_forward</span>
-          </a>
-          
-          <a 
-            [href]="route.mmtUrl" 
-            target="_blank"
-            class="flight-btn mmt"
-            (click)="trackFlightClick('MakeMyTrip', route.from + '-' + route.to)"
+            class="flight-btn agoda"
+            (click)="trackFlightClick('Agoda', route.from + '-' + route.to)"
             rel="nofollow sponsored noopener">
             <span class="btn-icon">✈️</span>
             <span class="btn-text">
-              <strong>Book Flights on MakeMyTrip</strong>
-              <small>Instant confirmation</small>
-            </span>
-            <span class="material-icons">arrow_forward</span>
-          </a>
-          
-          <a 
-            [href]="route.goibiboUrl" 
-            target="_blank"
-            class="flight-btn goibibo"
-            (click)="trackFlightClick('Goibibo', route.from + '-' + route.to)"
-            rel="nofollow sponsored noopener">
-            <span class="btn-icon">🎫</span>
-            <span class="btn-text">
-              <strong>Search Flights on Goibibo</strong>
-              <small>Earn goCash rewards</small>
+              <strong>Search Flights on Agoda</strong>
+              <small>Best prices guaranteed</small>
             </span>
             <span class="material-icons">arrow_forward</span>
           </a>

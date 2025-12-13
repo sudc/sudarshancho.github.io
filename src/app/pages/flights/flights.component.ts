@@ -12,9 +12,7 @@ interface FlightRoute {
   avgPrice: string;
   popular: boolean;
   image: string;
-  bookingUrl: string;
-  mmtUrl: string;
-  goibiboUrl: string;
+  agodaUrl: string;
 }
 
 @Component({
@@ -39,7 +37,7 @@ export class FlightsComponent implements OnInit {
     this.titleService.setTitle('Cheap Flight Tickets - Compare Flight Prices | TripSaver');
     this.metaService.updateTag({ 
       name: 'description', 
-      content: 'Compare and book cheap domestic flights in India. Find best prices on Delhi-Mumbai, Bangalore-Goa flights and more. Search flights on MakeMyTrip, Goibibo, and Booking.com.' 
+      content: 'Compare and book cheap domestic flights in India. Find best prices on Delhi-Mumbai, Bangalore-Goa flights and more. Search flights on Agoda.' 
     });
     this.metaService.updateTag({ 
       name: 'keywords', 
@@ -58,9 +56,7 @@ export class FlightsComponent implements OnInit {
       avgPrice: '₹3,500',
       popular: true,
       image: 'https://picsum.photos/400/200?random=10',
-      bookingUrl: this.analytics.addUTMToUrl('https://www.booking.com/flights?ss=Bangalore-Goa&aid=REPLACE_WITH_AFFILIATE_ID', 'tripsaver_flights', 'affiliate'),
-      mmtUrl: this.analytics.addUTMToUrl('https://www.makemytrip.com/flights?from=BLR&to=GOI&campaign=REPLACE_WITH_AFFILIATE_ID', 'tripsaver_flights', 'affiliate'),
-      goibiboUrl: this.analytics.addUTMToUrl('https://www.goibibo.com/flights/air-BLR-GOI?&utm_source=REPLACE_WITH_AFFILIATE_ID', 'tripsaver_flights', 'affiliate')
+      agodaUrl: this.analytics.addUTMToUrl('https://www.agoda.com/flights?cid=1955073&from=BLR&to=GOI', 'tripsaver_flights', 'affiliate')
     },
     {
       from: 'Delhi',
@@ -71,9 +67,7 @@ export class FlightsComponent implements OnInit {
       avgPrice: '₹4,200',
       popular: true,
       image: 'https://picsum.photos/400/200?random=11',
-      bookingUrl: this.analytics.addUTMToUrl('https://www.booking.com/flights?ss=Delhi-Mumbai&aid=REPLACE_WITH_AFFILIATE_ID', 'tripsaver_flights', 'affiliate'),
-      mmtUrl: this.analytics.addUTMToUrl('https://www.makemytrip.com/flights?from=DEL&to=BOM&campaign=REPLACE_WITH_AFFILIATE_ID', 'tripsaver_flights', 'affiliate'),
-      goibiboUrl: this.analytics.addUTMToUrl('https://www.goibibo.com/flights/air-DEL-BOM?&utm_source=REPLACE_WITH_AFFILIATE_ID', 'tripsaver_flights', 'affiliate')
+      agodaUrl: this.analytics.addUTMToUrl('https://www.agoda.com/flights?cid=1955073&from=DEL&to=BOM', 'tripsaver_flights', 'affiliate')
     },
     {
       from: 'Mumbai',
@@ -84,9 +78,7 @@ export class FlightsComponent implements OnInit {
       avgPrice: '₹3,200',
       popular: true,
       image: 'https://picsum.photos/400/200?random=12',
-      bookingUrl: this.analytics.addUTMToUrl('https://www.booking.com/flights?ss=Mumbai-Goa&aid=REPLACE_WITH_AFFILIATE_ID', 'tripsaver_flights', 'affiliate'),
-      mmtUrl: this.analytics.addUTMToUrl('https://www.makemytrip.com/flights?from=BOM&to=GOI&campaign=REPLACE_WITH_AFFILIATE_ID', 'tripsaver_flights', 'affiliate'),
-      goibiboUrl: this.analytics.addUTMToUrl('https://www.goibibo.com/flights/air-BOM-GOI?&utm_source=REPLACE_WITH_AFFILIATE_ID', 'tripsaver_flights', 'affiliate')
+      agodaUrl: this.analytics.addUTMToUrl('https://www.agoda.com/flights?cid=1955073&from=BOM&to=GOI', 'tripsaver_flights', 'affiliate')
     },
     {
       from: 'Delhi',
@@ -97,9 +89,7 @@ export class FlightsComponent implements OnInit {
       avgPrice: '₹4,800',
       popular: true,
       image: 'https://picsum.photos/400/200?random=13',
-      bookingUrl: this.analytics.addUTMToUrl('https://www.booking.com/flights?ss=Delhi-Bangalore&aid=REPLACE_WITH_AFFILIATE_ID', 'tripsaver_flights', 'affiliate'),
-      mmtUrl: this.analytics.addUTMToUrl('https://www.makemytrip.com/flights?from=DEL&to=BLR&campaign=REPLACE_WITH_AFFILIATE_ID', 'tripsaver_flights', 'affiliate'),
-      goibiboUrl: this.analytics.addUTMToUrl('https://www.goibibo.com/flights/air-DEL-BLR?&utm_source=REPLACE_WITH_AFFILIATE_ID', 'tripsaver_flights', 'affiliate')
+      agodaUrl: this.analytics.addUTMToUrl('https://www.agoda.com/flights?cid=1955073&from=DEL&to=BLR', 'tripsaver_flights', 'affiliate')
     },
     {
       from: 'Chennai',
@@ -110,9 +100,7 @@ export class FlightsComponent implements OnInit {
       avgPrice: '₹5,100',
       popular: false,
       image: 'https://picsum.photos/400/200?random=14',
-      bookingUrl: this.analytics.addUTMToUrl('https://www.booking.com/flights?ss=Chennai-Delhi&aid=REPLACE_WITH_AFFILIATE_ID', 'tripsaver_flights', 'affiliate'),
-      mmtUrl: this.analytics.addUTMToUrl('https://www.makemytrip.com/flights?from=MAA&to=DEL&campaign=REPLACE_WITH_AFFILIATE_ID', 'tripsaver_flights', 'affiliate'),
-      goibiboUrl: this.analytics.addUTMToUrl('https://www.goibibo.com/flights/air-MAA-DEL?&utm_source=REPLACE_WITH_AFFILIATE_ID', 'tripsaver_flights', 'affiliate')
+      agodaUrl: this.analytics.addUTMToUrl('https://www.agoda.com/flights?cid=1955073&from=MAA&to=DEL', 'tripsaver_flights', 'affiliate')
     },
     {
       from: 'Kolkata',
@@ -123,9 +111,7 @@ export class FlightsComponent implements OnInit {
       avgPrice: '₹4,900',
       popular: false,
       image: 'https://picsum.photos/400/200?random=15',
-      bookingUrl: this.analytics.addUTMToUrl('https://www.booking.com/flights?ss=Kolkata-Mumbai&aid=REPLACE_WITH_AFFILIATE_ID', 'tripsaver_flights', 'affiliate'),
-      mmtUrl: this.analytics.addUTMToUrl('https://www.makemytrip.com/flights?from=CCU&to=BOM&campaign=REPLACE_WITH_AFFILIATE_ID', 'tripsaver_flights', 'affiliate'),
-      goibiboUrl: this.analytics.addUTMToUrl('https://www.goibibo.com/flights/air-CCU-BOM?&utm_source=REPLACE_WITH_AFFILIATE_ID', 'tripsaver_flights', 'affiliate')
+      agodaUrl: this.analytics.addUTMToUrl('https://www.agoda.com/flights?cid=1955073&from=CCU&to=BOM', 'tripsaver_flights', 'affiliate')
     }
     ];
   }
