@@ -299,7 +299,7 @@ export class ComparisonService {
       currency: hotel.currency,
       imageUrl: hotel.imageUrl,
       description: hotel.description,
-      amenities: hotel.amenities ? hotel.amenities.split(',').map((a: string) => a.trim()) : [],
+      amenities: hotel.amenities || [],
       
       partnerId: partner.id,
       partnerName: partner.displayName,
