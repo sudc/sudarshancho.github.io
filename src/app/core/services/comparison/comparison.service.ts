@@ -5,9 +5,9 @@ import {
   AffiliatePartnerManager, 
   AffiliatePartner,
   HotelSearchParams 
-} from '../config/affiliate-partners.config';
-import { AgodaDataService, AgodaHotel } from './agoda-data/agoda-data.service';
-import { AnalyticsService } from './analytics/analytics.service';
+} from '../../config/affiliate-partners.config';
+import { AgodaDataService, AgodaHotel } from '../agoda-data/agoda-data.service';
+import { AnalyticsService } from '../analytics/analytics.service';
 
 /**
  * Unified comparison result across all partners
@@ -141,7 +141,7 @@ export class ComparisonService {
     const city = options.city || options.searchQuery || '';
     
     return this.agodaService.getHotelsByCity(city).pipe(
-      map(hotels => {
+      map((hotels: AgodaHotel[]) => {
         // Filter by criteria
         let filtered = this.applyFilters(hotels, options);
         
@@ -299,7 +299,7 @@ export class ComparisonService {
       currency: hotel.currency,
       imageUrl: hotel.imageUrl,
       description: hotel.description,
-      amenities: hotel.amenities ? hotel.amenities.split(',').map(a => a.trim()) : [],
+      amenities: hotel.amenities ? hotel.amenities.split(',').map((a: string) => a.trim()) : [],
       
       partnerId: partner.id,
       partnerName: partner.displayName,
@@ -332,7 +332,7 @@ export class ComparisonService {
     
     return of({
       totalPartners: activePartners.length,
-      activePartners: activePartners.map(p => p.displayName),
+      activePartners: activePartners.map((p: AffiliatePartner) => p.displayName),
       mode: activePartners.length === 1 ? 'single' : 'multi'
     });
   }
