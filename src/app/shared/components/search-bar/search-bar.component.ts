@@ -4,23 +4,18 @@ import { Router } from '@angular/router';
 import { Subject, debounceTime, distinctUntilChanged, switchMap, of } from 'rxjs';
 import { SearchService, SearchResult } from '../../../core/services/search/search.service';
 import { AnalyticsService } from '../../../core/services/analytics/analytics.service';
-import { ComparisonService, ComparisonResult } from '../../../core/services/comparison/comparison.service';
-import { ComparisonCardComponent } from '../comparison-card/comparison-card.component';
 
 @Component({
 	selector: 'app-search-bar',
 	standalone: true,
-    imports: [CommonModule, ComparisonCardComponent],
+    imports: [CommonModule],
 	templateUrl: './search-bar.component.html',
 	styleUrls: ['./search-bar.component.scss']
 })
 export class SearchBarComponent {
 	public searchResults: SearchResult[] = [];
-	public comparisonResults: ComparisonResult[] = [];
 	public showDropdown = false;
-	public showComparison = false;
 	public isSearching = false;
-	public isLoadingComparison = false;
 
 	public destination = '';
 	public checkin = '';
@@ -33,8 +28,7 @@ export class SearchBarComponent {
 	constructor(
 		private router: Router,
 		private searchService: SearchService,
-		private analytics: AnalyticsService,
-		private comparisonService: ComparisonService
+		private analytics: AnalyticsService
 	) {
 		// Set up smart search with debounce
 		this.searchSubject.pipe(
@@ -77,34 +71,10 @@ export class SearchBarComponent {
 			country: hotel.country
 		});
 		
-		// Load comparison results based on selected hotel
-		this.loadComparisonResults(hotel.hotelName, hotel.city);
-	}
-
-	loadComparisonResults(searchQuery: string, city?: string) {
-		this.isLoadingComparison = true;
-		this.showComparison = true;
-		
-		this.comparisonService.compareHotels({
-			category: 'hotels',
-			searchQuery,
-			city,
-			maxResults: 4
-		}).subscribe({
-			next: (results: ComparisonResult[]) => {
-				this.comparisonResults = results;
-				this.isLoadingComparison = false;
-			},
-			error: (err: any) => {
-				console.error('Comparison error:', err);
-				this.isLoadingComparison = false;
-			}
+		// Navigate to hotel detail or search results
+		this.router.navigate(['/hotels'], { 
+			queryParams: { q: hotel.hotelName, city: hotel.city }
 		});
-	}
-
-	closeComparison() {
-		this.showComparison = false;
-		this.comparisonResults = [];
 	}
 
 	onSubmit(e: Event) {
@@ -117,7 +87,7 @@ export class SearchBarComponent {
 			has_dates: !!(this.checkin && this.checkout)
 		});
 		
-		// If there's an exact match in results, use that hotel
+		// If there's an exact match in results, navigate to it
 		if (this.searchResults.length > 0) {
 			const exactMatch = this.searchResults.find(r => 
 				r.hotelName.toLowerCase() === this.destination.toLowerCase()
@@ -128,9 +98,7 @@ export class SearchBarComponent {
 			}
 		}
 		
-		// Otherwise, load comparison results based on search query
-		this.loadComparisonResults(this.destination);
-		
+		// Otherwise emit search event for parent to handle
 		this.search.emit({ destination: this.destination, checkin: this.checkin, checkout: this.checkout });
 	}
 

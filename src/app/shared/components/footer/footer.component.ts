@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { getPartnerLink, getActivePartners } from '../../../core/config/partner-links.config';
+import { getActivePartners, buildPartnerUrl } from '../../../core/config/partners.config';
 
 @Component({
   selector: 'app-footer',
@@ -13,12 +13,12 @@ export class FooterComponent {
   currentYear = new Date().getFullYear();
 
   // Partner links for Special Deals section - automatically populated from active partners
-  partnerLinks = getActivePartners().map(({ id, config }) => ({
-    id: id,
-    name: config.displayName,
-    url: getPartnerLink(id),
-    logo: config.logo,
-    brandColor: config.brandColor
+  partnerLinks = getActivePartners().map(partner => ({
+    id: partner.id,
+    name: partner.displayName,
+    url: buildPartnerUrl(partner.id, 'search'),
+    logo: partner.logo,
+    brandColor: partner.color
   }));
 
   socialLinks = [

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map, of, forkJoin } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
-import { AGODA_CONFIG, getAgodaHotelLink, getAgodaDataSource } from '../../config/agoda-affiliate.config';
+import { PARTNERS, buildPartnerUrl } from '../../config/partners.config';
 
 export interface AgodaHotel {
   hotelId: string;
@@ -41,28 +41,25 @@ export interface CityIndex {
   providedIn: 'root'
 })
 export class AgodaDataService {
-  // Get paths from centralized config
-  private readonly DATA_SOURCE = getAgodaDataSource('hotels');
-  private readonly DATA_PATH = this.DATA_SOURCE?.path;
-  private readonly INDEX_PATH = this.DATA_SOURCE?.indexPath;
-  private readonly IS_GOOGLE_DRIVE = this.DATA_PATH?.includes('drive.google.com');
+  // CSV data sources (currently disabled - using sample data)
+  private readonly DATA_PATH: string | undefined = undefined;
+  private readonly INDEX_PATH: string | undefined = undefined;
+  private readonly IS_GOOGLE_DRIVE = false;
   
   private cityIndex: CityIndex | null = null;
   private cityCache = new Map<string, AgodaHotel[]>();
   private allHotelsCache: AgodaHotel[] | null = null;
 
   constructor(private http: HttpClient) {
-    // Check if data source is enabled
-    if (!this.DATA_SOURCE?.enabled) {
-      console.warn('⚠️ Agoda hotels data source is disabled. Update agoda-affiliate.config.ts to enable.');
-    }
+    // CSV data source is disabled - components use sample data
+    console.info('ℹ️ Agoda data service initialized (using sample data in components)');
   }
 
   /**
    * Check if data source is properly configured
    */
   isDataSourceAvailable(): boolean {
-    return !!this.DATA_SOURCE?.enabled && !!this.DATA_PATH;
+    return false; // CSV data source disabled
   }
 
   /**

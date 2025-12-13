@@ -4,7 +4,7 @@ import { AgodaDataService, AgodaHotel } from '../../../core/services/agoda-data/
 import { Subject, timeout } from 'rxjs';
 import { takeUntil, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
-import { getAgodaHotelLink } from '../../../core/config/agoda-affiliate.config';
+import { buildPartnerUrl, PARTNERS } from '../../../core/config/partners.config';
 
 interface Destination {
   city: string;
@@ -91,7 +91,7 @@ export class PopularDestinationsComponent implements OnInit, OnDestroy {
               country: cityInfo.country,
               imageUrl: topHotel?.imageUrl || `https://picsum.photos/seed/${cityInfo.city}/400/280`,
               topHotel: topHotel,
-              affiliateUrl: topHotel ? topHotel.affiliateUrl : getAgodaHotelLink({ city: cityInfo.city })
+              affiliateUrl: topHotel ? topHotel.affiliateUrl : buildPartnerUrl('agoda', 'hotels', { city: cityInfo.city })
             };
           });
 
@@ -117,7 +117,7 @@ export class PopularDestinationsComponent implements OnInit, OnDestroy {
       city: cityInfo.city,
       country: cityInfo.country,
       imageUrl: `https://picsum.photos/seed/${cityInfo.city}/400/280`,
-      affiliateUrl: getAgodaHotelLink({ city: cityInfo.city }),
+      affiliateUrl: buildPartnerUrl('agoda', 'hotels', { city: cityInfo.city }),
       topHotel: undefined
     }));
     this.showSection = true;

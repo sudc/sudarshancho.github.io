@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AgodaDataService, AgodaHotel } from '../../../core/services/agoda-data/agoda-data.service';
-import { getAgodaHotelLink } from '../../../core/config/agoda-affiliate.config';
+import { buildPartnerUrl, PARTNERS } from '../../../core/config/partners.config';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -103,7 +103,7 @@ export class FeaturedDealsComponent implements OnInit, OnDestroy {
         description: 'Mumbai, India • 5⭐ Hotels',
         platform: 'Agoda',
         discount: '30% OFF',
-        affiliateUrl: getAgodaHotelLink({ city: 'Mumbai' }),
+        affiliateUrl: buildPartnerUrl('agoda', 'hotels', { city: 'Mumbai' }),
         category: 'Hotels',
         location: 'Mumbai, India'
       },
@@ -113,7 +113,7 @@ export class FeaturedDealsComponent implements OnInit, OnDestroy {
         description: 'Goa, India • 4⭐ Resorts',
         platform: 'Agoda',
         discount: '25% OFF',
-        affiliateUrl: getAgodaHotelLink({ city: 'Goa' }),
+        affiliateUrl: buildPartnerUrl('agoda', 'hotels', { city: 'Goa' }),
         category: 'Hotels',
         location: 'Goa, India'
       },
@@ -123,7 +123,7 @@ export class FeaturedDealsComponent implements OnInit, OnDestroy {
         description: 'Jaipur, India • 5⭐ Heritage',
         platform: 'Agoda',
         discount: '35% OFF',
-        affiliateUrl: getAgodaHotelLink({ city: 'Jaipur' }),
+        affiliateUrl: buildPartnerUrl('agoda', 'hotels', { city: 'Jaipur' }),
         category: 'Hotels',
         location: 'Jaipur, India'
       }
