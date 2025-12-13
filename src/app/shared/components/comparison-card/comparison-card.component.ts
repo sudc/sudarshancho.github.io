@@ -13,7 +13,7 @@ import { ComparisonResult } from '../../../core/services/comparison/comparison.s
   standalone: true,
   imports: [CommonModule],
   template: `
-    <article class="comparison-card" [class.featured]="featured">
+    <article class="comparison-card" [class.featured]="featured" (click)="onCardClick()">
       <div class="comparison-badge" *ngIf="featured">
         <span class="material-icons">star</span>
         Best Match
@@ -60,7 +60,7 @@ import { ComparisonResult } from '../../../core/services/comparison/comparison.s
 
         <button 
           class="book-button" 
-          (click)="onBookClick()"
+          (click)="onBookClick($event)"
           [style.background-color]="result.partnerColor">
           <span>View on {{ result.partnerName }}</span>
           <span class="material-icons">arrow_forward</span>
@@ -79,6 +79,7 @@ import { ComparisonResult } from '../../../core/services/comparison/comparison.s
       display: flex;
       flex-direction: column;
       height: 100%;
+      cursor: pointer;
 
       &:hover {
         transform: translateY(-8px);
@@ -318,8 +319,14 @@ export class ComparisonCardComponent {
     return Array(Math.min(fullStars, 5)).fill(0);
   }
 
-  onBookClick(): void {
+  onCardClick(): void {
     this.bookClick.emit(this.result);
     window.open(this.result.partnerUrl, '_blank');
+  }
+
+  onBookClick(event: Event): void {
+    // Prevent card click from also triggering
+    event.stopPropagation();
+    this.onCardClick();
   }
 }

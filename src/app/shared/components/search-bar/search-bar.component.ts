@@ -4,18 +4,23 @@ import { Router } from '@angular/router';
 import { Subject, debounceTime, distinctUntilChanged, switchMap, of } from 'rxjs';
 import { SearchService, SearchResult } from '../../../core/services/search/search.service';
 import { AnalyticsService } from '../../../core/services/analytics/analytics.service';
+import { ComparisonService, ComparisonResult } from '../../../core/services/comparison/comparison.service';
+import { ComparisonCardComponent } from '../comparison-card/comparison-card.component';
 
 @Component({
 	selector: 'app-search-bar',
 	standalone: true,
-    imports: [CommonModule],
+    imports: [CommonModule, ComparisonCardComponent],
 	templateUrl: './search-bar.component.html',
 	styleUrls: ['./search-bar.component.scss']
 })
 export class SearchBarComponent {
 	public searchResults: SearchResult[] = [];
+	public comparisonResults: ComparisonResult[] = [];
 	public showDropdown = false;
+	public showComparison = false;
 	public isSearching = false;
+	public isLoadingComparison = false;
 
 	public destination = '';
 	public checkin = '';
@@ -28,7 +33,8 @@ export class SearchBarComponent {
 	constructor(
 		private router: Router,
 		private searchService: SearchService,
-		private analytics: AnalyticsService
+		private analytics: AnalyticsService,
+		private comparisonService: ComparisonService
 	) {
 		// Set up smart search with debounce
 		this.searchSubject.pipe(
@@ -60,27 +66,58 @@ export class SearchBarComponent {
 	}
 
 	onHotelSelect(hotel: SearchResult) {
-		// Track affiliate click
-		this.analytics.trackAffiliateClick(
-			'Agoda',
-			'Hotels',
-			`${hotel.hotelName} - ${hotel.city}`,
-			`${hotel.currency} ${hotel.priceFrom}`
-		);
-		
-		// Redirect to Agoda with affiliate link
-		window.open(hotel.agodaUrl, '_blank');
-		
 		// Close dropdown
 		this.showDropdown = false;
 		this.destination = hotel.hotelName;
+		
+		// Track search selection
+		this.analytics.trackEvent('hotel_selected', {
+			hotel_name: hotel.hotelName,
+			city: hotel.city,
+			country: hotel.country
+		});
+		
+		// Load comparison results based on selected hotel
+		this.loadComparisonResults(hotel.hotelName, hotel.city);
+	}
+
+	loadComparisonResults(searchQuery: string, city?: string) {
+		this.isLoadingComparison = true;
+		this.showComparison = true;
+		
+		this.comparisonService.compareHotels({
+			category: 'hotels',
+			searchQuery,
+			city,
+			maxResults: 4
+		}).subscribe({
+			next: (results: ComparisonResult[]) => {
+				this.comparisonResults = results;
+				this.isLoadingComparison = false;
+			},
+			error: (err: any) => {
+				console.error('Comparison error:', err);
+				this.isLoadingComparison = false;
+			}
+		});
+	}
+
+	closeComparison() {
+		this.showComparison = false;
+		this.comparisonResults = [];
 	}
 
 	onSubmit(e: Event) {
 		e.preventDefault();
 		if (!this.destination) return;
 		
-		// If there's an exact match in results, redirect to it
+		// Track search query
+		this.analytics.trackEvent('search_query', {
+			search_term: this.destination,
+			has_dates: !!(this.checkin && this.checkout)
+		});
+		
+		// If there's an exact match in results, use that hotel
 		if (this.searchResults.length > 0) {
 			const exactMatch = this.searchResults.find(r => 
 				r.hotelName.toLowerCase() === this.destination.toLowerCase()
@@ -91,21 +128,8 @@ export class SearchBarComponent {
 			}
 		}
 		
-		// Otherwise, search on Agoda with query
-		const affiliateId = 'cid=1955073';
-		let searchUrl = `https://www.agoda.com/search?${affiliateId}&q=${encodeURIComponent(this.destination)}`;
-		
-		// Add UTM tracking
-		searchUrl = this.analytics.addUTMToUrl(searchUrl, 'tripsaver_search', 'text_search');
-		
-		// Track search query
-		this.analytics.trackEvent('search_query', {
-			search_term: this.destination,
-			platform: 'Agoda',
-			has_dates: !!(this.checkin && this.checkout)
-		});
-		
-		window.open(searchUrl, '_blank');
+		// Otherwise, load comparison results based on search query
+		this.loadComparisonResults(this.destination);
 		
 		this.search.emit({ destination: this.destination, checkin: this.checkin, checkout: this.checkout });
 	}
