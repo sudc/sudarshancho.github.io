@@ -134,7 +134,7 @@ const INDIAN_HOLIDAYS = {
     10: ['Dussehra', 'Diwali'],
     11: ['Diwali (sometimes)'],
     12: ['Christmas', 'New Year Eve']
-  }
+  } as Record<number, string[]>
 };
 
 // ===========================
