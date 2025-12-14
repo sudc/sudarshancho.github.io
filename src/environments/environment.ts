@@ -1,5 +1,7 @@
 export const environment = {
-  production: false,
+  production: false
+  // MongoDB disabled - not used yet
+  /*
   mongodb: {
     // MongoDB Atlas Connection String (@ symbol encoded as %40)
     connectionString: 'mongodb+srv://sudarshanchoudhary5_db_user:Sbabu%40954080@cluster0.fyzaiop.mongodb.net/tripsaver?retryWrites=true&w=majority&appName=Cluster0',
@@ -19,4 +21,5 @@ export const environment = {
       trustMessages: 'trust_messages'
     }
   }
+  */
 };
