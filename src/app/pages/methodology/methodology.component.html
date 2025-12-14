@@ -1,0 +1,297 @@
+<div class="methodology-page">
+  
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <h1>How TripSaver Works</h1>
+      <p class="lead">
+        Transparent, rule-based engines that help you make confident travel decisions
+        — without hidden ads or paid placements.
+      </p>
+    </div>
+  </section>
+
+  <!-- Short Explanation -->
+  <section class="intro">
+    <div class="container">
+      <div class="trust-card">
+        <h2>🔍 Our Approach</h2>
+        <p>
+          <strong>TripSaver does not sell travel packages or set prices.</strong>
+        </p>
+        <p>
+          Instead, we help travelers make confident decisions using five transparent engines
+          that analyze destinations, timing, preparation needs, and booking options.
+        </p>
+        <p>
+          All recommendations are derived from <strong>public data and clear logic</strong>
+          — not paid promotions.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Our 5 Engines -->
+  <section class="engines-section">
+    <div class="container">
+      <h2>Our 5 Transparent Engines</h2>
+      <p class="section-subtitle">
+        Each engine serves a specific purpose in helping you plan better trips
+      </p>
+
+      <div class="engines-grid">
+        <div class="engine-card" *ngFor="let engine of engines">
+          
+          <!-- Header -->
+          <div class="engine-header">
+            <span class="engine-icon" [class]="'badge-' + engine.color">
+              {{ engine.icon }}
+            </span>
+            <h3>{{ engine.name }}</h3>
+          </div>
+
+          <!-- Purpose -->
+          <div class="engine-purpose">
+            <h4>Purpose</h4>
+            <p>{{ engine.purpose }}</p>
+          </div>
+
+          <!-- How It Works -->
+          <div class="engine-how">
+            <h4>How It Works</h4>
+            <p>{{ engine.howItWorks }}</p>
+          </div>
+
+          <!-- Data Sources -->
+          <div class="engine-sources">
+            <h4>Data Sources</h4>
+            <ul>
+              <li *ngFor="let source of engine.dataSources">{{ source }}</li>
+            </ul>
+          </div>
+
+          <!-- Example -->
+          <div class="engine-example">
+            <h4>Example</h4>
+            <p class="example-text">{{ engine.example }}</p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- What Our Scores Mean -->
+  <section class="scores-section">
+    <div class="container">
+      <h2>📊 What Our Scores Mean</h2>
+      
+      <div class="score-explanations">
+        <div class="score-card">
+          <h3>Destination Scores (0-130)</h3>
+          <p>Compare how well destinations match your preferences and requirements.</p>
+          <ul>
+            <li><strong>90-130:</strong> Excellent match — highly recommended</li>
+            <li><strong>60-89:</strong> Very good match — recommended</li>
+            <li><strong>30-59:</strong> Good match — consider</li>
+            <li><strong>Below 30:</strong> Poor match — filtered out</li>
+          </ul>
+        </div>
+
+        <div class="score-card">
+          <h3>Trip Readiness Scores (0-100)</h3>
+          <p>Indicate how favorable current travel conditions are for a destination.</p>
+          <ul>
+            <li><strong>85-100:</strong> Excellent time — perfect conditions</li>
+            <li><strong>70-84:</strong> Good time — favorable conditions</li>
+            <li><strong>55-69:</strong> Fair time — acceptable conditions</li>
+            <li><strong>40-54:</strong> Consider alternatives</li>
+            <li><strong>Below 40:</strong> Not recommended</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="disclaimer">
+        <p>
+          ⚠️ <strong>Important:</strong> Scores are guidance based on historical data
+          and patterns, not guarantees. Weather, crowds, and conditions can vary.
+          Always check latest travel advisories before making final decisions.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- How We Make Money -->
+  <section class="monetization-section">
+    <div class="container">
+      <h2>💰 How We Make Money</h2>
+      
+      <div class="monetization-card">
+        <p class="lead-text">
+          When you choose to book through our recommended platforms, we may earn
+          a <strong>small affiliate commission</strong> at no extra cost to you.
+        </p>
+
+        <h3>What These Partnerships Do NOT Influence:</h3>
+        <ul class="no-influence-list">
+          <li>✅ Destination rankings and scores</li>
+          <li>✅ Trip readiness assessments</li>
+          <li>✅ Preparation guidance and checklists</li>
+          <li>✅ Platform recommendations (based on your needs only)</li>
+        </ul>
+
+        <div class="priority-statement">
+          <p>
+            <strong>Our priority is helping you travel with confidence.</strong>
+          </p>
+          <p>
+            We make money when our recommendations help you make good decisions
+            — not by manipulating what you see.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Data Sources -->
+  <section class="data-sources-section">
+    <div class="container">
+      <h2>🗂️ Our Data Sources (All Legal & Public)</h2>
+
+      <div class="sources-grid">
+        
+        <div class="source-card">
+          <h3>🇮🇳 Government Tourism</h3>
+          <ul>
+            <li><a href="https://www.incredibleindia.org" target="_blank">Incredible India</a></li>
+            <li><a href="https://www.tourism.rajasthan.gov.in" target="_blank">Rajasthan Tourism</a></li>
+            <li><a href="https://www.keralatourism.org" target="_blank">Kerala Tourism</a></li>
+            <li><a href="https://himachaltourism.gov.in" target="_blank">Himachal Tourism</a></li>
+            <li>Other state tourism portals</li>
+          </ul>
+          <p class="source-use"><strong>Used for:</strong> Seasonality, best time to visit, festivals</p>
+        </div>
+
+        <div class="source-card">
+          <h3>🌦️ Climate Data</h3>
+          <ul>
+            <li>Wikipedia climate tables</li>
+            <li>Historical averages (public domain)</li>
+            <li>Rainfall patterns</li>
+          </ul>
+          <p class="source-use"><strong>Used for:</strong> Weather scoring, seasonal recommendations</p>
+        </div>
+
+        <div class="source-card">
+          <h3>📅 Public Calendars</h3>
+          <ul>
+            <li>Indian school holiday schedules</li>
+            <li>National festival calendars</li>
+            <li>Public holiday dates</li>
+          </ul>
+          <p class="source-use"><strong>Used for:</strong> Crowd prediction, peak season detection</p>
+        </div>
+
+        <div class="source-card">
+          <h3>🧠 Editorial Research</h3>
+          <ul>
+            <li>Travel blogs (budget classification)</li>
+            <li>Agoda city pages (cost levels)</li>
+            <li>Experience categorization (our IP)</li>
+          </ul>
+          <p class="source-use"><strong>Used for:</strong> Budget tags, experience labels, accessibility</p>
+        </div>
+
+      </div>
+
+      <div class="no-scraping-notice">
+        <p>
+          ✅ We <strong>never</strong> scrape copyrighted content, use private APIs without permission,
+          or claim price data we don't own. All data is either public domain or our original research.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQs -->
+  <section class="faq-section">
+    <div class="container">
+      <h2>❓ Frequently Asked Questions</h2>
+
+      <div class="faq-list">
+        <div class="faq-item" *ngFor="let faq of faqs">
+          <h3>{{ faq.question }}</h3>
+          <p>{{ faq.answer }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why TripSaver Is Different -->
+  <section class="difference-section">
+    <div class="container">
+      <h2>🏆 Why TripSaver Is Different</h2>
+
+      <div class="comparison-grid">
+        
+        <div class="comparison-card traditional">
+          <h3>Traditional Travel Sites</h3>
+          <ul>
+            <li>Show "best deals today"</li>
+            <li>Focus on urgency and FOMO</li>
+            <li>Rankings influenced by ads</li>
+            <li>Black box algorithms</li>
+            <li>Conversion: 2-3%</li>
+          </ul>
+        </div>
+
+        <div class="comparison-card tripsaver">
+          <h3>TripSaver</h3>
+          <ul>
+            <li>Ask "Is this right for you?"</li>
+            <li>Focus on confidence and preparation</li>
+            <li>Rankings based on your needs</li>
+            <li>Transparent, explainable logic</li>
+            <li>Conversion: 5-8% (estimated)</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="success-models">
+        <h3>Similar Success Models</h3>
+        <p>Like these trusted platforms, we educate first, then monetize:</p>
+        <ul>
+          <li>💳 <strong>NerdWallet</strong> (finance) — Compare, educate, recommend</li>
+          <li>🏥 <strong>Healthline</strong> (health) — Inform, guide, connect</li>
+          <li>🌍 <strong>NomadList</strong> (travel) — Data, insights, decisions</li>
+        </ul>
+        <p class="success-note">
+          All win <strong>without owning inventory</strong> by building trust first.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final Trust Statement -->
+  <section class="final-trust">
+    <div class="container">
+      <div class="trust-statement">
+        <h2>Our Commitment to You</h2>
+        <p class="large-text">
+          We believe travelers make better decisions when they understand
+          <strong>why</strong> something is recommended, not just <strong>what</strong>.
+        </p>
+        <p>
+          Every score, every insight, every recommendation comes with transparent
+          reasoning and clear data sources.
+        </p>
+        <p>
+          <strong>That's our promise.</strong>
+        </p>
+        <a routerLink="/contact" class="cta-button">Have Questions? Contact Us</a>
+      </div>
+    </div>
+  </section>
+
+</div>
