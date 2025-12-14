@@ -40,9 +40,7 @@ export interface RecommendationResult {
   score: number; // Internal only, not shown to user
 }
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class RecommendationEngine extends BaseEngine<UserPreferences, any> {
   
   protected config: BaseEngineConfig = {

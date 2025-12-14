@@ -371,9 +371,7 @@ const DESTINATION_READINESS_DATA: Record<string, {
 // SCORING ENGINE
 // ===========================
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class TripReadinessScoringEngine extends BaseEngine<TripReadinessInput, TripReadinessScoringResult> {
   
   protected config = {

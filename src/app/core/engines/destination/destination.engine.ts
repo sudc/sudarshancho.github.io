@@ -76,9 +76,7 @@ export interface DestinationEngineResult extends BaseEngineResult {
 /**
  * Destination Engine Implementation
  */
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class DestinationEngine extends BaseEngine<DestinationQuery, DestinationEngineResult> {
   
   protected config: BaseEngineConfig = {

@@ -114,9 +114,7 @@ export interface TripReadinessResult extends BaseEngineResult {
 /**
  * Trip Readiness Engine Implementation
  */
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class TripReadinessEngine extends BaseEngine<TripReadinessInput, TripReadinessResult> {
   
   protected config: BaseEngineConfig = {

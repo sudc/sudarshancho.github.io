@@ -102,9 +102,7 @@ export interface DestinationScoringResult extends BaseEngineResult {
 // SCORING ENGINE
 // ===========================
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class DestinationScoringEngine extends BaseEngine<DestinationScoringInput, DestinationScoringResult> {
   
   protected config = {
