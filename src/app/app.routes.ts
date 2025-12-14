@@ -6,8 +6,10 @@ import { DealsComponent } from './pages/deals/deals.component';
 import { ContactComponent } from './pages/contact/contact.component';
 import { AboutComponent } from './pages/about/about.component';
 import { HowItWorksComponent } from './pages/how-it-works/how-it-works.component';
+import { MethodologyComponent } from './pages/methodology/methodology.component';
 import { EngineTestComponent } from './pages/engine-test/engine-test.component';
 import { MongoDbTestComponent } from './pages/mongodb-test/mongodb-test.component';
+import { DataSeederComponent } from './pages/data-seeder/data-seeder.component';
 
 export const routes: Routes = [
 	{ path: '', component: HomeComponent },
@@ -17,7 +19,9 @@ export const routes: Routes = [
 	{ path: 'contact', component: ContactComponent },
 	{ path: 'about', component: AboutComponent },
 	{ path: 'how-it-works', component: HowItWorksComponent },
+	{ path: 'methodology', component: MethodologyComponent },
 	{ path: 'engine-test', component: EngineTestComponent },
 	{ path: 'mongodb-test', component: MongoDbTestComponent },
+	{ path: 'data-seeder', component: DataSeederComponent },
 	{ path: '**', redirectTo: '' }
 ];

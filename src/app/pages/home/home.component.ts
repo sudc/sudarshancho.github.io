@@ -9,6 +9,8 @@ import { FooterComponent } from '../../shared/components/footer/footer.component
 import { AgodaHotelsComponent } from '../../shared/components/agoda-hotels/agoda-hotels.component';
 import { RequirementFormComponent, UserRequirements } from '../../shared/components/requirement-form/requirement-form.component';
 import { RecommendationResultComponent } from '../../shared/components/recommendation-result/recommendation-result.component';
+import { SmartRecommendationsComponent } from '../../components/smart-recommendations/smart-recommendations.component';
+import { TrustBadgesComponent } from '../../components/trust-badges/trust-badges.component';
 
 interface Category {
   id: string;
@@ -42,7 +44,9 @@ interface Deal {
     FooterComponent,
     AgodaHotelsComponent,
     RequirementFormComponent,
-    RecommendationResultComponent
+    RecommendationResultComponent,
+    SmartRecommendationsComponent,
+    TrustBadgesComponent
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss', './home.component.css']
