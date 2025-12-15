@@ -1,21 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterLink } from '@angular/router';
-import { SmartRecommendationsComponent } from '../../components/smart-recommendations/smart-recommendations.component';
-import { TrustBadgesComponent } from '../../components/trust-badges/trust-badges.component';
+import { RouterLink } from '@angular/router';
 
 /**
- * SCREEN 2 - DESTINATION SCORING RESULTS
+ * SCREEN 2 - DESTINATION SCORING RESULTS (Future Implementation)
  * 
- * Active Engine: Destination Scoring Engine
+ * Note: Currently, SmartRecommendationsComponent is self-contained and handles
+ * its own form input and recommendation logic. This component is a placeholder
+ * for a future Screen 2 implementation that will display results from Screen 1.
  * 
- * Goal: Show intelligence + explain "why"
- * 
- * Features:
- * - Displays top destination recommendations
- * - Shows expandable score breakdown (40pts Timing + 30pts Budget + 25pts Interest + 15pts Climate)
- * - Provides "Improve Accuracy" link to Trip Readiness inputs
- * - Shows "View Booking Options" CTA leading to booking modal
+ * When integrated with full flow:
+ * - Screen 1 collects preferences and calls DestinationScoringEngine
+ * - Results are stored in sessionStorage
+ * - User navigates to /results
+ * - This component retrieves stored results and displays them
  */
 
 @Component({
@@ -23,9 +21,7 @@ import { TrustBadgesComponent } from '../../components/trust-badges/trust-badges
   standalone: true,
   imports: [
     CommonModule,
-    RouterLink,
-    SmartRecommendationsComponent,
-    TrustBadgesComponent
+    RouterLink
   ],
   templateUrl: './results.component.html',
   styleUrls: ['./results.component.scss']
@@ -35,44 +31,23 @@ export class ResultsComponent implements OnInit {
   budgetRange: string = '';
   interests: string[] = [];
   climate: string = '';
-  recommendations: any[] = [];
   isLoading: boolean = true;
   error: string | null = null;
 
-  constructor(private route: ActivatedRoute) {}
+  constructor() {}
 
   ngOnInit(): void {
-    // Get preferences from query params
-    this.route.queryParams.subscribe(params => {
-      this.travelMonth = params['month'] || '';
-      this.budgetRange = params['budget'] || '';
-      this.interests = params['interests'] ? params['interests'].split(',') : [];
-      
-      // Get recommendations from sessionStorage
-      const storedRecommendations = sessionStorage.getItem('recommendations');
-      if (storedRecommendations) {
-        this.recommendations = JSON.parse(storedRecommendations);
-      }
-      
-      this.isLoading = false;
-    });
-
-    // Set SEO meta tags
+    // Placeholder for future Screen 2 implementation
+    // This will integrate with the RecommendationEngine output from Screen 1
+    this.isLoading = false;
     document.title = 'Destination Recommendations - TripSaver';
   }
 
-  // Improve accuracy by taking Trip Readiness test (optional)
   improveAccuracy(): void {
-    // Navigate to Trip Readiness screen (Screen 3)
-    // This will be implemented when Trip Readiness component is created
     console.log('Navigating to Trip Readiness form...');
-    // this.router.navigate(['/trip-readiness']);
   }
 
   resetPreferences(): void {
-    // Clear session storage and navigate back home
-    sessionStorage.removeItem('preferences');
-    sessionStorage.removeItem('recommendations');
-    // this.router.navigate(['/']);
+    console.log('Resetting preferences...');
   }
 }

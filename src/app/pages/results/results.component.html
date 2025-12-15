@@ -43,25 +43,30 @@
     </div>
 
     <!-- Results Grid -->
-    <div *ngIf="!isLoading && !error && recommendations.length > 0" class="results-grid">
+    <div *ngIf="!isLoading && !error && false" class="results-grid">
       
-      <!-- Smart Recommendations Component (Screen 2) -->
-      <app-smart-recommendations 
-        [recommendations]="recommendations">
-      </app-smart-recommendations>
+      <!-- Note: SmartRecommendationsComponent is self-contained with its own form.
+           For Screen 2 integration, this component will display scored recommendations
+           from the DestinationScoringEngine based on preferences from Screen 1. -->
 
     </div>
 
-    <!-- Empty State -->
-    <div *ngIf="!isLoading && !error && recommendations.length === 0" class="empty-state">
-      <p class="empty-message">No recommendations found. Please try different preferences.</p>
-      <button class="btn-primary" (click)="resetPreferences()">
-        Update Preferences
+    <!-- Empty State (Results page is currently a placeholder) -->
+    <div *ngIf="!isLoading && !error" class="empty-state">
+      <p class="empty-message">
+        This page is a placeholder for future Screen 2 implementation. 
+        The SmartRecommendationsComponent is currently a standalone form.
+      </p>
+      <p class="empty-message" style="font-size: 0.9rem; color: #6b7280; margin-top: 1rem;">
+        To see destination recommendations, visit the <a routerLink="/" style="color: #667eea; text-decoration: underline;">home page</a>.
+      </p>
+      <button class="btn-primary" routerLink="/">
+        Back to Home
       </button>
     </div>
 
-    <!-- IMPROVE ACCURACY CTA -->
-    <div class="improve-accuracy-section" *ngIf="!isLoading && !error && recommendations.length > 0">
+    <!-- Improve Accuracy Section -->
+    <div class="improve-accuracy-section" *ngIf="!isLoading && !error && false">
       <div class="improve-card">
         <h2>Want even better recommendations?</h2>
         <p>Answer 4 quick questions about your trip readiness → Get personalized insights</p>
@@ -76,4 +81,4 @@
 </section>
 
 <!-- Trust Badges -->
-<app-trust-badges></app-trust-badges>
+<!-- <app-trust-badges></app-trust-badges> -->

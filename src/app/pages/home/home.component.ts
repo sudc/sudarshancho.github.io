@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink, RouterLinkActive, Router } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Title, Meta } from '@angular/platform-browser';
@@ -10,9 +10,6 @@ import { FooterComponent } from '../../shared/components/footer/footer.component
 import { AgodaHotelsComponent } from '../../shared/components/agoda-hotels/agoda-hotels.component';
 import { RequirementFormComponent, UserRequirements } from '../../shared/components/requirement-form/requirement-form.component';
 import { RecommendationResultComponent } from '../../shared/components/recommendation-result/recommendation-result.component';
-import { SmartRecommendationsComponent } from '../../components/smart-recommendations/smart-recommendations.component';
-import { TrustBadgesComponent } from '../../components/trust-badges/trust-badges.component';
-import { RecommendationEngine } from '../../core/services/recommendation/recommendation.engine';
 
 interface Category {
   id: string;
@@ -47,9 +44,7 @@ interface Deal {
     FooterComponent,
     AgodaHotelsComponent,
     RequirementFormComponent,
-    RecommendationResultComponent,
-    SmartRecommendationsComponent,
-    TrustBadgesComponent
+    RecommendationResultComponent
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss', './home.component.css']
@@ -98,9 +93,7 @@ export class HomeComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private titleService: Title,
-    private metaService: Meta,
-    private router: Router,
-    private recommendationEngine: RecommendationEngine
+    private metaService: Meta
   ) {}
 
   ngOnInit(): void {
@@ -252,27 +245,11 @@ export class HomeComponent implements OnInit {
       climate: this.climatePreference
     });
 
-    // Call Destination Scoring Engine
-    const preferences = {
-      month: this.travelMonth,
-      budgetRange: this.budgetRange,
-      interests: Array.from(this.selectedInterests),
-      climate: this.climatePreference
-    };
-
-    const recommendations = this.recommendationEngine.generateRecommendations(preferences);
-    
-    // Store in session/state and navigate to results
-    sessionStorage.setItem('preferences', JSON.stringify(preferences));
-    sessionStorage.setItem('recommendations', JSON.stringify(recommendations));
-    
-    this.router.navigate(['/results'], {
-      queryParams: {
-        month: this.travelMonth,
-        budget: this.budgetRange,
-        interests: Array.from(this.selectedInterests).join(',')
-      }
-    });
+    // Note: The SmartRecommendationsComponent is a self-contained component that handles
+    // its own preference collection and recommendation generation via the Recommendation Engine.
+    // This landing form is a separate UI flow implementation.
+    // For full integration between landing form and SmartRecommendationsComponent,
+    // refactor SmartRecommendationsComponent to accept preferences as @Input.
   }
 
   resetForm(): void {
