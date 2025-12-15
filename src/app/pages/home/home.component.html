@@ -22,111 +22,160 @@
   </div>
 </header>
 
-<!-- HERO SECTION - Screen 1: Landing / Entry (Engine 1 - Destination Scoring) -->
-<section class="hero-section">
-  <div class="container">
-    <div class="hero-content">
-      <h1 class="hero-headline">
-        Find the best destination for <strong>YOU</strong> — powered by smart scoring
-      </h1>
-      <p class="hero-subtext">
-        Not ads. Not opinions. Data-backed travel recommendations.
-      </p>
+<!-- AI-POWERED DESTINATION FINDER -->
+<section class="finder-section">
+  <div class="finder-background">
+    <div class="finder-gradient"></div>
+    <div class="finder-pattern"></div>
+  </div>
 
-      <!-- SMART INPUT CARD -->
-      <div class="smart-input-card">
-        <form (ngSubmit)="submitDestinationPreferences()" class="preference-form">
+  <div class="finder-container">
+    <!-- Left Content -->
+    <div class="finder-content">
+      <span class="finder-badge">✨ AI-Powered</span>
+      
+      <h1 class="finder-title">
+        Find Your <span class="highlight">Perfect Destination</span>
+      </h1>
+      
+      <p class="finder-description">
+        Answer 4 simple questions. Get recommendations backed by smart algorithms, not guesses. Discover the destination that matches YOUR travel style.
+      </p>
+      
+      <div class="finder-perks">
+        <div class="perk-item">
+          <span class="perk-icon">🎯</span>
+          <span>Smarter than opinions</span>
+        </div>
+        <div class="perk-item">
+          <span class="perk-icon">🔒</span>
+          <span>No hidden agendas</span>
+        </div>
+        <div class="perk-item">
+          <span class="perk-icon">⚡</span>
+          <span>Takes 60 seconds</span>
+        </div>
+      </div>
+
+      <div class="finder-stats">
+        <div class="stat">
+          <strong>45+</strong>
+          <span>Destinations</span>
+        </div>
+        <div class="stat">
+          <strong>110</strong>
+          <span>Scoring Points</span>
+        </div>
+        <div class="stat">
+          <strong>100%</strong>
+          <span>Transparent</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Form -->
+    <div class="finder-form-wrapper">
+      <div class="finder-card">
+        <div class="finder-intro">
+          <div class="intro-icon">🤖</div>
+          <h2 class="intro-title">AI-Powered Destination Finder</h2>
+          <p class="intro-subtitle">Let our intelligent algorithm find your perfect destination based on your preferences</p>
+        </div>
+
+        <form (ngSubmit)="submitDestinationPreferences()" class="finder-form" novalidate>
           
-          <!-- When are you traveling? -->
-          <div class="form-group">
-            <label for="travel-month">When are you traveling? <span class="required">*</span></label>
+          <!-- When -->
+          <div class="finder-field">
+            <label for="travel-month" class="finder-label">
+              <span class="field-emoji">📅</span>
+              When are you traveling?
+            </label>
             <select 
               id="travel-month"
               [(ngModel)]="travelMonth"
               name="travelMonth"
-              class="form-input"
+              class="finder-input"
               required>
-              <option value="" disabled>Select a month</option>
+              <option value="" disabled selected>Pick a month</option>
               <option *ngFor="let month of monthOptions" [value]="month">{{ month }}</option>
             </select>
           </div>
 
-          <!-- Your budget range -->
-          <div class="form-group">
-            <label for="budget-range">Your budget range <span class="required">*</span></label>
+          <!-- Budget -->
+          <div class="finder-field">
+            <label for="budget-range" class="finder-label">
+              <span class="field-emoji">💰</span>
+              What's your budget?
+            </label>
             <select 
               id="budget-range"
               [(ngModel)]="budgetRange"
               name="budgetRange"
-              class="form-input"
+              class="finder-input"
               required>
-              <option value="" disabled>Select budget</option>
+              <option value="" disabled selected>Select range</option>
               <option *ngFor="let option of budgetOptions" [value]="option.value">
                 {{ option.label }}
               </option>
             </select>
           </div>
 
-          <!-- Your interests -->
-          <div class="form-group">
-            <label>Your interests <span class="required">*</span></label>
-            <div class="interest-grid">
-              <div *ngFor="let interest of interestOptions" class="interest-checkbox">
-                <input 
-                  [id]="interest.value"
-                  type="checkbox"
-                  [checked]="isInterestSelected(interest.value)"
-                  (change)="toggleInterest(interest.value)">
-                <label [for]="interest.value">{{ interest.label }}</label>
-              </div>
+          <!-- Interests -->
+          <div class="finder-field interests-field">
+            <label class="finder-label">
+              <span class="field-emoji">🎯</span>
+              What interests you? (Select all that apply)
+            </label>
+            <div class="finder-interests-grid">
+              <button 
+                *ngFor="let interest of interestOptions"
+                type="button"
+                class="interest-card"
+                [class.selected]="isInterestSelected(interest.value)"
+                (click)="toggleInterest(interest.value)">
+                <span class="interest-label">{{ interest.label }}</span>
+                <span class="interest-check">✓</span>
+              </button>
             </div>
           </div>
 
-          <!-- Climate preference -->
-          <div class="form-group">
-            <label for="climate">Climate preference <span class="required">*</span></label>
+          <!-- Climate -->
+          <div class="finder-field">
+            <label for="climate" class="finder-label">
+              <span class="field-emoji">🌤️</span>
+              Climate preference
+            </label>
             <select 
               id="climate"
               [(ngModel)]="climatePreference"
               name="climatePreference"
-              class="form-input"
+              class="finder-input"
               required>
-              <option value="" disabled>Select climate</option>
+              <option value="" disabled selected>Choose climate</option>
               <option *ngFor="let option of climateOptions" [value]="option.value">
                 {{ option.label }}
               </option>
             </select>
           </div>
 
-          <!-- CTA Button -->
-          <div class="form-actions">
-            <button type="submit" class="btn-primary">
-              Get Recommendations →
+          <!-- CTA Buttons -->
+          <div class="finder-actions">
+            <button type="submit" class="btn-finder-primary">
+              <span>Get My Recommendation</span>
+              <span class="btn-arrow">→</span>
             </button>
-            <button type="button" class="btn-secondary" (click)="resetForm()">
-              Reset
+            <button type="button" class="btn-finder-secondary" (click)="resetForm()">
+              Clear Form
             </button>
           </div>
 
         </form>
-      </div>
 
-      <!-- TRUST STRIP -->
-      <div class="trust-strip">
-        <div class="trust-item">
-          <span class="check-icon">✔</span>
-          <span>Transparent scoring</span>
-        </div>
-        <div class="trust-item">
-          <span class="check-icon">✔</span>
-          <span>No forced bookings</span>
-        </div>
-        <div class="trust-item">
-          <span class="check-icon">✔</span>
-          <span>Affiliate links disclosed</span>
+        <div class="finder-trust-note">
+          <span>🔒</span>
+          <span>No spam. No tracking. Completely private.</span>
         </div>
       </div>
-
     </div>
   </div>
 </section>
