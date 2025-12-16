@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, Input, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BookingModalComponent } from '../booking-modal/booking-modal.component';
@@ -22,6 +22,10 @@ import { DESTINATIONS_DATA } from '../../core/engines/destination/destinations.d
 })
 export class SmartRecommendationsComponent implements OnInit {
   private recommendationEngine = inject(RecommendationEngine);
+  
+  // ✅ Accept preferences from parent (home component)
+  @Input() userPreferences: any = null;
+  @Input() showForm: boolean = true;
   
   // ✅ Single source of truth for preferences (NEVER reset)
   preferences = {
@@ -51,8 +55,17 @@ export class SmartRecommendationsComponent implements OnInit {
   selectedDestination: any = null;
 
   ngOnInit(): void {
-    // Don't auto-load - wait for user to click button
-    // User will see empty state with instructions
+    // ✅ If preferences passed from parent, use them and auto-load
+    if (this.userPreferences) {
+      this.preferences = {
+        month: this.userPreferences.month,
+        budget: this.userPreferences.budget,
+        categories: this.userPreferences.categories
+      };
+      // Auto-load recommendations with parent's preferences
+      this.getRecommendations();
+    }
+    // Otherwise user will see empty state and click button manually
   }
 
   // ✅ Button label based on state (3 states)

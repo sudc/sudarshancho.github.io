@@ -48,6 +48,7 @@ export class HomeComponent implements OnInit {
 
   userRequirements: UserRequirements | null = null;
   categories: Category[] = [];
+  userPreferences: any = null;
 
   /* =======================
      DESTINATION FINDER FORM
@@ -184,6 +185,14 @@ export class HomeComponent implements OnInit {
       climate: this.climatePreference,
       interests: Array.from(this.selectedInterests)
     });
+
+    // ✅ Build preferences object to pass to SmartRecommendationsComponent
+    this.userPreferences = {
+      month: parseInt(this.travelMonth),
+      budget: this.budgetRange,
+      categories: Array.from(this.selectedInterests),
+      climate: this.climatePreference
+    };
 
     this.showSmartRecommendations = true;
 

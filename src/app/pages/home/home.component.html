@@ -97,7 +97,10 @@
 
 <!-- AI RECOMMENDATIONS - Shown after form submission -->
 <div class="smart-recommendations-section" *ngIf="showSmartRecommendations">
-  <app-smart-recommendations></app-smart-recommendations>
+  <app-smart-recommendations
+    [userPreferences]="userPreferences"
+    [showForm]="false">
+  </app-smart-recommendations>
 </div>
 
 <app-footer></app-footer>
