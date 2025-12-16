@@ -55,8 +55,11 @@ export class SmartRecommendationsComponent implements OnInit {
     // User will see empty state with instructions
   }
 
-  // ✅ Button label based on state
+  // ✅ Button label based on state (3 states)
   getButtonLabel(): string {
+    if (this.uiState.loading) {
+      return '⏳ Finding best destinations...';
+    }
     return this.uiState.hasResults ? '🔄 Refine Recommendations' : '🔍 Get Recommendations';
   }
 
