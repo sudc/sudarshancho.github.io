@@ -49,33 +49,40 @@ export class MongoDBService {
    * Get all destinations from MongoDB via backend proxy
    * Uses Render.com backend to handle CORS for GitHub Pages
    * Includes 5-second timeout and fallback to static data
+   * 
+   * ⚠️ TEMPORARILY DISABLED - Using static data until MongoDB credentials are fixed
    */
   getAllDestinations(): Observable<Destination[]> {
-    const backendUrl = 'https://tripsaver-github-io.onrender.com/api/destinations';
-    
-    // Try backend proxy first (with 5-second timeout)
-    return this.http.post<MongoResponse<Destination>>(
-      backendUrl,
-      {},
-      { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) }
-    ).pipe(
-      timeout(5000), // 5-second timeout
-      map(response => {
-        console.log('✅ Backend Proxy Response:', response);
-        return response.documents || [];
-      }),
-      catchError(error => {
-        console.error('❌ Backend proxy failed:', error.status, error.message);
-        if (error.status === 0 || error.name === 'TimeoutError') {
-          console.warn('⚠️ MongoDB/Backend timeout or unreachable');
-        } else if (error.error?.error) {
-          console.warn('⚠️ MongoDB Error:', error.error.error);
-        }
-        console.warn('⚠️ Falling back to static destination data (this works perfectly!)');
-        console.info('ℹ️ All features work with static data - no functionality lost');
-        return of([]);
-      })
-    );
+    // ❌ COMMENTED OUT - Backend service disabled due to MongoDB API auth error (cannot find app using Client App ID 'gzggipjk')
+    // const backendUrl = 'https://tripsaver-github-io.onrender.com/api/destinations';
+    // 
+    // // Try backend proxy first (with 5-second timeout)
+    // return this.http.post<MongoResponse<Destination>>(
+    //   backendUrl,
+    //   {},
+    //   { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) }
+    // ).pipe(
+    //   timeout(5000), // 5-second timeout
+    //   map(response => {
+    //     console.log('✅ Backend Proxy Response:', response);
+    //     return response.documents || [];
+    //   }),
+    //   catchError(error => {
+    //     console.error('❌ Backend proxy failed:', error.status, error.message);
+    //     if (error.status === 0 || error.name === 'TimeoutError') {
+    //       console.warn('⚠️ MongoDB/Backend timeout or unreachable');
+    //     } else if (error.error?.error) {
+    //       console.warn('⚠️ MongoDB Error:', error.error.error);
+    //     }
+    //     console.warn('⚠️ Falling back to static destination data (this works perfectly!)');
+    //     console.info('ℹ️ All features work with static data - no functionality lost');
+    //     return of([]);
+    //   })
+    // );
+
+    // ✅ USING STATIC DATA DIRECTLY - No loader hang, full functionality maintained
+    console.log('📦 Using static destination data (Backend temporarily disabled)');
+    return of([]);
   }
 
   /**
