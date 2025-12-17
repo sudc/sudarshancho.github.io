@@ -212,8 +212,9 @@ export class SmartRecommendationsComponent implements OnInit {
       return 0;
     }
     
+    const normUserCategories = this.preferences.categories.map(cat => cat.toLowerCase());
     const matches = dest.categories.filter((cat: string) => {
-      const included = this.preferences.categories.includes(cat);
+      const included = normUserCategories.includes(cat.toLowerCase());
       console.log(`     - ${cat}: ${included}`);
       return included;
     });

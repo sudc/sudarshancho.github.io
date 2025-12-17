@@ -163,8 +163,9 @@ export class DestinationScoringEngine extends BaseEngine<DestinationScoringInput
     
     // 3. Category Match (25 points max) - ✅ CRITICAL
     if (prefs.categories && prefs.categories.length > 0) {
+      const normUserCategories = prefs.categories.map(cat => cat.toLowerCase());
       const matchingCategories = dest.categories.filter(cat => 
-        prefs.categories.includes(cat)
+        normUserCategories.includes(cat.toLowerCase())
       );
       
       console.log(`   📊 Interest matching: ${JSON.stringify(matchingCategories)}`);
