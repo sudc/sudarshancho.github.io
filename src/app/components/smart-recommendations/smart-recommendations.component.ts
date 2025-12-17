@@ -119,6 +119,17 @@ export class SmartRecommendationsComponent implements OnInit {
     let climateScore = 0;
     let popularityScore = 0;
 
+    // ✅ FIXED: Use the actual interest score from the engine if available
+    if ((rec as any).interestMatchScore !== undefined) {
+      interestScore = (rec as any).interestMatchScore;
+    } else {
+      // Fallback: recalculate (should not happen)
+      if (prefs.categories.length > 0) {
+        const matches = dest.categories.filter(cat => prefs.categories.includes(cat));
+        interestScore = Math.min(25, matches.length * 12);
+      }
+    }
+
     // Timing (40 max)
     if (dest.bestMonths.includes(prefs.month)) {
       timingScore = 40;
@@ -139,12 +150,6 @@ export class SmartRecommendationsComponent implements OnInit {
       budgetScore = diff === 1 ? 15 : 5;
     }
 
-    // Interest (25 max)
-    if (prefs.categories.length > 0) {
-      const matches = dest.categories.filter(cat => prefs.categories.includes(cat));
-      interestScore = Math.min(25, matches.length * 12);
-    }
-
     // Climate (15 max)
     climateScore = rec.overallRecommendationScore >= 80 ? 15 : (rec.overallRecommendationScore >= 65 ? 10 : 5);
 
@@ -162,6 +167,25 @@ export class SmartRecommendationsComponent implements OnInit {
       total: timingScore + budgetScore + interestScore + climateScore + popularityScore,
       totalMax: 110
     };
+  }
+
+  // ✅ NEW: Check if booking should be disabled (Interest Match = 0)
+  isBookingDisabled(rec: EnhancedRecommendation): boolean {
+    const actualInterestMatch = (rec as any).interestMatchScore || 0;
+    if (actualInterestMatch === 0) {
+      console.warn(`🚫 BOOKING DISABLED: ${rec.destination.state} - Interest Match = 0`);
+      return true;
+    }
+    return false;
+  }
+
+  // ✅ NEW: Get booking disabled message
+  getBookingDisabledMessage(rec: EnhancedRecommendation): string {
+    const actualInterestMatch = (rec as any).interestMatchScore || 0;
+    if (actualInterestMatch === 0) {
+      return 'This destination doesn\'t match your selected interests';
+    }
+    return '';
   }
 
   // ✅ NEW: Calculate interest match score for safety check

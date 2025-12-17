@@ -134,9 +134,18 @@
           ⚠️ This destination partially matches your preferences
         </div>
 
-        <!-- CTA Button -->
-        <button (click)="openBookingModal(rec)" class="cta-button">
-          View booking options →
+        <!-- ✅ Hard Block for Zero Interest Match -->
+        <div *ngIf="isBookingDisabled(rec)" class="booking-disabled-message">
+          🚫 {{ getBookingDisabledMessage(rec) }}
+        </div>
+
+        <!-- CTA Button - Disabled if Interest Match = 0 -->
+        <button 
+          (click)="openBookingModal(rec)" 
+          [disabled]="isBookingDisabled(rec)"
+          class="cta-button"
+          [class.disabled]="isBookingDisabled(rec)">
+          {{ isBookingDisabled(rec) ? '❌ Doesn\'t Match Your Interests' : 'View booking options →' }}
         </button>
       </div>
     </div>
