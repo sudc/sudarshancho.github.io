@@ -316,8 +316,66 @@ export class SmartRecommendationsComponent implements OnInit {
       case 'consider':
         return '💭 Worth Considering';
       default:
-        return 'Not Recommended';
+        return 'Consider';
     }
+  }
+
+  // ✅ NEW: Check if we have no results and provide smart guidance
+  hasNoResults(): boolean {
+    return !this.uiState.loading && this.uiState.hasResults && this.recommendations.length === 0;
+  }
+
+  // ✅ NEW: Generate smart fallback message
+  getNoResultsMessage(): string {
+    const interestText = this.preferences.categories.length > 0 
+      ? this.preferences.categories.join(', ').toLowerCase()
+      : 'your selected interests';
+
+    const monthText = this.getMonthName(this.preferences.month);
+    const budgetText = this.formatBudget(this.preferences.budget);
+
+    return `We couldn't find perfect ${interestText} destinations for ${monthText} at ${budgetText} budget.`;
+  }
+
+  // ✅ NEW: Generate suggestions to refine search
+  getSuggestionsForNoResults(): string[] {
+    const suggestions: string[] = [];
+
+    // Suggest increasing budget
+    if (this.preferences.budget === 'budget') {
+      suggestions.push('Consider increasing your budget to moderate for more options');
+    }
+
+    // Suggest different travel months
+    const alternativeMonths = this.getAlternativeMonths();
+    if (alternativeMonths.length > 0) {
+      suggestions.push(`Try traveling in ${alternativeMonths.join(' or ')} for better options`);
+    }
+
+    // Suggest broadening interests
+    if (this.preferences.categories.length <= 1) {
+      suggestions.push('Try selecting 2-3 interest categories for better matches');
+    } else {
+      suggestions.push('Try adding more diverse interest categories to broaden results');
+    }
+
+    return suggestions.length > 0 ? suggestions : ['Try adjusting your preferences'];
+  }
+
+  // ✅ NEW: Find alternative months with better destination availability
+  private getAlternativeMonths(): string[] {
+    const alternatives: string[] = [];
+    const popularMonths = [3, 4, 10, 11]; // March, April, Oct, Nov
+    const currentMonth = this.preferences.month;
+
+    for (const month of popularMonths) {
+      if (month !== currentMonth) {
+        alternatives.push(this.getMonthName(month));
+        if (alternatives.length >= 2) break;
+      }
+    }
+
+    return alternatives;
   }
 
   openBookingModal(rec: EnhancedRecommendation): void {

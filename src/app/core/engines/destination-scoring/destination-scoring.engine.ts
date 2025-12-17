@@ -57,6 +57,18 @@ export class DestinationScoringEngine extends BaseEngine<DestinationScoringInput
     const scored: ScoredDestination[] = [];
     
     for (const destination of destinations) {
+      // ✅ HARD FILTER: Skip destinations that don't match user interests
+      if (input.userPreferences.categories && input.userPreferences.categories.length > 0) {
+        const hasInterestMatch = destination.categories.some(cat => 
+          input.userPreferences.categories.includes(cat)
+        );
+        
+        if (!hasInterestMatch) {
+          console.log(`⏭️ Filtering out ${destination.state} - no interest match`);
+          continue; // Skip this destination entirely
+        }
+      }
+
       const { score, reasons, badges } = this.scoreDestination(destination, input.userPreferences);
       scored.push({
         destinationId: (destination as any)._id || '',
@@ -70,7 +82,7 @@ export class DestinationScoringEngine extends BaseEngine<DestinationScoringInput
     // Sort by score descending
     scored.sort((a, b) => b.score - a.score);
 
-    this.log(`Scored ${scored.length} destinations`);
+    this.log(`Scored ${scored.length} destinations (after interest filtering)`);
 
     return {
       engineName: this.config.name,

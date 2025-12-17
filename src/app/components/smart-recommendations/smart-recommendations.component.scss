@@ -420,7 +420,90 @@ $text-muted: #6b7280;
   padding: 2rem;
   color: $text-muted;
 }
+/* ========== NO RESULTS STATE ========== */
+.no-results-state {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  border: 2px solid $border;
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  margin: 2rem 0;
+}
 
+.no-results-content {
+  max-width: 600px;
+  margin: 0 auto;
+
+  h3 {
+    font-size: 1.5rem;
+    color: $text-main;
+    margin: 0 0 1rem 0;
+  }
+
+  .no-results-message {
+    color: $text-muted;
+    font-size: 1.05rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+  }
+}
+
+.suggestions {
+  background: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  text-align: left;
+
+  .suggestions-title {
+    margin: 0 0 1rem 0;
+    color: $text-main;
+    font-weight: 600;
+    font-size: 1rem;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      padding: 0.75rem;
+      color: $text-muted;
+      font-size: 0.95rem;
+      border-left: 3px solid $primary;
+      padding-left: 1rem;
+      margin-bottom: 0.5rem;
+      background: $neutral-bg;
+      border-radius: 4px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+
+.retry-button {
+  background: $primary;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: $primary-dark;
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
 /* ========== ANIMATIONS ========== */
 @keyframes fadeInUp {
   from {

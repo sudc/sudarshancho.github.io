@@ -142,13 +142,32 @@
       <p>Finding perfect destinations for you...</p>
     </div>
 
+    <!-- NO RESULTS STATE (with smart fallback guidance) -->
+    <div *ngIf="hasNoResults()" class="no-results-state">
+      <div class="no-results-content">
+        <h3>😊 Let's refine your search</h3>
+        <p class="no-results-message">{{ getNoResultsMessage() }}</p>
+        
+        <div class="suggestions">
+          <p class="suggestions-title">💡 Try these adjustments:</p>
+          <ul>
+            <li *ngFor="let suggestion of getSuggestionsForNoResults()">{{ suggestion }}</li>
+          </ul>
+        </div>
+
+        <button (click)="getRecommendations()" class="retry-button">
+          🔍 Search Again
+        </button>
+      </div>
+    </div>
+
     <!-- ERROR STATE -->
     <div *ngIf="uiState.error" class="error-message">
       ⚠️ {{ uiState.error }}
     </div>
 
     <!-- EMPTY STATE -->
-    <div *ngIf="!uiState.loading && recommendations.length === 0 && !uiState.error" class="empty-state">
+    <div *ngIf="!uiState.loading && recommendations.length === 0 && !uiState.error && !hasNoResults()" class="empty-state">
       <p>Select your preferences above and click "Get Recommendations" to discover personalized destinations</p>
     </div>
   </div>

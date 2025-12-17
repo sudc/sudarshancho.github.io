@@ -161,49 +161,52 @@ export class RecommendationEngine extends BaseEngine<RecommendationInput, Recomm
     scoredDestinations: ScoredDestination[],
     tripReadiness?: TripReadinessResult
   ): EnhancedRecommendation[] {
-    return scoredDestinations.map(dest => {
-      let overallScore = dest.score;
-      const warnings: string[] = [];
-      let readinessScore: number | undefined;
+    return scoredDestinations
+      .map(dest => {
+        let overallScore = dest.score;
+        const warnings: string[] = [];
+        let readinessScore: number | undefined;
 
-      // Incorporate trip readiness if available
-      if (tripReadiness) {
-        readinessScore = tripReadiness.overallScore;
-        
-        // Weight: 70% destination score, 30% readiness score
-        overallScore = (dest.score * 0.7) + (tripReadiness.overallScore * 0.3);
+        // Incorporate trip readiness if available
+        if (tripReadiness) {
+          readinessScore = tripReadiness.overallScore;
+          
+          // Weight: 70% destination score, 30% readiness score
+          overallScore = (dest.score * 0.7) + (tripReadiness.overallScore * 0.3);
 
-        // Add warnings based on readiness
-        if (tripReadiness.overallStatus === 'not-ready') {
-          warnings.push('⚠ Significant preparation needed before booking');
-        } else if (tripReadiness.overallStatus === 'needs-preparation') {
-          warnings.push('○ Some preparation steps required');
+          // Add warnings based on readiness
+          if (tripReadiness.overallStatus === 'not-ready') {
+            warnings.push('⚠ Significant preparation needed before booking');
+          } else if (tripReadiness.overallStatus === 'needs-preparation') {
+            warnings.push('○ Some preparation steps required');
+          }
+
+          // Add critical action items as warnings
+          const criticalActions = tripReadiness.actionItems.filter(a => a.includes('URGENT'));
+          warnings.push(...criticalActions);
         }
 
-        // Add critical action items as warnings
-        const criticalActions = tripReadiness.actionItems.filter(a => a.includes('URGENT'));
-        warnings.push(...criticalActions);
-      }
+        // ✅ IMPROVED: Better recommendation type labels based on score tiers
+        // Interest match is already a hard filter (applied in DestinationScoringEngine)
+        let recommendationType: EnhancedRecommendation['recommendationType'];
+        if (overallScore >= 70) {
+          recommendationType = 'highly-recommended';
+        } else if (overallScore >= 50) {
+          recommendationType = 'recommended';
+        } else {
+          // ✅ Changed: "consider" instead of "not-recommended" for 30-49%
+          recommendationType = 'consider';
+        }
 
-      // Determine recommendation type
-      let recommendationType: EnhancedRecommendation['recommendationType'];
-      if (overallScore >= 80) {
-        recommendationType = 'highly-recommended';
-      } else if (overallScore >= 65) {
-        recommendationType = 'recommended';
-      } else if (overallScore >= 50) {
-        recommendationType = 'consider';
-      } else {
-        recommendationType = 'not-recommended';
-      }
-
-      return {
-        ...dest,
-        readinessScore,
-        overallRecommendationScore: Math.round(overallScore),
-        recommendationType,
-        warnings
-      };
-    });
+        return {
+          ...dest,
+          readinessScore,
+          overallRecommendationScore: Math.round(overallScore),
+          recommendationType,
+          warnings
+        };
+      })
+      // ✅ NEW: Filter out low-quality recommendations (less than 30% score)
+      .filter(rec => rec.overallRecommendationScore >= 30);
   }
 }
