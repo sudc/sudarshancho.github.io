@@ -179,6 +179,19 @@ export class SmartRecommendationsComponent implements OnInit {
     return false;
   }
 
+  // ✅ NEW: Check if recommendation should not be displayed at all
+  isInvalidRecommendation(rec: EnhancedRecommendation): boolean {
+    const actualInterestMatch = (rec as any).interestMatchScore || 0;
+    const calculated = this.calculateInterestMatchScore(rec.destination);
+    
+    // Hide if either engine or component calculates 0 interest match
+    if (actualInterestMatch === 0 || calculated === 0) {
+      console.log(`🚫 HIDING INVALID: ${rec.destination.state} (engine: ${actualInterestMatch}, component: ${calculated})`);
+      return true; // Hidden from view
+    }
+    return false;
+  }
+
   // ✅ NEW: Get booking disabled message
   getBookingDisabledMessage(rec: EnhancedRecommendation): string {
     const actualInterestMatch = (rec as any).interestMatchScore || 0;

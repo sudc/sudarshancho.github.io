@@ -82,7 +82,7 @@
         <p class="results-subtitle">Based on your preferences, here are our top recommendations</p>
       </div>
 
-      <div *ngFor="let rec of recommendations; let i = index" class="destination-card">
+      <div *ngFor="let rec of recommendations; let i = index" class="destination-card" [hidden]="isInvalidRecommendation(rec)">
         <!-- Card Header -->
         <div class="card-header">
           <div>
