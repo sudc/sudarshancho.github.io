@@ -5,9 +5,11 @@
  * Comprehensive scoring engine for destinations based on multiple factors
  */
 
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { BaseEngine, BaseEngineConfig, BaseEngineResult } from '../base.engine';
 import { Destination, DESTINATIONS_DATA } from '../destination/destinations.data';
+import { environment } from '../../../../environments/environment';
 
 export interface UserPreferences {
   categories: string[];
@@ -36,6 +38,7 @@ export interface DestinationScoringResult extends BaseEngineResult {
 
 @Injectable()
 export class DestinationScoringEngine extends BaseEngine<DestinationScoringInput, DestinationScoringResult> {
+  private http = inject(HttpClient);
   
   protected config: BaseEngineConfig = {
     name: 'DestinationScoringEngine',
@@ -50,10 +53,26 @@ export class DestinationScoringEngine extends BaseEngine<DestinationScoringInput
       throw new Error('Invalid input');
     }
 
-    // 🚀 SKIP MongoDB entirely - use static data IMMEDIATELY (no async wait)
-    console.warn('⚠️ MongoDB disabled - using instant static data');
-    let destinations = Object.values(DESTINATIONS_DATA) as Destination[];
-    console.log(`📊 Loaded ${destinations.length} destinations from static data (instant)`);
+    // 🚀 LOAD DATA FROM MONGODB BACKEND
+    let destinations: Destination[] = [];
+    
+    try {
+      console.log('📡 Fetching destinations from MongoDB backend...');
+      const response = await this.http.get<Destination[]>(
+        `${environment.apiBaseUrl}/api/destinations`
+      ).toPromise();
+      
+      if (response && response.length > 0) {
+        destinations = response;
+        console.log(`✅ Loaded ${destinations.length} destinations from MongoDB`);
+      } else {
+        throw new Error('Empty response from backend');
+      }
+    } catch (err: any) {
+      console.warn('⚠️ MongoDB backend failed, falling back to static data:', err.message);
+      destinations = Object.values(DESTINATIONS_DATA) as Destination[];
+      console.log(`📊 Using fallback: ${destinations.length} destinations from static data`);
+    }
 
     const scored: ScoredDestination[] = [];
     

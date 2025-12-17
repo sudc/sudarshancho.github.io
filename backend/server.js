@@ -147,6 +147,73 @@ app.get('/api/destinations/:id', async (req, res) => {
   }
 });
 
+// Seed destinations (one-time setup)
+app.post('/api/seed', async (req, res) => {
+  try {
+    console.log('📝 Seeding destinations collection...');
+    
+    const destinations = [
+      { state: 'Goa', categories: ['Beach', 'Party'], bestMonths: [11, 12, 1, 2], avoidMonths: [6, 7, 8], climate: 'tropical', budget: 'moderate', agoda: 'goa-in' },
+      { state: 'Maharashtra', categories: ['City', 'Coastal'], bestMonths: [10, 11, 12, 1, 2], avoidMonths: [6, 7, 8], climate: 'humid', budget: 'premium', agoda: 'mumbai-in' },
+      { state: 'Maharashtra', categories: ['City', 'Hill'], bestMonths: [10, 11, 12, 1, 2], avoidMonths: [6, 7, 8], climate: 'moderate', budget: 'moderate', agoda: 'pune-in' },
+      { state: 'Himachal Pradesh', categories: ['Mountain', 'Snow'], bestMonths: [3, 4, 5, 10], avoidMonths: [7, 8], climate: 'cold', budget: 'budget', agoda: 'manali-in' },
+      { state: 'Himachal Pradesh', categories: ['Hill', 'Colonial'], bestMonths: [3, 4, 5, 10], avoidMonths: [7, 8], climate: 'cold', budget: 'budget', agoda: 'shimla-in' },
+      { state: 'Rajasthan', categories: ['Heritage'], bestMonths: [10, 11, 12, 1, 2], avoidMonths: [5, 6], climate: 'hot', budget: 'budget', agoda: 'jaipur-in' },
+      { state: 'Rajasthan', categories: ['Romantic', 'Heritage'], bestMonths: [10, 11, 12, 1, 2], avoidMonths: [5, 6], climate: 'hot', budget: 'moderate', agoda: 'udaipur-in' },
+      { state: 'Rajasthan', categories: ['Heritage'], bestMonths: [10, 11, 12, 1, 2], avoidMonths: [5, 6], climate: 'hot', budget: 'budget', agoda: 'jodhpur-in' },
+      { state: 'Uttarakhand', categories: ['Spiritual', 'Adventure'], bestMonths: [3, 4, 5, 10, 11], avoidMonths: [7, 8], climate: 'cool', budget: 'budget', agoda: 'rishikesh-in' },
+      { state: 'Delhi', categories: ['City', 'Culture', 'Heritage'], bestMonths: [10, 11, 12, 1, 2], avoidMonths: [5, 6, 7], climate: 'hot', budget: 'premium', agoda: 'delhi-in' },
+      { state: 'Uttar Pradesh', categories: ['Heritage'], bestMonths: [10, 11, 12, 1, 2], avoidMonths: [6, 7, 8], climate: 'extreme', budget: 'budget', agoda: 'agra-in' },
+      { state: 'Uttar Pradesh', categories: ['Spiritual', 'Culture'], bestMonths: [10, 11, 12, 1, 2], avoidMonths: [6, 7, 8], climate: 'extreme', budget: 'budget', agoda: 'varanasi-in' },
+      { state: 'Ladakh', categories: ['Adventure', 'Mountain'], bestMonths: [6, 7, 8, 9], avoidMonths: [11, 12, 1, 2, 3], climate: 'cold', budget: 'premium', agoda: 'leh-in' },
+      { state: 'Jammu & Kashmir', categories: ['Nature', 'Romantic'], bestMonths: [4, 5, 9, 10], avoidMonths: [11, 12, 1, 2], climate: 'cool', budget: 'moderate', agoda: 'srinagar-in' },
+      { state: 'Jammu & Kashmir', categories: ['Snow', 'Ski'], bestMonths: [1, 2, 3], avoidMonths: [5, 6, 7, 8, 9], climate: 'cold', budget: 'premium', agoda: 'gulmarg-in' },
+      { state: 'Kerala', categories: ['Backwaters', 'Culture'], bestMonths: [10, 11, 12, 1, 2], avoidMonths: [5, 6, 7], climate: 'tropical', budget: 'moderate', agoda: 'kochi-in' },
+      { state: 'Kerala', categories: ['Hill', 'Nature'], bestMonths: [9, 10, 11, 12, 1], avoidMonths: [4, 5], climate: 'tropical', budget: 'budget', agoda: 'munnar-in' },
+      { state: 'Kerala', categories: ['Backwaters'], bestMonths: [8, 9, 10, 11, 12], avoidMonths: [5, 6, 7], climate: 'tropical', budget: 'budget', agoda: 'alleppey-in' },
+      { state: 'Tamil Nadu', categories: ['Hill'], bestMonths: [10, 11, 12, 1, 2], avoidMonths: [4, 5, 6], climate: 'cool', budget: 'budget', agoda: 'ooty-in' },
+      { state: 'Puducherry', categories: ['Beach', 'Culture', 'Colonial'], bestMonths: [10, 11, 12, 1, 2], avoidMonths: [5, 6, 7], climate: 'tropical', budget: 'budget', agoda: 'puducherry-in' },
+      { state: 'Karnataka', categories: ['Heritage'], bestMonths: [10, 11, 12, 1, 2], avoidMonths: [5, 6], climate: 'moderate', budget: 'budget', agoda: 'hampi-in' },
+      { state: 'Karnataka', categories: ['Hill', 'Nature'], bestMonths: [9, 10, 11, 12, 1], avoidMonths: [4, 5, 6], climate: 'cool', budget: 'budget', agoda: 'coorg-in' },
+      { state: 'Karnataka', categories: ['Beach'], bestMonths: [10, 11, 12, 1, 2], avoidMonths: [5, 6], climate: 'tropical', budget: 'budget', agoda: 'gokarna-in' },
+      { state: 'West Bengal', categories: ['Hill', 'Colonial'], bestMonths: [3, 4, 9, 10, 11], avoidMonths: [6, 7, 8], climate: 'cool', budget: 'budget', agoda: 'darjeeling-in' },
+      { state: 'Sikkim', categories: ['Hill', 'Nature'], bestMonths: [3, 4, 5, 10, 11], avoidMonths: [6, 7], climate: 'cold', budget: 'budget', agoda: 'gangtok-in' },
+      { state: 'Meghalaya', categories: ['Nature', 'Hill'], bestMonths: [10, 11, 12, 1, 2], avoidMonths: [5, 6, 7], climate: 'wet', budget: 'budget', agoda: 'shillong-in' },
+      { state: 'Andaman & Nicobar', categories: ['Island', 'Beach'], bestMonths: [10, 11, 12, 1, 2], avoidMonths: [5, 6, 7, 8], climate: 'tropical', budget: 'premium', agoda: 'andaman-in' },
+      { state: 'Punjab', categories: ['Spiritual', 'Heritage'], bestMonths: [10, 11, 12, 1, 2], avoidMonths: [5, 6, 7], climate: 'extreme', budget: 'budget', agoda: 'amritsar-in' },
+      { state: 'Kerala', categories: ['Beach', 'Spiritual'], bestMonths: [10, 11, 12, 1, 2], avoidMonths: [5, 6, 7], climate: 'tropical', budget: 'budget', agoda: 'thiruvananthapuram-in' },
+      { state: 'Tamil Nadu', categories: ['Hill'], bestMonths: [10, 11, 12, 1, 2], avoidMonths: [4, 5, 6], climate: 'cool', budget: 'budget', agoda: 'coonoor-in' },
+      { state: 'Maharashtra', categories: ['Hill'], bestMonths: [9, 10, 11, 12], avoidMonths: [5, 6, 7], climate: 'moderate', budget: 'budget', agoda: 'mahabaleshwar-in' },
+      { state: 'Maharashtra', categories: ['Hill'], bestMonths: [9, 10, 11, 12], avoidMonths: [5, 6, 7], climate: 'moderate', budget: 'budget', agoda: 'panchgani-in' },
+      { state: 'Uttarakhand', categories: ['Spiritual'], bestMonths: [4, 5, 10, 11], avoidMonths: [7, 8], climate: 'cool', budget: 'budget', agoda: 'uttarkashi-in' },
+      { state: 'Kerala', categories: ['Nature', 'Wildlife'], bestMonths: [11, 12, 1, 2], avoidMonths: [5, 6, 7], climate: 'tropical', budget: 'budget', agoda: 'thekkady-in' },
+      { state: 'Assam', categories: ['Wildlife', 'Nature'], bestMonths: [11, 12, 1, 2], avoidMonths: [5, 6, 7], climate: 'wet', budget: 'budget', agoda: 'kaziranga-in' },
+      { state: 'Karnataka', categories: ['Heritage', 'Culture'], bestMonths: [10, 11, 12, 1, 2], avoidMonths: [5, 6], climate: 'hot', budget: 'budget', agoda: 'bangalore-in' },
+      { state: 'Rajasthan', categories: ['Wildlife'], bestMonths: [10, 11, 12, 1, 2], avoidMonths: [5, 6], climate: 'hot', budget: 'moderate', agoda: 'jaisalmer-in' },
+      { state: 'Madhya Pradesh', categories: ['Heritage'], bestMonths: [10, 11, 12, 1, 2], avoidMonths: [5, 6], climate: 'hot', budget: 'budget', agoda: 'khajuraho-in' },
+      { state: 'Rajasthan', categories: ['Spiritual', 'Culture'], bestMonths: [10, 11, 12, 1, 2], avoidMonths: [5, 6], climate: 'hot', budget: 'budget', agoda: 'pushkar-in' },
+      { state: 'Rajasthan', categories: ['Hill'], bestMonths: [10, 11, 12, 1, 2], avoidMonths: [5, 6], climate: 'hot', budget: 'budget', agoda: 'mount-abu-in' },
+      { state: 'Meghalaya', categories: ['Nature'], bestMonths: [10, 11, 12, 1, 2], avoidMonths: [5, 6, 7], climate: 'wet', budget: 'budget', agoda: 'cherrapunji-in' },
+      { state: 'Tamil Nadu', categories: ['Heritage', 'Spiritual'], bestMonths: [10, 11, 12, 1, 2], avoidMonths: [4, 5, 6], climate: 'hot', budget: 'budget', agoda: 'madurai-in' },
+      { state: 'Uttarakhand', categories: ['Hill', 'Lake'], bestMonths: [5, 6, 9, 10], avoidMonths: [11, 12, 1, 2], climate: 'cool', budget: 'budget', agoda: 'nainital-in' },
+      { state: 'Uttarakhand', categories: ['Hill', 'Colonial'], bestMonths: [3, 4, 5, 10, 11], avoidMonths: [7, 8], climate: 'cool', budget: 'budget', agoda: 'almora-in' }
+    ];
+
+    // Drop and recreate
+    const collection = db.collection('destinations');
+    await collection.deleteMany({});
+    const result = await collection.insertMany(destinations);
+
+    res.json({
+      message: `✅ Seeded ${result.insertedCount} destinations`,
+      count: result.insertedCount
+    });
+  } catch (err) {
+    console.error('❌ /api/seed:', err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // 404
 app.use((req, res) => {
   res.status(404).json({
