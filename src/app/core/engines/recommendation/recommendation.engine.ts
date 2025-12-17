@@ -215,11 +215,11 @@ export class RecommendationEngine extends BaseEngine<RecommendationInput, Recomm
           warnings
         };
       })
-      // ✅ CRITICAL: Filter out any destination with score < 40%
+      // ✅ CRITICAL: Filter out any destination with score < 25% (lowered from 40% to allow more results)
       .filter(rec => {
-        const keep = rec.overallRecommendationScore >= 40;
+        const keep = rec.overallRecommendationScore >= 25;
         if (!keep) {
-          console.log(`🚫 Filtering out ${rec.destination.state}: Score ${rec.overallRecommendationScore}% < 40%`);
+          console.log(`🚫 Filtering out ${rec.destination.state}: Score ${rec.overallRecommendationScore}% < 25%`);
         }
         return keep;
       });
