@@ -9,7 +9,6 @@ import { HowItWorksComponent } from './pages/how-it-works/how-it-works.component
 import { MethodologyComponent } from './pages/methodology/methodology.component';
 import { EngineTestComponent } from './pages/engine-test/engine-test.component';
 import { MongoDbTestComponent } from './pages/mongodb-test/mongodb-test.component';
-import { DataSeederComponent } from './pages/data-seeder/data-seeder.component';
 import { ResultsComponent } from './pages/results/results.component';
 
 export const routes: Routes = [
@@ -24,6 +23,5 @@ export const routes: Routes = [
 	{ path: 'methodology', component: MethodologyComponent },
 	{ path: 'engine-test', component: EngineTestComponent },
 	{ path: 'mongodb-test', component: MongoDbTestComponent },
-	{ path: 'data-seeder', component: DataSeederComponent },
 	{ path: '**', redirectTo: '' }
 ];

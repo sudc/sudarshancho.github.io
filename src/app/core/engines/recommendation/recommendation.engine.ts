@@ -56,7 +56,7 @@ export interface RecommendationInput {
 export interface EnhancedRecommendation extends ScoredDestination {
   readinessScore?: number;
   overallRecommendationScore: number;
-  recommendationType: 'highly-recommended' | 'recommended' | 'consider' | 'not-recommended';
+  recommendationType: 'highly-recommended' | 'recommended' | 'consider' | 'not-recommended' | 'hidden';
   warnings: string[];
 }
 
