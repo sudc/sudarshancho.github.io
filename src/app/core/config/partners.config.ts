@@ -98,35 +98,35 @@ export const PARTNERS: Record<string, PartnerConfig> = {
     }
   },
   
-  // ✅ MAKEMYTRIP - PRIMARY DOMESTIC PARTNER
-  makemytrip: {
-    id: 'makemytrip',
-    name: 'makemytrip',
-    displayName: 'MakeMyTrip',
+  // ✅ CUELINKS - PRIMARY DOMESTIC PARTNER
+  cuelinks: {
+    id: 'cuelinks',
+    name: 'cuelinks',
+    displayName: 'CueLinks',
     active: true, // ← Set to false to disable
     
     affiliateId: '', // Add when available
     
-    color: '#E73C34',
+    color: '#2563EB',
     
     urls: {
       hotels: (params) => {
-        const destination = (params?.city || params?.destination || 'india')
+        const destination = (params?.city || params?.destination || 'India')
           .toLowerCase()
-          .replace(/\s+/g, '-');
-        return `https://www.makemytrip.com/hotels/hotels-in-${destination}.html`;
+          .replace(/\s+/g, '%20');
+        return `https://www.cuelinks.com/affiliate?search=${destination}&category=hotels`;
       },
       search: (params) => {
-        const destination = (params?.destination || 'india')
+        const destination = (params?.destination || 'India')
           .toLowerCase()
-          .replace(/\s+/g, '-');
-        return `https://www.makemytrip.com/hotels/hotels-in-${destination}.html`;
+          .replace(/\s+/g, '%20');
+        return `https://www.cuelinks.com/affiliate?search=${destination}&category=hotels`;
       }
     },
     
     descriptions: {
-      general: "TripSaver helps Indian travelers decide when MakeMyTrip is suitable, especially for budget and domestic hotel bookings. We redirect users to MakeMyTrip using affiliate links without modifying pricing or availability.",
-      specific: "TripSaver helps Indian travelers decide when MakeMyTrip is suitable, especially for budget and domestic hotel bookings. We redirect users using affiliate links without modifying pricing."
+      general: "TripSaver helps travelers decide when CueLinks is suitable, leveraging its diverse hotel and travel partner network. We redirect users to CueLinks using affiliate links without modifying pricing or availability.",
+      specific: "TripSaver helps travelers access hotels through CueLinks' wide partner network. We redirect users using affiliate links without modifying pricing."
     }
   },
   
