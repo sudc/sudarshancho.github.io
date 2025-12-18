@@ -10,7 +10,6 @@ import {
 import { DestinationScoringEngine } from '../../core/engines/destination-scoring/destination-scoring.engine';
 import { TripReadinessEngine } from '../../core/engines/trip-readiness/trip-readiness.engine';
 import { TrustConfigService } from '../../core/services/trust-config.service';
-import { DESTINATIONS_DATA } from '../../core/engines/destination/destinations.data';
 
 @Component({
   selector: 'app-smart-recommendations',
