@@ -9,14 +9,6 @@ import { TripStepperComponent } from '../../components/trip-stepper/trip-stepper
 import { SmartRecommendationsComponent } from '../../components/smart-recommendations/smart-recommendations.component';
 import { TrustConfigService } from '../../core/services/trust-config.service';
 
-interface Category {
-  id: string;
-  name: string;
-  description: string;
-  icon: string;
-  affiliates: any[];
-}
-
 interface UserRequirements {
   month: number;
   budget: 'budget' | 'moderate' | 'premium';
@@ -48,7 +40,6 @@ export class HomeComponent implements OnInit {
   showSmartRecommendations = false;
 
   userRequirements: UserRequirements | null = null;
-  categories: Category[] = [];
   userPreferences: any = null;
 
   /* =======================
@@ -112,7 +103,6 @@ export class HomeComponent implements OnInit {
   ======================== */
   ngOnInit(): void {
     this.setSeoTags();
-    this.loadCategories();
   }
 
   /* =======================
@@ -226,13 +216,6 @@ export class HomeComponent implements OnInit {
   /* =======================
      DATA
   ======================== */
-  private loadCategories(): void {
-    this.http.get<{ categories: Category[] }>('/assets/data/categories.json')
-      .subscribe({
-        next: res => (this.categories = res.categories),
-        error: () => (this.categories = [])
-      });
-  }
 
   /* =======================
      MODALS
