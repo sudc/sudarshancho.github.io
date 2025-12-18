@@ -135,16 +135,33 @@ export class SmartRecommendationsComponent implements OnInit {
       interestScore = (rec as any).interestMatchScore;
     } else {
       // Fallback: recalculate (should not happen)
-      if (prefs.categories.length > 0) {
+      if (prefs.categories.length > 0 && dest.categories && dest.categories.length > 0) {
         const matches = dest.categories.filter(cat => prefs.categories.includes(cat));
         interestScore = Math.min(23, matches.length * 11);
       }
     }
 
     // Timing (36 max - /100 scale)
-    if (dest.bestMonths.includes(prefs.month)) {
-      timingScore = 36;
-    } else if (dest.avoidMonths.includes(prefs.month)) {
+    if (dest.bestMonths && dest.bestMonths.length > 0) {
+      const normalizedBestMonths = dest.bestMonths.map(m => {
+        if (typeof m === 'string') {
+          const monthMap: Record<string, number> = {
+            'Jan': 1, 'Feb': 2, 'Mar': 3, 'Apr': 4, 'May': 5, 'Jun': 6,
+            'Jul': 7, 'Aug': 8, 'Sep': 9, 'Oct': 10, 'Nov': 11, 'Dec': 12
+          };
+          return monthMap[m] || 0;
+        }
+        return m;
+      });
+      
+      if (normalizedBestMonths.includes(prefs.month)) {
+        timingScore = 36;
+      } else if (dest.avoidMonths && dest.avoidMonths.includes(prefs.month)) {
+        timingScore = 9;
+      } else {
+        timingScore = 18;
+      }
+    } else if (dest.avoidMonths && dest.avoidMonths.length > 0 && dest.avoidMonths.includes(prefs.month)) {
       timingScore = 9;
     } else {
       timingScore = 18;
