@@ -109,39 +109,22 @@
         [resultCount]="recommendations.length">
       </app-result-summary>
 
-      <!-- ✅ CAROUSEL LAYOUT (Single Card with Navigation) -->
-      <div class="carousel-container">
-        <!-- Previous Button -->
-        <button 
-          class="nav-button nav-prev"
-          (click)="previousCard()"
-          [disabled]="currentCardIndex === 0"
-          aria-label="Previous recommendation">
-          ❮ Previous
-        </button>
-
-        <!-- Single Card Display -->
-        <div class="carousel-card">
-          <app-destination-card-compact
-            *ngIf="recommendations.length > 0"
-            [recommendation]="recommendations[currentCardIndex]"
-            (bookingClicked)="openBookingModal($event)">
-          </app-destination-card-compact>
-        </div>
-
-        <!-- Next Button -->
-        <button 
-          class="nav-button nav-next"
-          (click)="nextCard()"
-          [disabled]="currentCardIndex === recommendations.length - 1"
-          aria-label="Next recommendation">
-          Next ❯
-        </button>
+      <!-- ✅ GRID LAYOUT (Multiple Cards) -->
+      <div class="recommendations-grid">
+        <app-destination-card-compact
+          *ngFor="let rec of recommendations | slice:0:6"
+          [recommendation]="rec"
+          (bookingClicked)="openBookingModal($event)">
+        </app-destination-card-compact>
       </div>
 
-      <!-- Card Counter -->
-      <div class="carousel-counter">
-        Showing {{ currentCardIndex + 1 }} of {{ recommendations.length }} recommendations
+      <!-- Show More Button -->
+      <div class="show-more-container" *ngIf="recommendations.length > 6">
+        <button
+          class="show-more-btn"
+          (click)="showAllResults = !showAllResults">
+          {{ showAllResults ? 'Show Less' : 'Show More Destinations' }}
+        </button>
       </div>
     </div>
 
