@@ -28,9 +28,15 @@ if (!MONGODB_URI) {
    MIDDLEWARE
    =============================== */
 
-// Simple CORS configuration - allow all origins for debugging
+// CORS configuration - allow specific origins
 const corsOptions = {
-  origin: '*',
+  origin: [
+    'https://tripsaver.github.io',
+    'https://tripsaver-github-io.onrender.com',
+    'http://localhost:4200',
+    'http://localhost:3000',
+    'http://localhost:5173'
+  ],
   credentials: false,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH', 'HEAD'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
@@ -50,9 +56,8 @@ app.use(express.urlencoded({ extended: true }));
 
 // Request logging middleware
 app.use((req, res, next) => {
-  console.log(`📨 ${req.method} ${req.path} from ${req.get('origin') || 'NO-ORIGIN'}`);
   res.on('finish', () => {
-    console.log(`📮 Response: ${res.statusCode}`);
+    console.log(`${req.method} ${req.path} - ${res.statusCode}`);
   });
   next();
 });
