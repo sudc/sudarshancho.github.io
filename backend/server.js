@@ -28,43 +28,22 @@ if (!MONGODB_URI) {
    MIDDLEWARE
    =============================== */
 
-// CORS configuration with origin function for better debugging
+// Simple CORS configuration - allow all origins for debugging
 const corsOptions = {
-  origin: function (origin, callback) {
-    const allowedOrigins = [
-      'https://tripsaver.github.io',
-      'https://tripsaver-backend.onrender.com',
-      'http://localhost:4200',
-      'http://localhost:3000',
-      'http://localhost:5173'
-    ];
-    
-    // Log all requests for debugging
-    console.log(`📍 CORS request from origin: ${origin || 'NO-ORIGIN'}`);
-    
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) {
-      console.log('✅ No origin - allowing (mobile/curl)');
-      callback(null, true);
-    } else if (allowedOrigins.includes(origin)) {
-      console.log(`✅ Origin allowed: ${origin}`);
-      callback(null, true);
-    } else {
-      console.warn(`⚠️  CORS blocked origin: ${origin}`);
-      // For debugging - temporarily log but still allow
-      callback(null, true); // TEMPORARILY ALLOWING ALL - REMOVE IN PRODUCTION
-    }
-  },
-  credentials: true,
+  origin: '*',
+  credentials: false,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH', 'HEAD'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
   exposedHeaders: ['Content-Type'],
   optionsSuccessStatus: 200,
-  preflightContinue: false,
-  maxAge: 86400 // 24 hours
+  maxAge: 86400
 };
 
+// Apply CORS BEFORE any routes
 app.use(cors(corsOptions));
+
+// Explicit preflight handler
+app.options('*', cors(corsOptions));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -77,9 +56,6 @@ app.use((req, res, next) => {
   });
   next();
 });
-
-// Explicit preflight request handler
-app.options('*', cors(corsOptions));
 
 /* ===============================
    MONGODB CONNECTION
