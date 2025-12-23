@@ -39,24 +39,44 @@ const corsOptions = {
       'http://localhost:5173'
     ];
     
+    // Log all requests for debugging
+    console.log(`📍 CORS request from origin: ${origin || 'NO-ORIGIN'}`);
+    
     // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin || allowedOrigins.includes(origin)) {
+    if (!origin) {
+      console.log('✅ No origin - allowing (mobile/curl)');
+      callback(null, true);
+    } else if (allowedOrigins.includes(origin)) {
+      console.log(`✅ Origin allowed: ${origin}`);
       callback(null, true);
     } else {
       console.warn(`⚠️  CORS blocked origin: ${origin}`);
-      callback(new Error('CORS not allowed'));
+      // For debugging - temporarily log but still allow
+      callback(null, true); // TEMPORARILY ALLOWING ALL - REMOVE IN PRODUCTION
     }
   },
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  optionsSuccessStatus: 200
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH', 'HEAD'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  exposedHeaders: ['Content-Type'],
+  optionsSuccessStatus: 200,
+  preflightContinue: false,
+  maxAge: 86400 // 24 hours
 };
 
 app.use(cors(corsOptions));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Request logging middleware
+app.use((req, res, next) => {
+  console.log(`📨 ${req.method} ${req.path} from ${req.get('origin') || 'NO-ORIGIN'}`);
+  res.on('finish', () => {
+    console.log(`📮 Response: ${res.statusCode}`);
+  });
+  next();
+});
 
 // Explicit preflight request handler
 app.options('*', cors(corsOptions));
@@ -366,11 +386,17 @@ app.post('/api/contact/submit', async (req, res) => {
 
     // Validation
     if (!name || !email || !subject || !message) {
-      return res.status(400).json({ error: 'All fields are required' });
+      return res.status(400).json({ 
+        success: false,
+        error: 'All fields are required' 
+      });
     }
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return res.status(400).json({ error: 'Invalid email format' });
+      return res.status(400).json({ 
+        success: false,
+        error: 'Invalid email format' 
+      });
     }
 
     // Create submission document
@@ -381,24 +407,80 @@ app.post('/api/contact/submit', async (req, res) => {
       message,
       submittedAt: new Date(),
       status: 'new',
-      ipAddress: req.ip
+      ipAddress: req.ip || 'unknown'
     };
 
-    // Insert into MongoDB
-    const result = await db
-      .collection('contact-submissions')
-      .insertOne(submission);
+    // Ensure collection exists and insert
+    try {
+      const collection = db.collection('contact-submissions');
+      const result = await collection.insertOne(submission);
 
-    res.status(201).json({
-      success: true,
-      message: 'Contact form submitted successfully',
-      submissionId: result.insertedId
-    });
+      console.log(`✅ Contact submission from ${email}: ${subject}`);
+      console.log(`   Inserted ID: ${result.insertedId}`);
 
-    console.log(`✅ Contact submission from ${email}: ${subject}`);
+      res.status(201).json({
+        success: true,
+        message: 'Contact form submitted successfully',
+        submissionId: result.insertedId
+      });
+    } catch (dbError) {
+      console.error('❌ Database error:', dbError.message);
+      throw dbError;
+    }
   } catch (err) {
-    console.error('❌ /api/contact/submit:', err.message);
-    res.status(500).json({ error: 'Failed to submit contact form' });
+    console.error('❌ /api/contact/submit Error:', {
+      message: err.message,
+      name: err.name,
+      stack: err.stack
+    });
+    
+    // Return more detailed error for debugging
+    res.status(500).json({ 
+      success: false,
+      error: 'Failed to submit contact form',
+      details: process.env.NODE_ENV === 'development' ? err.message : undefined
+    });
+  }
+});
+
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.status(200).json({ 
+    status: 'OK', 
+    timestamp: new Date(),
+    version: '1.0'
+  });
+});
+
+// Initialize collections endpoint (run once)
+app.post('/api/init', async (req, res) => {
+  try {
+    console.log('🔧 Initializing database collections...');
+    
+    // Create contact-submissions collection with indexes
+    const contactCollection = db.collection('contact-submissions');
+    
+    // Create compound index for email and date
+    await contactCollection.createIndex({ email: 1, submittedAt: -1 });
+    
+    // Create text index for searching
+    await contactCollection.createIndex({ name: 'text', subject: 'text', message: 'text' });
+    
+    console.log('✅ Database initialized successfully');
+    
+    res.json({
+      success: true,
+      message: 'Database initialized',
+      collections: {
+        'contact-submissions': 'ready with indexes'
+      }
+    });
+  } catch (err) {
+    console.error('❌ /api/init:', err.message);
+    res.status(500).json({ 
+      success: false,
+      error: err.message 
+    });
   }
 });
 
