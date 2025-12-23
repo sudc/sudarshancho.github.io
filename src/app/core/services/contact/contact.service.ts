@@ -23,7 +23,7 @@ export class ContactService {
   private apiUrl = 'http://localhost:3000/api/contact/submit';
   
   // Use production API if available
-  private productionApiUrl = 'https://tripsaver-backend.onrender.com/api/contact/submit';
+  private productionApiUrl = 'https://tripsaver-github-io.onrender.com/api/contact/submit';
 
   constructor(private http: HttpClient) {
     // Auto-detect environment
