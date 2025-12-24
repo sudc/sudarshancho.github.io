@@ -77,6 +77,9 @@ async function connectToMongo() {
     
     // Initialize collections on startup
     await initializeCollections();
+    
+    // Initialize affiliate config with defaults
+    await initializeAffiliateConfig();
   } catch (err) {
     console.error('❌ MongoDB connection failed:', err.message);
     process.exit(1);
@@ -484,6 +487,255 @@ app.post('/api/init', async (req, res) => {
     });
   }
 });
+
+/* ===============================
+   AFFILIATE CONFIG ENDPOINTS
+   =============================== */
+
+// Initialize affiliate config with defaults
+app.get('/api/affiliate-config/init', async (req, res) => {
+  try {
+    const defaultConfig = {
+      _id: 'active',
+      activePartner: 'amazon',
+      affiliateIds: {
+        amazon: 'tripsaver21-21',
+        agoda: process.env.AGODA_AFFILIATE_ID || 'YOUR_AGODA_ID',
+        booking: process.env.BOOKING_AFFILIATE_ID || 'YOUR_BOOKING_ID',
+        abhibus: 'kQK6mx'
+      },
+      partners: {
+        amazon: {
+          name: 'Amazon',
+          logo: '🛒',
+          type: 'shopping'
+        },
+        agoda: {
+          name: 'Agoda',
+          logo: '🏨',
+          type: 'hotel'
+        },
+        booking: {
+          name: 'Booking.com',
+          logo: '🏩',
+          type: 'hotel'
+        },
+        abhibus: {
+          name: 'AbhiBus',
+          logo: '🚌',
+          type: 'bus'
+        }
+      },
+      lastUpdated: new Date(),
+      updatedBy: 'auto-init'
+    };
+
+    // Check if config already exists
+    const existing = await db.collection('affiliate-config').findOne({ _id: 'active' });
+    
+    if (existing) {
+      return res.json({
+        status: 'already_exists',
+        message: 'Config already initialized',
+        config: existing
+      });
+    }
+
+    // Initialize with defaults
+    await db.collection('affiliate-config').insertOne(defaultConfig);
+    
+    console.log('✅ Affiliate config initialized with defaults');
+
+    res.status(201).json({
+      status: 'initialized',
+      message: 'Config initialized with defaults',
+      config: defaultConfig
+    });
+  } catch (err) {
+    console.error('❌ Error initializing affiliate config:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Get current affiliate configuration
+app.get('/api/affiliate-config', async (req, res) => {
+  try {
+    let config = await db.collection('affiliate-config').findOne({ _id: 'active' });
+    
+    // Auto-initialize if not found
+    if (!config) {
+      console.log('ℹ️  Config not found, auto-initializing...');
+      const initResponse = await new Promise((resolve, reject) => {
+        const req = { params: {} };
+        const res = {
+          json: resolve,
+          status: () => res
+        };
+        require('./server.js'); // This won't work, use direct initialization instead
+      });
+      
+      // Direct initialization
+      config = {
+        _id: 'active',
+        activePartner: 'amazon',
+        affiliateIds: {
+          amazon: 'tripsaver21-21',
+          agoda: process.env.AGODA_AFFILIATE_ID || 'YOUR_AGODA_ID',
+          booking: process.env.BOOKING_AFFILIATE_ID || 'YOUR_BOOKING_ID',
+          abhibus: 'kQK6mx'
+        },
+        partners: {
+          amazon: {
+            name: 'Amazon',
+            logo: '🛒',
+            type: 'shopping'
+          },
+          agoda: {
+            name: 'Agoda',
+            logo: '🏨',
+            type: 'hotel'
+          },
+          booking: {
+            name: 'Booking.com',
+            logo: '🏩',
+            type: 'hotel'
+          },
+          abhibus: {
+            name: 'AbhiBus',
+            logo: '🚌',
+            type: 'bus'
+          }
+        },
+        lastUpdated: new Date(),
+        updatedBy: 'auto-init'
+      };
+
+      await db.collection('affiliate-config').insertOne(config);
+      console.log('✅ Auto-initialized affiliate config');
+    }
+
+    res.json({
+      activePartner: config.activePartner,
+      affiliateIds: config.affiliateIds,
+      partners: config.partners,
+      lastUpdated: config.lastUpdated
+    });
+  } catch (err) {
+    console.error('❌ Error fetching affiliate config:', err);
+    res.status(500).json({ error: 'Failed to fetch affiliate config' });
+  }
+});
+
+// Update affiliate configuration
+app.post('/api/affiliate-config', async (req, res) => {
+  try {
+    const { activePartner, affiliateIds, partners } = req.body;
+
+    if (!activePartner) {
+      return res.status(400).json({ error: 'activePartner is required' });
+    }
+
+    const config = {
+      _id: 'active',
+      activePartner,
+      affiliateIds: affiliateIds || {},
+      partners: partners || {},
+      lastUpdated: new Date(),
+      updatedBy: 'system'
+    };
+
+    const result = await db.collection('affiliate-config').updateOne(
+      { _id: 'active' },
+      { $set: config },
+      { upsert: true }
+    );
+
+    console.log(`✅ Affiliate config updated: ${activePartner}`);
+
+    res.status(200).json({
+      success: true,
+      message: 'Affiliate config updated',
+      config
+    });
+  } catch (err) {
+    console.error('❌ Error updating affiliate config:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Update specific affiliate ID
+app.patch('/api/affiliate-config/:partnerId', async (req, res) => {
+  try {
+    const { partnerId } = req.params;
+    const { affiliateId } = req.body;
+
+    if (!affiliateId) {
+      return res.status(400).json({ error: 'affiliateId is required' });
+    }
+
+    const result = await db.collection('affiliate-config').updateOne(
+      { _id: 'active' },
+      { 
+        $set: { 
+          [`affiliateIds.${partnerId}`]: affiliateId,
+          lastUpdated: new Date()
+        }
+      },
+      { upsert: true }
+    );
+
+    console.log(`✅ Affiliate ID updated for ${partnerId}`);
+
+    res.status(200).json({
+      success: true,
+      message: `Affiliate ID updated for ${partnerId}`,
+      partnerId,
+      affiliateId
+    });
+  } catch (err) {
+    console.error('❌ Error updating affiliate ID:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/* ===============================
+   AUTO-INITIALIZATION ON STARTUP
+   =============================== */
+async function initializeAffiliateConfig() {
+  try {
+    const config = await db.collection('affiliate-config').findOne({ _id: 'active' });
+    
+    if (!config) {
+      console.log('📌 No affiliate config found, initializing...');
+      
+      const defaultConfig = {
+        _id: 'active',
+        activePartner: 'amazon',
+        affiliateIds: {
+          amazon: 'tripsaver21-21',
+          agoda: process.env.AGODA_AFFILIATE_ID || 'YOUR_AGODA_ID',
+          booking: process.env.BOOKING_AFFILIATE_ID || 'YOUR_BOOKING_ID',
+          abhibus: 'kQK6mx'
+        },
+        partners: {
+          amazon: { name: 'Amazon', logo: '🛒', type: 'shopping' },
+          agoda: { name: 'Agoda', logo: '🏨', type: 'hotel' },
+          booking: { name: 'Booking.com', logo: '🏩', type: 'hotel' },
+          abhibus: { name: 'AbhiBus', logo: '🚌', type: 'bus' }
+        },
+        lastUpdated: new Date(),
+        updatedBy: 'startup'
+      };
+
+      await db.collection('affiliate-config').insertOne(defaultConfig);
+      console.log('✅ Affiliate config initialized on startup');
+    } else {
+      console.log('✅ Affiliate config already exists:', config.activePartner);
+    }
+  } catch (err) {
+    console.error('❌ Error initializing affiliate config:', err);
+  }
+}
 
 // 404
 app.use((req, res) => {

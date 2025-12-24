@@ -7,6 +7,7 @@ import { TripReadinessEngine } from '../../core/engines/trip-readiness/trip-read
 import { BookingModalComponent } from '../booking-modal/booking-modal.component';
 import { getDestinationCategories, type ProductCategory } from '../../core/config/destination-categories.config';
 import { AffiliateLinkBuilderService } from '../../core/services/affiliate-link-builder.service';
+import { AffiliateConfigService } from '../../core/services/affiliate-config.service';
 import type { AffiliatePartnerType } from '../../core/config/affiliate-partners.config';
 import { getShoppingPartners, type AffiliatePartnerConfig } from '../../core/config/affiliate-config';
 
@@ -25,6 +26,7 @@ export class TripStepperComponent implements OnInit {
   private recommendationEngine = inject(RecommendationEngine);
   private cdr = inject(ChangeDetectorRef);
   private affiliateLinkBuilder = inject(AffiliateLinkBuilderService);
+  private affiliateConfigService = inject(AffiliateConfigService);
 
   // ✅ Affiliate Shopping Partners (Agoda, Amazon, etc)
   availableShoppingPartners = getShoppingPartners();
@@ -91,7 +93,31 @@ export class TripStepperComponent implements OnInit {
   ];
 
   ngOnInit(): void {
-    // Initialize stepper
+    // Initialize affiliate config first (auto-seeds MongoDB if needed)
+    this.affiliateConfigService.initConfig().subscribe(
+      (initResult) => {
+        console.log('✅ Affiliate config initialized:', initResult);
+        // Then load the config
+        this.loadAffiliateConfig();
+      },
+      (error) => {
+        console.warn('⚠️ Init endpoint may not exist, loading config directly:', error);
+        // If init fails, just load config directly
+        this.loadAffiliateConfig();
+      }
+    );
+  }
+
+  private loadAffiliateConfig(): void {
+    this.affiliateConfigService.loadConfig().subscribe(
+      (config) => {
+        console.log('✅ Affiliate config loaded in component:', config);
+        this.cdr.markForCheck();
+      },
+      (error) => {
+        console.warn('⚠️ Using default affiliate config:', error);
+      }
+    );
   }
 
   // ✅ Navigation

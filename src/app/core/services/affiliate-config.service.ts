@@ -1,0 +1,131 @@
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, BehaviorSubject, firstValueFrom } from 'rxjs';
+import { tap, catchError } from 'rxjs/operators';
+
+export interface AffiliateConfigData {
+  activePartner: string;
+  affiliateIds: { [key: string]: string };
+  partners: any;
+  lastUpdated: string;
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class AffiliateConfigService {
+  private http = inject(HttpClient);
+  
+  private apiUrl = 'http://localhost:3000/api/affiliate-config';
+  
+  private configSubject = new BehaviorSubject<AffiliateConfigData | null>(null);
+  public config$ = this.configSubject.asObservable();
+
+  constructor() {
+    this.loadConfig();
+  }
+
+  /**
+   * Initialize affiliate config if not exists
+   */
+  initConfig(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/init`).pipe(
+      tap(result => {
+        console.log('✅ Affiliate config initialized:', result);
+      }),
+      catchError(err => {
+        console.warn('⚠️ Failed to initialize affiliate config:', err);
+        throw err;
+      })
+    );
+  }
+
+  /**
+   * Load affiliate configuration from MongoDB
+   */
+  loadConfig(): Observable<AffiliateConfigData> {
+    return this.http.get<AffiliateConfigData>(this.apiUrl).pipe(
+      tap(config => {
+        console.log('✅ Affiliate config loaded from MongoDB:', config);
+        this.configSubject.next(config);
+      }),
+      catchError(err => {
+        console.warn('⚠️ Failed to load affiliate config:', err);
+        throw err;
+      })
+    );
+  }
+
+  /**
+   * Get current config synchronously if loaded
+   */
+  getCurrentConfig(): AffiliateConfigData | null {
+    return this.configSubject.value;
+  }
+
+  /**
+   * Wait for config to load (useful for initialization)
+   */
+  async waitForConfig(): Promise<AffiliateConfigData> {
+    const current = this.configSubject.value;
+    if (current) {
+      return current;
+    }
+    return firstValueFrom(this.config$);
+  }
+
+  /**
+   * Update affiliate configuration in MongoDB
+   */
+  updateConfig(config: Partial<AffiliateConfigData>): Observable<any> {
+    return this.http.post<any>(this.apiUrl, config).pipe(
+      tap(result => {
+        console.log('✅ Affiliate config updated:', result);
+        this.loadConfig();
+      }),
+      catchError(err => {
+        console.error('❌ Failed to update config:', err);
+        throw err;
+      })
+    );
+  }
+
+  /**
+   * Update specific affiliate ID in MongoDB
+   */
+  updateAffiliateId(partnerId: string, affiliateId: string): Observable<any> {
+    return this.http
+      .patch<any>(`${this.apiUrl}/${partnerId}`, { affiliateId })
+      .pipe(
+        tap(result => {
+          console.log(`✅ Affiliate ID updated for ${partnerId}:`, result);
+          this.loadConfig();
+        }),
+        catchError(err => {
+          console.error(`❌ Failed to update affiliate ID for ${partnerId}:`, err);
+          throw err;
+        })
+      );
+  }
+
+  /**
+   * Get active partner from config
+   */
+  getActivePartner(): string | null {
+    return this.configSubject.value?.activePartner || null;
+  }
+
+  /**
+   * Get affiliate ID for partner
+   */
+  getAffiliateId(partnerId: string): string | null {
+    return this.configSubject.value?.affiliateIds[partnerId] || null;
+  }
+
+  /**
+   * Set active partner
+   */
+  setActivePartner(partnerId: string): Observable<any> {
+    return this.updateConfig({ activePartner: partnerId });
+  }
+}

@@ -293,13 +293,13 @@
             <p class="mini-drawer-note">Available on {{ getSelectedPartnerName() }}</p>
           </div>
 
-          <!-- CTA - Merged with panel -->
+          <!-- PRIMARY CTA - Merged with panel -->
           <button 
-            class="btn-explore" 
+            class="btn-primary-cta" 
             [class.expanded]="expandedDestinationId === rec.destination.id"
             (click)="toggleExplorePanel(rec.destination.id)">
-            <span class="explore-text">Explore {{ rec.destination.name }}</span>
-            <span class="explore-chevron">{{expandedDestinationId === rec.destination.id ? '▼' : '▶'}}</span>
+            <span class="cta-text">Plan Trip</span>
+            <span class="cta-chevron">{{expandedDestinationId === rec.destination.id ? '▼' : '▶'}}</span>
           </button>
 
           <!-- ✅ Contextual Explore Panel (Inline) -->
