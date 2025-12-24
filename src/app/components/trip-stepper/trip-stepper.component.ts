@@ -322,7 +322,6 @@ export class TripStepperComponent implements OnInit {
     }
     return 'our partners';
   }
-  }
 
   /**
    * Switch shopping partner
