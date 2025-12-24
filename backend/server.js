@@ -500,7 +500,7 @@ app.get('/api/affiliate-config/init', async (req, res) => {
       activePartner: 'amazon',
       affiliateIds: {
         amazon: 'tripsaver21-21',
-        agoda: process.env.AGODA_AFFILIATE_ID || 'YOUR_AGODA_ID',
+        agoda: process.env.AGODA_AFFILIATE_ID || '1955073',
         booking: process.env.BOOKING_AFFILIATE_ID || 'YOUR_BOOKING_ID',
         abhibus: 'kQK6mx'
       },
@@ -572,7 +572,7 @@ app.get('/api/affiliate-config', async (req, res) => {
         activePartner: 'amazon',
         affiliateIds: {
           amazon: 'tripsaver21-21',
-          agoda: process.env.AGODA_AFFILIATE_ID || 'YOUR_AGODA_ID',
+          agoda: process.env.AGODA_AFFILIATE_ID || '1955073',
           booking: process.env.BOOKING_AFFILIATE_ID || 'YOUR_BOOKING_ID',
           abhibus: 'kQK6mx'
         },
@@ -705,7 +705,7 @@ async function initializeAffiliateConfig() {
         activePartner: 'amazon',
         affiliateIds: {
           amazon: 'tripsaver21-21',
-          agoda: process.env.AGODA_AFFILIATE_ID || 'YOUR_AGODA_ID',
+          agoda: process.env.AGODA_AFFILIATE_ID || '1955073',
           booking: process.env.BOOKING_AFFILIATE_ID || 'YOUR_BOOKING_ID',
           abhibus: 'kQK6mx'
         },

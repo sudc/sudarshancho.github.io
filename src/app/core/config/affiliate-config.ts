@@ -26,7 +26,7 @@ export const AFFILIATE_CONFIG: Record<string, AffiliatePartnerConfig> = {
     name: 'Agoda',
     logo: '🏨',
     baseUrl: 'https://www.agoda.com',
-    affiliateId: 'YOUR_AGODA_AFFILIATE_ID', // UPDATE WITH YOUR ID
+    affiliateId: '1955073', // Agoda CID
     commission: 12,
     active: true,
     description: 'Best hotel deals in Asia',

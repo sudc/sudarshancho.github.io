@@ -126,7 +126,7 @@
     <div class="modal-body">
       <!-- Hotel booking platforms -->
       <div class="platforms-container">
-        <a href="https://www.agoda.com/?cid=1891348" target="_blank" rel="noopener" class="platform-card" (click)="trackHotelClick('Agoda')">
+        <a [href]="'https://www.agoda.com/?cid=' + agodaAffiliateId" target="_blank" rel="noopener" class="platform-card" (click)="trackHotelClick('Agoda')">
           <div class="platform-icon">🏨</div>
           <div class="platform-info">
             <h4>Agoda</h4>

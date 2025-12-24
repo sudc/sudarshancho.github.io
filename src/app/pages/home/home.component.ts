@@ -11,6 +11,7 @@ import { TripStepperComponent } from '../../components/trip-stepper/trip-stepper
 import { SmartRecommendationsComponent } from '../../components/smart-recommendations/smart-recommendations.component';
 import { TrustConfigService } from '../../core/services/trust-config.service';
 import { BookingService } from '../../core/services/booking.service';
+import { AffiliateConfigService } from '../../core/services/affiliate-config.service';
 
 declare const gtag: Function;
 
@@ -101,7 +102,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     private titleService: Title,
     private metaService: Meta,
     private trustConfigService: TrustConfigService,
-    private bookingService: BookingService
+    private bookingService: BookingService,
+    private affiliateConfigService: AffiliateConfigService
   ) {
     // Fetch trust config on init (non-blocking)
     this.trustConfigService.getConfig().subscribe(config => {
@@ -115,6 +117,24 @@ export class HomeComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.setSeoTags();
     this.setupBookingServiceListeners();
+    this.loadAffiliateConfig();
+  }
+
+  /**
+   * Load affiliate configuration from centralized service
+   */
+  private loadAffiliateConfig(): void {
+    this.affiliateConfigService.config$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(config => {
+        if (config?.affiliateIds?.agoda) {
+          this.agodaAffiliateId = config.affiliateIds.agoda;
+          console.log('✅ Agoda CID loaded from config:', this.agodaAffiliateId);
+        }
+      });
+
+    // If config not loaded yet, trigger load
+    this.affiliateConfigService.loadConfig().subscribe();
   }
 
   ngOnDestroy(): void {
@@ -280,9 +300,13 @@ export class HomeComponent implements OnInit, OnDestroy {
   ======================== */
 
   // Modal state
+  /* =======================
+     MODAL STATE
+  ======================== */
   isHotelModalOpen = false;
   isBusModalOpen = false;
   isEssentialsModalOpen = false;
+  agodaAffiliateId = ''; // ✅ Loaded from centralized AffiliateConfigService
 
   /**
    * Open hotel booking modal
