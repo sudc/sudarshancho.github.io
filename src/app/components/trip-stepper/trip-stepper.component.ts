@@ -263,6 +263,23 @@ export class TripStepperComponent implements OnInit {
       this.expandedDestinationId === destinationId ? null : destinationId;
   }
 
+  // ✅ Quick Essentials Drawer (Power User)
+  expandedEssentialsId: string | null = null;
+
+  toggleEssentialsQuick(destinationId: string): void {
+    // Track quick action
+    if (typeof gtag !== 'undefined') {
+      (window as any).gtag('event', 'essentials_quick_action', {
+        event_category: 'Quick Action',
+        event_label: 'Essentials Mini Drawer',
+        source: 'quick_action_button'
+      });
+    }
+    this.expandedEssentialsId =
+      this.expandedEssentialsId === destinationId ? null : destinationId;
+    this.cdr.markForCheck();
+  }
+
   getDestinationCategories(destinationType?: string): Array<{
     name: string;
     icon: string;
@@ -346,6 +363,20 @@ export class TripStepperComponent implements OnInit {
       partner: this.selectedShoppingPartner,
       item: itemName,
     });
+  }
+
+  // ✅ Track Bus Booking Click
+  trackBusBookingClick(): void {
+    if (typeof gtag !== 'undefined') {
+      (window as any).gtag('event', 'abhibus_click', {
+        event_category: 'Affiliate',
+        event_label: 'Bus Tickets - AbhiBus',
+        source: 'quick_action_button'
+      });
+    }
+    console.log('🚌 Bus Booking Click: AbhiBus affiliate (Quick Action)');
+    // Navigate to AbhiBus
+    window.open('https://inr.deals/kQK6mx', '_blank', 'noopener');
   }
 
   // ✅ Restart
