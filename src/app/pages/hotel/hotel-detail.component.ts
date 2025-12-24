@@ -33,12 +33,26 @@ import { AffiliateService, PriceEntry } from '../../core/services/affiliate/affi
       <aside class="card p-6 border border-gray-200">
         <h3 class="text-xl font-bold mb-4">Prices & Booking</h3>
         <div *ngIf="prices.length" class="space-y-3">
-          <div *ngFor="let p of prices" class="p-3 bg-slate-50 rounded-lg border border-gray-200">
+          <div *ngFor="let p of prices; let first = first" 
+               class="p-3 rounded-lg border"
+               [class.featured]="first"
+               [class.bg-yellow-50]="first"
+               [class.border-yellow-300]="first"
+               [class.bg-slate-50]="!first"
+               [class.border-gray-200]="!first">
             <div class="flex justify-between items-center mb-2">
-              <span class="font-semibold text-gray-900">{{p.provider}}</span>
-              <span class="text-lg font-bold text-blue-600">₹{{p.price}}</span>
+              <div>
+                <span class="font-semibold text-gray-900">{{p.provider}}</span>
+                <span *ngIf="first" class="ml-2 inline-block bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-1 rounded">Best Deal</span>
+              </div>
+              <span class="text-lg font-bold" [class.text-blue-600]="!first" [class.text-green-600]="first">₹{{p.price}}</span>
             </div>
-            <a [href]="p.url" target="_blank" rel="noopener" class="btn-primary w-full text-center block">Book on {{p.provider}}</a>
+            <a [href]="p.url" target="_blank" rel="noopener" 
+               class="w-full text-center block py-2 px-3 rounded font-semibold transition-all"
+               [class.btn-primary]="first"
+               [class.btn-secondary]="!first">
+              Book on {{p.provider}}
+            </a>
           </div>
         </div>
         <div *ngIf="!prices.length" class="text-gray-500 text-sm">Loading prices...</div>

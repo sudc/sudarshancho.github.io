@@ -5,6 +5,10 @@ import { RecommendationEngine } from '../../core/engines/recommendation/recommen
 import { DestinationScoringEngine } from '../../core/engines/destination-scoring/destination-scoring.engine';
 import { TripReadinessEngine } from '../../core/engines/trip-readiness/trip-readiness.engine';
 import { BookingModalComponent } from '../booking-modal/booking-modal.component';
+import { getDestinationCategories, type ProductCategory } from '../../core/config/destination-categories.config';
+import { AffiliateLinkBuilderService } from '../../core/services/affiliate-link-builder.service';
+import type { AffiliatePartnerType } from '../../core/config/affiliate-partners.config';
+import { getShoppingPartners, type AffiliatePartnerConfig } from '../../core/config/affiliate-config';
 
 @Component({
   selector: 'app-trip-stepper',
@@ -17,6 +21,11 @@ import { BookingModalComponent } from '../booking-modal/booking-modal.component'
 export class TripStepperComponent implements OnInit {
   private recommendationEngine = inject(RecommendationEngine);
   private cdr = inject(ChangeDetectorRef);
+  private affiliateLinkBuilder = inject(AffiliateLinkBuilderService);
+
+  // ✅ Affiliate Shopping Partners (Agoda, Amazon, etc)
+  availableShoppingPartners = getShoppingPartners();
+  selectedShoppingPartner: string = 'amazon'; // Default to Amazon for product exploration
 
   // ✅ Stepper State
   currentStep = 1;
@@ -227,6 +236,9 @@ export class TripStepperComponent implements OnInit {
     this.preferences.climate = value as 'warm' | 'cool' | 'doesnt-matter';
   }
 
+  // ✅ Expand Panel State
+  expandedDestinationId: string | null = null;
+
   // ✅ Booking Modal
   openBookingModal(destination: any): void {
     this.selectedDestination = destination;
@@ -236,6 +248,88 @@ export class TripStepperComponent implements OnInit {
   closeBookingModal(): void {
     this.isBookingModalOpen = false;
     this.selectedDestination = null;
+  }
+
+  // ✅ Contextual Explore Panel (NEW)
+  toggleExplorePanel(destinationId: string, event?: Event): void {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    this.expandedDestinationId =
+      this.expandedDestinationId === destinationId ? null : destinationId;
+  }
+
+  getDestinationCategories(destinationType?: string): Array<{
+    name: string;
+    icon: string;
+    url: string;
+    partner?: string;
+  }> {
+    // Get partner-agnostic categories
+    const categories = getDestinationCategories(destinationType);
+    const partner = this.availableShoppingPartners.find(p => p.id === this.selectedShoppingPartner);
+    
+    // Build affiliate links dynamically based on selected partner
+    return categories.map((category: ProductCategory) => ({
+      name: category.name,
+      icon: category.icon,
+      url: this.buildShoppingLink(category.searchQuery),
+      partner: this.selectedShoppingPartner
+    }));
+  }
+
+  /**
+   * Build shopping link for current selected partner
+   * Supports both Agoda and Amazon with different link formats
+   */
+  buildShoppingLink(searchQuery: string): string {
+    const partner = this.availableShoppingPartners.find(p => p.id === this.selectedShoppingPartner);
+    
+    if (!partner) {
+      return '';
+    }
+
+    let url = '';
+
+    // Build partner-specific links
+    if (partner.id === 'amazon') {
+      // Amazon: search products
+      url = `${partner.baseUrl}/s?k=${encodeURIComponent(searchQuery)}&tag=${partner.affiliateId}`;
+    } else if (partner.id === 'agoda') {
+      // Agoda: redirect to search with affiliate ID
+      url = `${partner.baseUrl}/search?ss=${encodeURIComponent(searchQuery)}&affid=${partner.affiliateId}`;
+    } else {
+      // Generic format
+      url = `${partner.baseUrl}?search=${encodeURIComponent(searchQuery)}&affid=${partner.affiliateId}`;
+    }
+
+    return url;
+  }
+
+  /**
+   * Switch shopping partner
+   */
+  switchShoppingPartner(partnerId: string): void {
+    this.selectedShoppingPartner = partnerId;
+    this.cdr.markForCheck();
+  }
+
+  trackAffiliateClick(itemName: string): void {
+    // Track with GA4
+    if (typeof gtag !== 'undefined') {
+      const partner = this.availableShoppingPartners.find(p => p.id === this.selectedShoppingPartner);
+      (window as any).gtag('event', 'shopping_affiliate_click', {
+        event_category: partner?.name.toUpperCase() || 'SHOPPING',
+        event_label: itemName,
+        source: 'destination_explore_panel',
+        partner: this.selectedShoppingPartner
+      });
+    }
+    console.log('🛍️ Shopping Affiliate Click:', {
+      partner: this.selectedShoppingPartner,
+      item: itemName,
+    });
   }
 
   // ✅ Restart

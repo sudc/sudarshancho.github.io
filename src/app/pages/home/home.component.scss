@@ -35,7 +35,128 @@ nav a.active {
   color: #667eea;
 }
 
-/* HERO */
+/* HAMBURGER BUTTON */
+.hamburger-btn {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  z-index: 1001;
+}
+
+.hamburger-btn span {
+  width: 28px;
+  height: 3px;
+  background: #4b5563;
+  border-radius: 3px;
+  transition: all 0.3s ease;
+}
+
+.hamburger-btn.active span:nth-child(1) {
+  transform: rotate(45deg) translate(7px, 7px);
+}
+
+.hamburger-btn.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger-btn.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -7px);
+}
+
+.hamburger-btn:hover span {
+  background: #667eea;
+}
+
+/* MOBILE MENU */
+nav {
+  display: flex;
+  flex-direction: row;
+  gap: 0;
+}
+
+nav a {
+  margin-left: 16px;
+  text-decoration: none;
+  color: #444;
+  font-weight: 500;
+  transition: color 0.3s ease;
+  padding: 6px 12px;
+  border-radius: 4px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+
+nav a:hover {
+  color: #667eea;
+}
+
+/* Responsive - Show hamburger on mobile */
+@media (max-width: 768px) {
+  .hamburger-btn {
+    display: flex;
+  }
+
+  nav {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 280px;
+    height: 100vh;
+    background: linear-gradient(135deg, #fffffffa, #f9fafbfa);
+    backdrop-filter: blur(20px);
+    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
+    flex-direction: column;
+    padding: 5rem 2rem 2rem;
+    gap: 0.5rem;
+    transition: right 0.3s ease;
+    z-index: 1000;
+    overflow-y: auto;
+  }
+
+  nav.mobile-open {
+    right: 0;
+  }
+
+  nav a {
+    margin-left: 0;
+    padding: 1rem 1.5rem;
+    font-size: 1.1rem;
+    width: 100%;
+    border-radius: 8px;
+    min-height: 48px;
+  }
+
+  nav a:hover {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+    transform: translateX(5px);
+  }
+
+  nav a.active {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+  }
+}
+
+@media (max-width: 640px) {
+  .hamburger-btn span {
+    width: 24px;
+  }
+
+  nav {
+    width: 85%;
+    max-width: 320px;
+    padding: 4.5rem 1.5rem 2rem;
+  }
+
+  nav a {
+    padding: 0.875rem 1.25rem;
+    font-size: 1rem;
+  }
+}
 .finder-section {
   background: linear-gradient(135deg, #667eea, #764ba2);
   padding: 30px 20px;

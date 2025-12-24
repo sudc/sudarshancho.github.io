@@ -194,9 +194,15 @@
         <button class="btn-back" (click)="prevStep()">← Back</button>
         <button class="btn-submit" 
                 (click)="submitPreferences()"
-                [disabled]="uiState.loading">
-          <span *ngIf="!uiState.loading">🔍 Find My Best Destinations</span>
-          <span *ngIf="uiState.loading">⏳ Finding destinations...</span>
+                [disabled]="uiState.loading"
+                [class.loading]="uiState.loading">
+          <span *ngIf="!uiState.loading" class="btn-content">
+            🔍 Find My Best Destinations
+          </span>
+          <span *ngIf="uiState.loading" class="btn-content">
+            <span class="spinner"></span>
+            Finding destinations...
+          </span>
         </button>
       </div>
 
@@ -238,9 +244,71 @@
           </div>
 
           <!-- CTA -->
-          <button class="btn-explore" (click)="openBookingModal(rec)">
+          <button 
+            class="btn-explore" 
+            (click)="toggleExplorePanel(rec.destination.id)">
             Explore {{ rec.destination.name }} →
           </button>
+
+          <!-- ✅ Contextual Explore Panel (Inline) -->
+          <div 
+            class="explore-panel" 
+            *ngIf="expandedDestinationId === rec.destination.id"
+            [@slideDown]>
+            <div class="explore-header">
+              <h4>🧳 Essentials for {{ rec.destination.name }}</h4>
+              
+              <!-- Shopping Partner Selector (Agoda + Amazon) -->
+              <div class="partner-selector">
+                <label>Shop from:</label>
+                <div class="partner-buttons">
+                  <button 
+                    *ngFor="let partner of availableShoppingPartners"
+                    [class.active]="selectedShoppingPartner === partner.id"
+                    (click)="switchShoppingPartner(partner.id)"
+                    class="partner-btn">
+                    {{ partner.logo }} {{ partner.name }}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Categories Grid (Dynamic based on selected partner) -->
+            <div class="category-grid">
+              <a
+                *ngFor="let item of getDestinationCategories(rec.destination.type)"
+                [href]="item.url"
+                target="_blank"
+                rel="nofollow sponsored noopener"
+                class="category-item"
+                [title]="'Shop on ' + (availableShoppingPartners.find(p => p.id === selectedShoppingPartner)?.name || 'our partner')"
+                (click)="trackAffiliateClick(item.name)">
+                <span class="category-icon">{{ item.icon }}</span>
+                <span class="category-name">{{ item.name }}</span>
+              </a>
+            </div>
+
+            <!-- Actions -->
+            <div class="explore-actions">
+              <button 
+                class="secondary-btn" 
+                (click)="openBookingModal(rec)">
+                🏨 Book Hotels
+              </button>
+              <a 
+                href="https://www.redbus.in"
+                target="_blank"
+                rel="noopener"
+                class="secondary-btn">
+                🚌 Book Bus
+              </a>
+            </div>
+
+            <!-- Disclosure -->
+            <p class="affiliate-disclosure">
+              ℹ️ We earn from affiliate purchases through {{ availableShoppingPartners.find(p => p.id === selectedShoppingPartner)?.name || 'our partners' }}.
+            </p>
+          </div>
         </div>
       </div>
 

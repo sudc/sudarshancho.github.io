@@ -1,23 +1,82 @@
 import { Injectable } from '@angular/core';
+import { AFFILIATE_CONFIG, getHotelPartners } from '../../config/affiliate-config';
 
 export interface PriceEntry { provider: string; price: number; currency?: string; url?: string }
 
 @Injectable({ providedIn: 'root' })
 export class AffiliateService {
-  // Mock price comparison. In production replace with real provider API or your backend aggregator.
+  // Get all active hotel partners from config
+  private hotelPartners = getHotelPartners();
+
+  /**
+   * Get hotel prices from all active affiliate partners
+   * @param hotelId Hotel identifier
+   * @returns Promise with price entries from all partners
+   */
   getPrices(hotelId: string): Promise<PriceEntry[]> {
-    return Promise.resolve([
-      { provider: 'Agoda', price: 3200, currency: 'INR', url: this.buildAffiliateLink('agoda', hotelId) },
-      { provider: 'Booking.com', price: 3350, currency: 'INR', url: this.buildAffiliateLink('booking', hotelId) },
-      { provider: 'Expedia', price: 3310, currency: 'INR', url: this.buildAffiliateLink('expedia', hotelId) }
-    ]);
+    // In production, replace with real API calls to partner APIs
+    // For now, return mock data with affiliate links
+    const prices: PriceEntry[] = this.hotelPartners.map((partner, index) => ({
+      provider: partner.name,
+      price: 3200 + (index * 100), // Mock prices
+      currency: 'INR',
+      url: this.buildAffiliateLink(partner.id, hotelId)
+    }));
+
+    return Promise.resolve(prices);
   }
 
-  buildAffiliateLink(provider: string, hotelId: string) {
-    // Insert your affiliate id or tracking params here
-    const domainMap: any = { agoda: 'https://www.agoda.com', booking: 'https://www.booking.com', expedia: 'https://www.expedia.co.in' };
-    const base = domainMap[provider] || 'https://example.com';
-    const params = `?affid=YOUR_AFFILIATE_ID&hotel=${encodeURIComponent(hotelId)}`;
-    return base + params;
+  /**
+   * Build affiliate link for a given provider and hotel
+   * @param providerId Provider ID (agoda, amazon, booking, etc)
+   * @param hotelId Hotel identifier
+   * @returns Formatted affiliate URL
+   */
+  buildAffiliateLink(providerId: string, hotelId: string): string {
+    const partner = AFFILIATE_CONFIG[providerId];
+
+    if (!partner || !partner.active) {
+      console.warn(`Partner ${providerId} not found or inactive`);
+      return '';
+    }
+
+    let params = '';
+
+    // Provider-specific parameter formatting
+    switch (providerId) {
+      case 'amazon':
+        // Amazon uses 'k' for search and 'tag' for affiliate ID
+        const searchQuery = `hotel ${hotelId}`;
+        params = `?k=${encodeURIComponent(searchQuery)}&tag=${partner.affiliateId}`;
+        break;
+
+      case 'agoda':
+        // Agoda format
+        params = `?affid=${partner.affiliateId}&hotel=${encodeURIComponent(hotelId)}`;
+        break;
+
+      case 'booking':
+        // Booking.com format
+        params = `?affiliate_id=${partner.affiliateId}&ss=${encodeURIComponent(hotelId)}`;
+        break;
+
+      case 'expedia':
+        // Expedia format
+        params = `?pwaLandingTest=UNSET&rfrr=${partner.affiliateId}`;
+        break;
+
+      default:
+        // Generic format
+        params = `?affid=${partner.affiliateId}&ref=${encodeURIComponent(hotelId)}`;
+    }
+
+    return partner.baseUrl + params;
+  }
+
+  /**
+   * Get all active partners for UI display
+   */
+  getActivePartners() {
+    return this.hotelPartners;
   }
 }
