@@ -990,6 +990,71 @@
   letter-spacing: 0.5px;
 }
 
+/* ========== ESSENTIALS MINI DRAWER ========== */
+.essentials-mini-drawer {
+  background: white;
+  border: 2px solid #8b5cf6;
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 12px;
+  animation: slideDown 0.3s ease-out;
+
+  h4 {
+    margin: 0 0 10px 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1f2937;
+  }
+}
+
+.mini-essentials-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.mini-essential-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  background: #faf5ff;
+  border: 1px solid #e9d5ff;
+  border-radius: 6px;
+  text-decoration: none;
+  color: #6b21a8;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    background: #f3e8ff;
+    border-color: #d8b4fe;
+    transform: translateX(2px);
+  }
+
+  .icon {
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .name {
+    text-align: left;
+    line-height: 1.2;
+    flex: 1;
+  }
+}
+
+.mini-drawer-note {
+  margin: 0;
+  font-size: 11px;
+  color: #9ca3af;
+  text-align: center;
+  line-height: 1.3;
+}
+
 .btn-explore {
   background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
   color: white;

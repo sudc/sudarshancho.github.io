@@ -271,6 +271,28 @@
           <!-- Trust Microcopy -->
           <p class="quick-actions-note">Partner booking • No extra cost</p>
 
+          <!-- 🧳 ESSENTIALS MINI DRAWER (Quick Action) -->
+          <div 
+            class="essentials-mini-drawer"
+            *ngIf="expandedEssentialsId === rec.destination.id"
+            [@slideDown]>
+            <h4>🧳 Essential Items</h4>
+            <div class="mini-essentials-grid">
+              <a
+                *ngFor="let item of getDestinationCategories(rec.destination.type) | slice:0:4"
+                [href]="item.url"
+                target="_blank"
+                rel="nofollow sponsored noopener"
+                class="mini-essential-item"
+                [title]="item.name"
+                (click)="trackAffiliateClick(item.name)">
+                <span class="icon">{{ item.icon }}</span>
+                <span class="name">{{ item.name }}</span>
+              </a>
+            </div>
+            <p class="mini-drawer-note">Available on {{ getSelectedPartnerName() }}</p>
+          </div>
+
           <!-- CTA - Merged with panel -->
           <button 
             class="btn-explore" 
