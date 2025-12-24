@@ -7,6 +7,7 @@ import { Title, Meta } from '@angular/platform-browser';
 
 import { TripStepperComponent } from '../../components/trip-stepper/trip-stepper.component';
 import { SmartRecommendationsComponent } from '../../components/smart-recommendations/smart-recommendations.component';
+import { BookingModalComponent } from '../../components/booking-modal/booking-modal.component';
 import { TrustConfigService } from '../../core/services/trust-config.service';
 
 declare const gtag: Function;
@@ -26,7 +27,8 @@ interface UserRequirements {
     RouterLinkActive,
     FormsModule,
     TripStepperComponent,
-    SmartRecommendationsComponent
+    SmartRecommendationsComponent,
+    BookingModalComponent
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
@@ -230,20 +232,14 @@ export class HomeComponent implements OnInit {
     this.showRequirementForm = false;
   }
 
-  handleFormSubmit(requirements: UserRequirements): void {
-    this.userRequirements = requirements;
-    this.showRequirementForm = false;
-    this.showRecommendationResult = true;
-  }
-
-  closeRecommendationResult(): void {
-    this.showRecommendationResult = false;
-    this.userRequirements = null;
-  }
-
   /* =======================
      BOOK INSTANTLY ACTIONS
   ======================== */
+
+  // Modal state
+  isHotelModalOpen = false;
+  isBusModalOpen = false;
+  isEssentialsModalOpen = false;
 
   /**
    * Open hotel booking modal
@@ -256,9 +252,11 @@ export class HomeComponent implements OnInit {
         source: 'homepage_cta'
       });
     }
-    // Trigger instant-booking-bar component modal
-    const hotelBtn = document.querySelector('.instant-booking-bar .action-btn.hotels') as HTMLElement;
-    hotelBtn?.click();
+    this.isHotelModalOpen = true;
+  }
+
+  closeHotelModal(): void {
+    this.isHotelModalOpen = false;
   }
 
   /**
@@ -272,8 +270,23 @@ export class HomeComponent implements OnInit {
         source: 'homepage_cta'
       });
     }
-    const busBtn = document.querySelector('.instant-booking-bar .action-btn.bus') as HTMLElement;
-    busBtn?.click();
+    this.isBusModalOpen = true;
+  }
+
+  closeBusModal(): void {
+    this.isBusModalOpen = false;
+  }
+
+  confirmBusBooking(): void {
+    if (typeof gtag !== 'undefined') {
+      (window as any).gtag('event', 'abhibus_redirect', {
+        event_category: 'Affiliate',
+        event_label: 'Bus Tickets - AbhiBus',
+        source: 'homepage_cta'
+      });
+    }
+    window.open('https://inr.deals/kQK6mx', '_blank', 'noopener');
+    this.closeBusModal();
   }
 
   /**
@@ -287,7 +300,32 @@ export class HomeComponent implements OnInit {
         source: 'homepage_cta'
       });
     }
-    const essentialsBtn = document.querySelector('.instant-booking-bar .action-btn.essentials') as HTMLElement;
-    essentialsBtn?.click();
+    this.isEssentialsModalOpen = true;
+  }
+
+  closeEssentialsModal(): void {
+    this.isEssentialsModalOpen = false;
+  }
+
+  goToEssentials(category: string): void {
+    if (typeof gtag !== 'undefined') {
+      (window as any).gtag('event', 'essentials_category_click', {
+        event_category: 'Shopping',
+        event_label: category,
+        source: 'homepage_cta'
+      });
+    }
+
+    const categoryMap: Record<string, string> = {
+      luggage: 'luggage',
+      toiletries: 'travel toiletries',
+      electronics: 'travel electronics',
+      clothing: 'travel clothing'
+    };
+
+    const query = categoryMap[category] || category;
+    const url = `https://www.amazon.in/s?k=${encodeURIComponent(query)}&tag=tripsaver21-21`;
+    window.open(url, '_blank', 'noopener');
+    this.closeEssentialsModal();
   }
 }
