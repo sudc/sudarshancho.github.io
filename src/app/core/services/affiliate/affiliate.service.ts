@@ -35,7 +35,7 @@ export class AffiliateService {
    */
   buildAffiliateLink(providerId: string, hotelId: string): string {
     // Get partner from current config (loaded from MongoDB)
-    const config = this.affiliateConfigService.getConfig();
+    const config = this.affiliateConfigService.getCurrentConfig();
     if (!config || !config.partners) {
       console.warn('Affiliate config not loaded');
       return '';
