@@ -10,6 +10,9 @@ import { AffiliateLinkBuilderService } from '../../core/services/affiliate-link-
 import type { AffiliatePartnerType } from '../../core/config/affiliate-partners.config';
 import { getShoppingPartners, type AffiliatePartnerConfig } from '../../core/config/affiliate-config';
 
+// Declare gtag globally
+declare const gtag: Function;
+
 @Component({
   selector: 'app-trip-stepper',
   standalone: true,
@@ -305,6 +308,20 @@ export class TripStepperComponent implements OnInit {
     }
 
     return url;
+  }
+
+  /**
+   * Get the name of the currently selected shopping partner
+   * Helper method for template binding (templates can't use find with arrow functions)
+   */
+  getSelectedPartnerName(): string {
+    for (const partner of this.availableShoppingPartners) {
+      if (partner.id === this.selectedShoppingPartner) {
+        return partner.name;
+      }
+    }
+    return 'our partners';
+  }
   }
 
   /**

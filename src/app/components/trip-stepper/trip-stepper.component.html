@@ -281,7 +281,7 @@
                 target="_blank"
                 rel="nofollow sponsored noopener"
                 class="category-item"
-                [title]="'Shop on ' + (availableShoppingPartners.find(p => p.id === selectedShoppingPartner)?.name || 'our partner')"
+                [title]="'Shop on ' + getSelectedPartnerName()"
                 (click)="trackAffiliateClick(item.name)">
                 <span class="category-icon">{{ item.icon }}</span>
                 <span class="category-name">{{ item.name }}</span>
@@ -306,7 +306,7 @@
 
             <!-- Disclosure -->
             <p class="affiliate-disclosure">
-              ℹ️ We earn from affiliate purchases through {{ availableShoppingPartners.find(p => p.id === selectedShoppingPartner)?.name || 'our partners' }}.
+              ℹ️ We earn from affiliate purchases through {{ getSelectedPartnerName() }}.
             </p>
           </div>
         </div>
