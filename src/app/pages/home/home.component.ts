@@ -9,6 +9,8 @@ import { TripStepperComponent } from '../../components/trip-stepper/trip-stepper
 import { SmartRecommendationsComponent } from '../../components/smart-recommendations/smart-recommendations.component';
 import { TrustConfigService } from '../../core/services/trust-config.service';
 
+declare const gtag: Function;
+
 interface UserRequirements {
   month: number;
   budget: 'budget' | 'moderate' | 'premium';
@@ -237,5 +239,55 @@ export class HomeComponent implements OnInit {
   closeRecommendationResult(): void {
     this.showRecommendationResult = false;
     this.userRequirements = null;
+  }
+
+  /* =======================
+     BOOK INSTANTLY ACTIONS
+  ======================== */
+
+  /**
+   * Open hotel booking modal
+   */
+  openHotelBooking(): void {
+    if (typeof gtag !== 'undefined') {
+      (window as any).gtag('event', 'instant_hotel_booking', {
+        event_category: 'Intent User',
+        event_label: 'Book Instantly - Hotels',
+        source: 'homepage_cta'
+      });
+    }
+    // Trigger instant-booking-bar component modal
+    const hotelBtn = document.querySelector('.instant-booking-bar .action-btn.hotels') as HTMLElement;
+    hotelBtn?.click();
+  }
+
+  /**
+   * Open bus booking confirmation
+   */
+  openBusBooking(): void {
+    if (typeof gtag !== 'undefined') {
+      (window as any).gtag('event', 'instant_bus_booking', {
+        event_category: 'Intent User',
+        event_label: 'Book Instantly - Bus',
+        source: 'homepage_cta'
+      });
+    }
+    const busBtn = document.querySelector('.instant-booking-bar .action-btn.bus') as HTMLElement;
+    busBtn?.click();
+  }
+
+  /**
+   * Open essentials shopping
+   */
+  openEssentialsShopping(): void {
+    if (typeof gtag !== 'undefined') {
+      (window as any).gtag('event', 'instant_essentials', {
+        event_category: 'Intent User',
+        event_label: 'Book Instantly - Essentials',
+        source: 'homepage_cta'
+      });
+    }
+    const essentialsBtn = document.querySelector('.instant-booking-bar .action-btn.essentials') as HTMLElement;
+    essentialsBtn?.click();
   }
 }
