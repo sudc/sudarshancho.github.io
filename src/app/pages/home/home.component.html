@@ -19,9 +19,51 @@
   </div>
 </header>
 
-<!-- HERO / FINDER - 4-Step Stepper -->
+<!-- HERO SECTION (Intent Users) -->
+<section class="hero-section">
+  <div class="hero-content">
+    <h1 class="hero-title">Book Hotels, Bus & Travel Essentials</h1>
+    <p class="hero-subtitle">{{ heroSubtitle }}</p>
+    
+    <!-- Key Benefits -->
+    <div class="hero-benefits">
+      <div class="benefit">
+        <span class="benefit-icon">✓</span>
+        <span class="benefit-text">Best Prices Guaranteed</span>
+      </div>
+      <div class="benefit">
+        <span class="benefit-icon">✓</span>
+        <span class="benefit-text">Instant Booking</span>
+      </div>
+      <div class="benefit">
+        <span class="benefit-icon">✓</span>
+        <span class="benefit-text">No Hidden Charges</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Background gradient -->
+  <div class="hero-bg"></div>
+</section>
+
+<!-- DIVIDER: Intent vs Explorer Users -->
+<section class="dual-entry-divider">
+  <div class="divider-line"></div>
+  <div class="divider-text">
+    <span class="divider-label">OR</span>
+    <span class="divider-description">Discover places tailored for you</span>
+  </div>
+  <div class="divider-line"></div>
+</section>
+
+<!-- TRIP PLANNER SECTION (Explorer Users) -->
 <section class="finder-section">
   <div class="finder-container">
+    <div class="finder-intro">
+      <h2>🧭 Smart Trip Planner</h2>
+      <p>Answer 4 quick questions and get destinations ranked just for you</p>
+    </div>
+
     <!-- Trip Stepper Component -->
     <app-trip-stepper></app-trip-stepper>
   </div>

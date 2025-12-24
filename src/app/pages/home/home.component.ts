@@ -110,7 +110,7 @@ export class HomeComponent implements OnInit {
   ======================== */
   private setSeoTags(): void {
     this.titleService.setTitle(
-      'TripSaver - Compare Hotels, Flights & Travel Deals | Save More on Bookings'
+      'TripSaver – Book Hotels, Bus Tickets & Travel Essentials | Best Deals in India'
     );
 
     this.metaService.updateTag({

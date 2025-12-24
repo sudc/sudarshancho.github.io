@@ -2,12 +2,13 @@ import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { SeoService } from './core/services/seo/seo.service';
 import { FooterComponent } from './components/footer/footer.component';
+import { InstantBookingBarComponent } from './components/instant-booking-bar/instant-booking-bar.component';
 // Note: keep component imports local to pages that render them to avoid unused warnings
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, FooterComponent],
+  imports: [RouterOutlet, FooterComponent, InstantBookingBarComponent],
   templateUrl: './app.html',
   styleUrls: ['./app.scss']
 })
