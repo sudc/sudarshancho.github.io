@@ -281,11 +281,12 @@
               <a
                 *ngFor="let item of getDestinationCategories(rec.destination.type) | slice:0:4"
                 [href]="item.url"
+                [ngClass]="{ 'disabled-link': !item.url }"
                 target="_blank"
                 rel="nofollow sponsored noopener"
                 class="mini-essential-item"
                 [title]="item.name"
-                (click)="trackAffiliateClick(item.name)">
+                (click)="item.url ? trackAffiliateClick(item.name) : null">
                 <span class="icon">{{ item.icon }}</span>
                 <span class="name">{{ item.name }}</span>
               </a>
@@ -321,11 +322,12 @@
               <a
                 *ngFor="let item of getDestinationCategories(rec.destination.type)"
                 [href]="item.url"
+                [ngClass]="{ 'disabled-link': !item.url }"
                 target="_blank"
                 rel="nofollow sponsored noopener"
                 class="category-item"
                 [title]="'Shop ' + item.name + ' on ' + getSelectedPartnerName()"
-                (click)="trackAffiliateClick(item.name)">
+                (click)="item.url ? trackAffiliateClick(item.name) : null">
                 <span class="category-icon">{{ item.icon }}</span>
                 <span class="category-name">{{ item.name }}</span>
                 <span class="category-arrow">→</span>

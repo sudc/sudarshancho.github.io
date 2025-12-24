@@ -117,11 +117,38 @@ export class TripStepperComponent implements OnInit {
             p.type === 'shopping' || p.type === 'both'
           );
           console.log('✅ Shopping partners loaded:', this.availableShoppingPartners);
+          
+          // Ensure selectedShoppingPartner is set to a valid partner
+          if (this.availableShoppingPartners.length > 0) {
+            const amazonPartner = this.availableShoppingPartners.find((p: any) => p.id === 'amazon');
+            if (amazonPartner) {
+              this.selectedShoppingPartner = 'amazon';
+            } else {
+              this.selectedShoppingPartner = this.availableShoppingPartners[0].id;
+            }
+            console.log('✅ Selected shopping partner set to:', this.selectedShoppingPartner);
+          }
         }
         this.cdr.markForCheck();
       },
       (error) => {
         console.warn('⚠️ Using default affiliate config:', error);
+        // Set fallback default partners
+        this.availableShoppingPartners = [
+          {
+            id: 'amazon',
+            name: 'Amazon',
+            logo: '🛍️',
+            baseUrl: 'https://www.amazon.in',
+            affiliateId: 'tripsaver21-21',
+            commission: 5,
+            active: true,
+            description: 'Travel essentials and gear',
+            type: 'shopping'
+          }
+        ];
+        this.selectedShoppingPartner = 'amazon';
+        this.cdr.markForCheck();
       }
     );
   }
@@ -320,7 +347,6 @@ export class TripStepperComponent implements OnInit {
   }> {
     // Get partner-agnostic categories
     const categories = getDestinationCategories(destinationType);
-    const partner = this.availableShoppingPartners.find((p: any) => p.id === this.selectedShoppingPartner);
     
     // Build affiliate links dynamically based on selected partner
     return categories.map((category: ProductCategory) => ({
@@ -336,24 +362,31 @@ export class TripStepperComponent implements OnInit {
    * Supports both Agoda and Amazon with different link formats
    */
   buildShoppingLink(searchQuery: string): string {
+    // If no partners loaded yet, use fallback Amazon link
+    if (!this.availableShoppingPartners || this.availableShoppingPartners.length === 0) {
+      console.warn('⚠️ Shopping partners not loaded, using fallback Amazon link');
+      return `https://www.amazon.in/s?k=${encodeURIComponent(searchQuery)}&tag=tripsaver21-21`;
+    }
+
     const partner = this.availableShoppingPartners.find((p: any) => p.id === this.selectedShoppingPartner);
     
     if (!partner) {
-      return '';
+      console.warn(`⚠️ Partner ${this.selectedShoppingPartner} not found, using fallback Amazon link`);
+      return `https://www.amazon.in/s?k=${encodeURIComponent(searchQuery)}&tag=tripsaver21-21`;
     }
 
     let url = '';
 
     // Build partner-specific links
     if (partner.id === 'amazon') {
-      // Amazon: search products
+      // Amazon: search products with affiliate tag
       url = `${partner.baseUrl}/s?k=${encodeURIComponent(searchQuery)}&tag=${partner.affiliateId}`;
     } else if (partner.id === 'agoda') {
-      // Agoda: redirect to search with affiliate ID
+      // Agoda: hotel/travel search with affiliate ID
       url = `${partner.baseUrl}/search?ss=${encodeURIComponent(searchQuery)}&affid=${partner.affiliateId}`;
     } else {
-      // Generic format
-      url = `${partner.baseUrl}?search=${encodeURIComponent(searchQuery)}&affid=${partner.affiliateId}`;
+      // Generic fallback
+      url = `${partner.baseUrl}?search=${encodeURIComponent(searchQuery)}&tag=${partner.affiliateId}`;
     }
 
     return url;
@@ -364,12 +397,19 @@ export class TripStepperComponent implements OnInit {
    * Helper method for template binding (templates can't use find with arrow functions)
    */
   getSelectedPartnerName(): string {
+    // If partners not loaded, return default
+    if (!this.availableShoppingPartners || this.availableShoppingPartners.length === 0) {
+      return 'Amazon';
+    }
+
     for (const partner of this.availableShoppingPartners) {
       if (partner.id === this.selectedShoppingPartner) {
         return partner.name;
       }
     }
-    return 'our partners';
+    
+    // Fallback to default partner name
+    return 'Amazon';
   }
 
   /**
