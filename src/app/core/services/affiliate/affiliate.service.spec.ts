@@ -56,8 +56,7 @@ describe('AffiliateService', () => {
     configService = TestBed.inject(AffiliateConfigService);
 
     // Mock the config service to return our mock config
-    const configServiceSpy = configService as jasmine.SpyObj<AffiliateConfigService>;
-    jasmine.spyOn(configService, 'getCurrentConfig').and.returnValue(mockConfig);
+    spyOn(configService, 'getCurrentConfig').and.returnValue(mockConfig);
   });
 
   describe('buildAffiliateLink', () => {

@@ -63,8 +63,8 @@ describe('AffiliateConfigService', () => {
   });
 
   describe('loadConfig', () => {
-    it('should load affiliate config from MongoDB', async () => {
-      let loadedConfig: AffiliateConfigData | null = null;
+    it('should load affiliate config from MongoDB', () => {
+      let loadedConfig: AffiliateConfigData | null | undefined;
       
       service.loadConfig().subscribe((config) => {
         loadedConfig = config;
@@ -75,8 +75,10 @@ describe('AffiliateConfigService', () => {
       req.flush(mockConfig);
       
       expect(loadedConfig).toEqual(mockConfig);
-      expect(loadedConfig?.partners).toBeDefined();
-      expect(loadedConfig?.partners['agoda']).toBeDefined();
+      if (loadedConfig) {
+        expect(loadedConfig.partners).toBeDefined();
+        expect(loadedConfig.partners['agoda']).toBeDefined();
+      }
     });
 
     it('should update configSubject when config is loaded', async () => {

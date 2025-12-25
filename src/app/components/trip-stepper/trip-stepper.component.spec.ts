@@ -241,10 +241,10 @@ describe('TripStepperComponent', () => {
     });
 
     it('should track affiliate clicks', () => {
-      spyOn(window, 'gtag' as any);
+      const windowSpy = spyOn(window as any, 'gtag');
       component.trackAffiliateClick('luggage');
       // Verify gtag was called (if gtag is available)
-      // expect(window.gtag).toHaveBeenCalled();
+      // expect(windowSpy).toHaveBeenCalled();
     });
 
     it('should include event details in tracking', () => {
