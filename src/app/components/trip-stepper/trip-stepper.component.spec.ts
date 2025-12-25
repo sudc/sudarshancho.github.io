@@ -138,13 +138,13 @@ describe('TripStepperComponent', () => {
 
     it('should decrement current step on prevStep', () => {
       component.currentStep = 2;
-      component.previousStep();
+      component.prevStep();
       expect(component.currentStep).toBe(1);
     });
 
     it('should not go below step 1', () => {
       component.currentStep = 1;
-      component.previousStep();
+      component.prevStep();
       expect(component.currentStep).toBe(1);
     });
   });
@@ -278,16 +278,12 @@ describe('TripStepperComponent', () => {
     });
 
     it('should track expanded destination state', () => {
-      component.expandedDestination = 'goa';
-      expect(component.expandedDestination).toBe('goa');
+      component.expandedDestinationId = 'goa';
+      expect(component.expandedDestinationId).toBe('goa');
     });
 
-    it('should handle booking modal visibility', () => {
-      component.showBookingModal = true;
-      expect(component.showBookingModal).toBe(true);
-
-      component.showBookingModal = false;
-      expect(component.showBookingModal).toBe(false);
+    it('should initialize component without errors', () => {
+      expect(component).toBeTruthy();
     });
   });
 

@@ -56,7 +56,8 @@ describe('AffiliateService', () => {
     configService = TestBed.inject(AffiliateConfigService);
 
     // Mock the config service to return our mock config
-    spyOn(configService, 'getCurrentConfig').and.returnValue(mockConfig);
+    const configServiceSpy = configService as jasmine.SpyObj<AffiliateConfigService>;
+    jasmine.spyOn(configService, 'getCurrentConfig').and.returnValue(mockConfig);
   });
 
   describe('buildAffiliateLink', () => {
@@ -158,9 +159,9 @@ describe('AffiliateService', () => {
 
   describe('Commission rates', () => {
     it('should have correct commission rates in config', () => {
-      expect(mockConfig.partners.agoda.commission).toBe(12);
-      expect(mockConfig.partners.amazon.commission).toBe(5);
-      expect(mockConfig.partners.abhibus.commission).toBe(8);
+      expect(mockConfig.partners['agoda'].commission).toBe(12);
+      expect(mockConfig.partners['amazon'].commission).toBe(5);
+      expect(mockConfig.partners['abhibus'].commission).toBe(8);
     });
   });
 });
