@@ -76,6 +76,10 @@ export class SmartRecommendationsComponent implements OnInit {
   showAllResults = false;
 
   ngOnInit(): void {
+    console.log('🎯 [SmartRecommendations] Component initialized');
+    console.log('🎯 [SmartRecommendations] showForm:', this.showForm);
+    console.log('🎯 [SmartRecommendations] userPreferences:', this.userPreferences);
+    
     // Fetch trust config from MongoDB (non-blocking)
     this.trustConfigService.getConfig().subscribe(config => {
       this.trustBadge = config.trustBadge;
@@ -84,6 +88,7 @@ export class SmartRecommendationsComponent implements OnInit {
 
     // ✅ If preferences passed from parent, use them and auto-load
     if (this.userPreferences) {
+      console.log('🎯 [SmartRecommendations] Using preferences from parent');
       this.preferences = {
         month: this.userPreferences.month,
         budget: this.userPreferences.budget,
@@ -91,6 +96,8 @@ export class SmartRecommendationsComponent implements OnInit {
       };
       // Auto-load recommendations with parent's preferences
       this.getRecommendations();
+    } else {
+      console.log('🎯 [SmartRecommendations] No parent preferences, waiting for user input');
     }
     // Otherwise user will see empty state and click button manually
   }

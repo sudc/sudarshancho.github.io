@@ -64,12 +64,15 @@ export class DestinationCardCompactComponent {
    */
   toggleExpanded(): void {
     this.isExpanded = !this.isExpanded;
+    console.log(`🎴 [DestinationCard] ${this.recommendation?.destination?.state} - Expanded: ${this.isExpanded}`);
     // Reset days selection when collapsing
     if (!this.isExpanded) {
       this.selectedDays = null;
+      console.log(`🎴 [DestinationCard] Days selection reset`);
     } else {
       // Auto-select 3 days when expanding
       this.selectedDays = 3;
+      console.log(`🎴 [DestinationCard] Auto-selected 3 days`);
     }
   }
 
@@ -78,6 +81,7 @@ export class DestinationCardCompactComponent {
    */
   selectDays(days: number): void {
     this.selectedDays = this.selectedDays === days ? null : days;
+    console.log(`🎴 [DestinationCard] ${this.recommendation?.destination?.state} - Days selected: ${this.selectedDays}`);
   }
 
   /**
@@ -107,12 +111,17 @@ export class DestinationCardCompactComponent {
    * Handle CTA button click - navigates to planner with context
    */
   onCtaClick(): void {
+    console.log(`🎴 [DestinationCard] CTA clicked - ${this.recommendation?.destination?.state}`);
+    console.log(`🎴 [DestinationCard] isExpanded: ${this.isExpanded}, selectedDays: ${this.selectedDays}`);
+    
     if (!this.isExpanded) {
       // First click: expand the card
+      console.log(`🎴 [DestinationCard] Expanding card...`);
       this.toggleExpanded();
     } else if (this.selectedDays) {
       // Second click: navigate to planner with destination and days
       const destination = this.recommendation.destination.state.toLowerCase();
+      console.log(`🎴 [DestinationCard] Navigating to planner: destination=${destination}, days=${this.selectedDays}`);
       this.router.navigate(['/planner'], {
         queryParams: {
           destination: destination,

@@ -50,7 +50,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   isMenuOpen = false;
   showRequirementForm = false;
   showRecommendationResult = false;
-  showSmartRecommendations = false;
+  showSmartRecommendations = true; // Always show smart recommendations section on homepage
 
   userRequirements: UserRequirements | null = null;
   userPreferences: any = null;
@@ -117,6 +117,8 @@ export class HomeComponent implements OnInit, OnDestroy {
      LIFECYCLE
   ======================== */
   ngOnInit(): void {
+    console.log('🏠 [Home] Component initialized');
+    console.log('🏠 [Home] showSmartRecommendations:', this.showSmartRecommendations);
     this.setSeoTags();
     this.setupBookingServiceListeners();
     this.loadAffiliateConfig();
