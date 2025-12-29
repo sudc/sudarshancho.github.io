@@ -37,8 +37,8 @@
     // Initialize Agoda widget after DOM is loaded
     document.addEventListener('DOMContentLoaded', function() {
       try {
-        // Only initialize if Agoda script loaded successfully
-        if (typeof AgdSherpa !== 'undefined') {
+        // Only initialize if Agoda script loaded successfully AND element exists
+        if (typeof AgdSherpa !== 'undefined' && document.getElementById('adgshp-30325076')) {
           var stg = new Object(); 
           stg.crt="7593686995288";
           stg.version="1.04"; 
@@ -55,7 +55,7 @@
           new AgdSherpa(stg).initialize();
         }
       } catch (e) {
-        console.warn('Agoda Sherpa widget failed to initialize:', e);
+        console.debug('Agoda Sherpa widget initialization info:', e.message);
       }
     });
   </script>
