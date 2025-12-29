@@ -33,9 +33,9 @@ jobs:
         run: npm run test:ci
         continue-on-error: false
 
-      - name: Build site
-        run: npm run build
-        # Builds Angular app to dist/hotel-affiliate/browser
+      - name: Build site (Production)
+        run: npm run build:prod
+        # Builds Angular app to dist/hotel-affiliate/browser with production optimizations
         # Includes standalone HTML files via assets config
 
       - name: Deploy to GitHub Pages (gh-pages)
