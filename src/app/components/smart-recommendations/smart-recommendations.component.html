@@ -105,62 +105,82 @@
 
     <!-- RECOMMENDATIONS CARDS (Always full width) -->
     <div class="cards-container">
-      <!-- Each card with inline itinerary expansion -->
+      <!-- Each card - clean, no inline expansion -->
       <div *ngFor="let rec of (recommendations | slice:0:6)" class="card-with-itinerary">
         <!-- Destination Card -->
         <app-destination-card-compact
           [recommendation]="rec"
-          [class.active]="isActiveDestination(rec)"
           (bookingClicked)="openBookingModal($event)"
           (planTripClicked)="openItinerary($event)">
         </app-destination-card-compact>
+      </div>
+    </div>
+  </div>
 
-        <!-- Inline Itinerary Expansion -->
-        <div *ngIf="isDestinationExpanded(rec)" class="itinerary-expansion">
-          <!-- Loading State -->
-          <div *ngIf="itineraryLoading" class="itinerary-loading">
-            <div class="spinner"></div>
-            <p>Generating itinerary...</p>
-          </div>
+  <!-- 🎯 SIDE DRAWER (Desktop: Right panel, Mobile: Bottom sheet) -->
+  <div class="itinerary-drawer" [class.open]="isDrawerOpen">
+    <!-- Drawer Overlay (tap to close) -->
+    <div class="drawer-overlay" (click)="closeItinerary()"></div>
 
-          <!-- Itinerary Content -->
-          <div *ngIf="!itineraryLoading && activeItinerary" class="itinerary-content">
-            <div class="itinerary-header">
-              <h4>📋 {{activeItinerary.destination}} - {{selectedDays}}-Day Itinerary</h4>
-              <button class="close-btn" (click)="closeItinerary()">✕</button>
+    <!-- Drawer Panel -->
+    <div class="drawer-panel">
+      <!-- Drawer Header -->
+      <div class="drawer-header" *ngIf="drawerDestination">
+        <div class="header-content">
+          <h2>{{drawerDestination.destination.state}}</h2>
+          <p class="trip-duration">{{selectedDays}}-Day Itinerary</p>
+        </div>
+        <button class="close-btn" (click)="closeItinerary()">✕</button>
+      </div>
+
+      <!-- Day Selector Pills -->
+      <div class="day-selector" *ngIf="!itineraryLoading">
+        <button 
+          *ngFor="let days of [3, 4, 5, 7]"
+          class="day-pill"
+          [class.active]="selectedDays === days"
+          (click)="selectedDays = days">
+          {{days}} Days
+        </button>
+      </div>
+
+      <!-- Loading State -->
+      <div *ngIf="itineraryLoading" class="drawer-loading">
+        <div class="spinner"></div>
+        <p>Generating your itinerary...</p>
+      </div>
+
+      <!-- Itinerary Content -->
+      <div *ngIf="!itineraryLoading && activeItinerary" class="drawer-content">
+        <div class="itinerary-days">
+          <div *ngFor="let day of activeItinerary.itinerary" class="day-item">
+            <div class="day-header">
+              <span class="day-number">{{day.day}}</span>
+              <span class="day-title">{{day.title}}</span>
             </div>
-
-            <div class="itinerary-days">
-              <div *ngFor="let day of activeItinerary.itinerary" class="day-item">
-                <div class="day-header">
-                  <span class="day-number">{{day.day}}</span>
-                  <span class="day-title">{{day.title}}</span>
-                </div>
-                <div class="day-content" [class.expanded]="true">
-                  <p class="day-description">{{day.description}}</p>
-                  <div *ngIf="day.places && day.places.length > 0" class="places">
-                    <div class="section-title">Places to visit</div>
-                    <ul>
-                      <li *ngFor="let place of day.places">{{place}}</li>
-                    </ul>
-                  </div>
-                  <div *ngIf="day.activities && day.activities.length > 0" class="activities">
-                    <div class="section-title">Activities</div>
-                    <div class="activity-list">
-                      <span *ngFor="let activity of day.activities" class="activity-item">{{activity}}</span>
-                    </div>
-                  </div>
+            <div class="day-content expanded">
+              <p class="day-description">{{day.description}}</p>
+              <div *ngIf="day.places && day.places.length > 0" class="places">
+                <div class="section-title">Places to visit</div>
+                <ul>
+                  <li *ngFor="let place of day.places">{{place}}</li>
+                </ul>
+              </div>
+              <div *ngIf="day.activities && day.activities.length > 0" class="activities">
+                <div class="section-title">Activities</div>
+                <div class="activity-list">
+                  <span *ngFor="let activity of day.activities" class="activity-item">{{activity}}</span>
                 </div>
               </div>
             </div>
-
-            <!-- CTA Buttons -->
-            <div class="itinerary-ctas">
-              <button class="cta-btn hotels" (click)="openHotelBooking()">🏨 Book Hotels</button>
-              <button class="cta-btn bus" (click)="openBusBooking()">🚌 Book Bus</button>
-              <button class="cta-btn essentials" (click)="openEssentialsShopping()">🧳 Buy Essentials</button>
-            </div>
           </div>
+        </div>
+
+        <!-- CTA Buttons (Sticky Footer) -->
+        <div class="drawer-ctas">
+          <button class="cta-btn hotels" (click)="openHotelBooking()">🏨 Book Hotels</button>
+          <button class="cta-btn bus" (click)="openBusBooking()">🚌 Book Bus</button>
+          <button class="cta-btn essentials" (click)="openEssentialsShopping()">🧳 Buy Essentials</button>
         </div>
       </div>
     </div>

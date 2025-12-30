@@ -454,71 +454,156 @@ $text-muted: #6b7280;
   }
 }
 
-/* ========== INLINE ITINERARY EXPANSION ========== */
-.itinerary-expansion {
-  background: linear-gradient(180deg, #f8f9ff 0%, #fff 100%);
-  border: 1px solid #e5e7eb;
-  border-top: none;
-  border-radius: 0 0 12px 12px;
-  padding: 1.5rem;
-  animation: slideDown 0.3s ease;
+/* ========== SIDE DRAWER ========== */
+.itinerary-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 999;
+  display: flex;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 
-  @keyframes slideDown {
-    from {
-      opacity: 0;
-      max-height: 0;
-    }
-    to {
-      opacity: 1;
-      max-height: 1000px;
+  &.open {
+    pointer-events: auto;
+    opacity: 1;
+  }
+}
+
+.drawer-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  pointer-events: auto;
+}
+
+.drawer-panel {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 450px;
+  background: white;
+  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+  z-index: 1000;
+
+  .itinerary-drawer.open & {
+    transform: translateX(0);
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    bottom: auto;
+    top: auto;
+    right: 0;
+    left: 0;
+    border-radius: 16px 16px 0 0;
+    max-height: 85vh;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+
+    .itinerary-drawer.open & {
+      transform: translateY(0);
     }
   }
 }
 
-.itinerary-header {
+.drawer-header {
+  padding: 1.5rem;
+  border-bottom: 2px solid $border;
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
-  border-bottom: 2px solid $border;
-  padding-bottom: 1rem;
+  align-items: flex-start;
+  gap: 1rem;
 
-  h4 {
-    margin: 0;
-    font-size: 16px;
-    font-weight: 700;
-    color: $text-main;
+  .header-content {
+    flex: 1;
+
+    h2 {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: $text-main;
+    }
+
+    .trip-duration {
+      margin: 0.5rem 0 0 0;
+      color: $text-muted;
+      font-size: 14px;
+    }
   }
 
   .close-btn {
     background: none;
     border: none;
-    font-size: 20px;
+    font-size: 24px;
     cursor: pointer;
     color: $text-muted;
+    padding: 0;
+    flex-shrink: 0;
     transition: color 0.2s;
-    padding: 4px 8px;
-    border-radius: 4px;
 
     &:hover {
-      background: white;
       color: $text-main;
     }
   }
 }
 
-.itinerary-loading {
+.day-selector {
+  display: flex;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid $border;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+
+  .day-pill {
+    padding: 0.6rem 1.2rem;
+    border: 2px solid rgba(37, 99, 235, 0.2);
+    background: white;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.3s ease;
+    color: $text-main;
+
+    &:hover {
+      border-color: rgba(37, 99, 235, 0.4);
+    }
+
+    &.active {
+      background: linear-gradient(135deg, $primary 0%, #2563eb 100%);
+      color: white;
+      border-color: $primary;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+    }
+  }
+}
+
+.drawer-loading {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding: 3rem 1.5rem;
   gap: 1rem;
-  padding: 2rem;
 
   .spinner {
-    width: 32px;
-    height: 32px;
-    border: 3px solid $border;
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(37, 99, 235, 0.2);
     border-top-color: $primary;
     border-radius: 50%;
     animation: spin 0.6s linear infinite;
@@ -530,17 +615,76 @@ $text-muted: #6b7280;
   }
 }
 
-.itinerary-content {
+.drawer-content {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  flex: 1;
+  overflow: hidden;
 }
 
-.itinerary-days {
+.drawer-ctas {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  max-height: 500px;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  border-top: 2px solid $border;
+  background: white;
+  flex-shrink: 0;
+
+  .cta-btn {
+    padding: 0.9rem 1.2rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    color: white;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    &.hotels {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+
+      &:hover {
+        background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+      }
+    }
+
+    &.bus {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+
+      &:hover {
+        background: linear-gradient(135deg, #f87171 0%, #ef4444 100%);
+      }
+    }
+
+    &.essentials {
+      background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+
+      &:hover {
+        background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%);
+      }
+    }
+  }
+}
+
+    border-radius: 4px;
+
+    &:hover {
+      background: white;
+      color: $text-main;
+    }
+  }
+}
+
+/* ========== ITINERARY DAYS IN DRAWER ========== */
+.drawer-content {
   overflow-y: auto;
   padding-right: 0.5rem;
 
@@ -553,7 +697,6 @@ $text-muted: #6b7280;
 
   &::-webkit-scrollbar-track {
     background: transparent;
-    border-radius: 10px;
   }
 
   &::-webkit-scrollbar-thumb {
@@ -563,6 +706,17 @@ $text-muted: #6b7280;
     &:hover {
       background: linear-gradient(to bottom, rgba(37, 99, 235, 0.7), rgba(37, 99, 235, 0.5));
     }
+  }
+}
+
+.itinerary-days {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.5rem;
+
+  .drawer-content & {
+    padding: 1rem 1.5rem;
   }
 }
 
@@ -655,51 +809,6 @@ $text-muted: #6b7280;
   }
 }
 
-.itinerary-ctas {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.75rem;
-  margin-top: 1rem;
-  padding-top: 1rem;
-  border-top: 1px solid $border;
-
-  @media (max-width: 640px) {
-    grid-template-columns: 1fr;
-  }
-
-  .cta-btn {
-    padding: 0.75rem 1rem;
-    border: none;
-    border-radius: 6px;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-    color: white;
-
-    &.hotels {
-      background: #f59e0b;
-      &:hover {
-        background: #d97706;
-      }
-    }
-
-    &.bus {
-      background: #ef4444;
-      &:hover {
-        background: #dc2626;
-      }
-    }
-
-    &.essentials {
-      background: #8b5cf6;
-      &:hover {
-        background: #7c3aed;
-      }
-    }
-  }
-}
-
 .day-description {
   font-size: 14px;
   color: #4b5563;
@@ -717,7 +826,7 @@ $text-muted: #6b7280;
   border-bottom: 1px solid rgba(37, 99, 235, 0.1);
   background: white;
 
-  h5 {
+  .section-title {
     font-size: 12px;
     font-weight: 700;
     color: $primary;
@@ -753,9 +862,6 @@ $text-muted: #6b7280;
 }
 
 .activities {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
   margin: 0;
   padding: 1rem 1.25rem;
   background: white;
@@ -765,8 +871,7 @@ $text-muted: #6b7280;
     border-bottom: none;
   }
 
-  h5 {
-    width: 100%;
+  .section-title {
     font-size: 12px;
     font-weight: 700;
     color: $primary;
@@ -775,7 +880,13 @@ $text-muted: #6b7280;
     letter-spacing: 0.5px;
   }
 
-  .activity {
+  .activity-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .activity-item {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
@@ -795,151 +906,9 @@ $text-muted: #6b7280;
       transform: translateY(-2px);
     }
 
-    .activity-name {
-      color: $primary;
-    }
-
     &::before {
       content: '✓';
       font-weight: 700;
-    }
-  }
-}
-
-.itinerary-ctas {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
-  padding: 1.5rem 1.25rem;
-  border-top: 2px solid $border;
-  margin-top: 1rem;
-  position: sticky;
-  bottom: 0;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, white 100%);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.06);
-
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-    gap: 0.75rem;
-    padding: 1rem 1.25rem;
-  }
-
-  .cta-btn {
-    padding: 0.9rem 1.2rem;
-    border: none;
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    color: white;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    position: relative;
-    overflow: hidden;
-
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: rgba(255, 255, 255, 0.2);
-      transition: left 0.3s ease;
-    }
-
-    &:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-
-      &::before {
-        left: 100%;
-      }
-    }
-
-    &:active {
-      transform: translateY(-1px);
-    }
-
-    &.hotels {
-      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-      
-      &:hover {
-        background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-      }
-    }
-
-    &.bus {
-      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-      
-      &:hover {
-        background: linear-gradient(135deg, #f87171 0%, #ef4444 100%);
-      }
-    }
-
-    &.essentials {
-      background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
-      
-      &:hover {
-        background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%);
-      }
-    }
-  }
-}
-
-.panel-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  padding-top: 1rem;
-  border-top: 1px solid $border;
-
-  .action-btn {
-    padding: 0.75rem 1rem;
-    background: $primary;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 600;
-    transition: all 0.2s;
-
-    &:hover {
-      background: $primary-dark;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-    }
-
-    &.hotels {
-      background: linear-gradient(135deg, #667eea, #764ba2);
-
-      &:hover {
-        background: linear-gradient(135deg, #5568d3, #6a3f8f);
-      }
-    }
-
-    &.bus {
-      background: linear-gradient(135deg, #f093fb, #f5576c);
-
-      &:hover {
-        background: linear-gradient(135deg, #de84eb, #de4560);
-      }
-    }
-
-    &.essentials {
-      background: linear-gradient(135deg, #4facfe, #00f2fe);
-
-      &:hover {
-        background: linear-gradient(135deg, #4094de, #00d2de);
-      }
     }
   }
 }
@@ -949,6 +918,7 @@ $text-muted: #6b7280;
     transform: rotate(360deg);
   }
 }
+
 
 /* ========== MOBILE RESPONSIVENESS ========== */
 @media (max-width: 768px) {
@@ -1051,15 +1021,12 @@ $text-muted: #6b7280;
     }
   }
 
-  .itinerary-ctas {
-    grid-template-columns: 1fr;
-    gap: 0.75rem;
-    padding: 1rem;
+  .drawer-panel {
+    width: 400px;
+  }
 
-    .cta-btn {
-      padding: 0.8rem 1rem;
-      font-size: 12px;
-    }
+  .drawer-header h2 {
+    font-size: 1.25rem;
   }
 }
 
@@ -1160,18 +1127,17 @@ $text-muted: #6b7280;
     }
   }
 
-  .itinerary-ctas {
-    grid-template-columns: 1fr;
-    gap: 0.5rem;
-    padding: 0.875rem;
-    bottom: 0;
-    border-top: none;
+  .drawer-panel {
+    width: 100%;
+  }
 
-    .cta-btn {
-      padding: 0.75rem 1rem;
-      font-size: 11px;
-      border-radius: 6px;
-    }
+  .day-selector {
+    padding: 0.75rem 1rem;
+  }
+
+  .drawer-ctas {
+    flex-direction: column;
   }
 }
+
 

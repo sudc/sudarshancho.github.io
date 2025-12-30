@@ -30,10 +30,11 @@ export class SmartRecommendationsComponent implements OnInit, AfterViewInit {
   private trustConfigService = inject(TrustConfigService);
   private itineraryService = inject(ItineraryService);
   
-  // Itinerary state (inline expansion)
-  expandedDestinationId: string | null = null;
-  activeItinerary: ItineraryPlan | null = null;
+  // Drawer state (side panel for itinerary)
+  isDrawerOpen = false;
+  drawerDestination: EnhancedRecommendation | null = null;
   itineraryLoading = false;
+  activeItinerary: ItineraryPlan | null = null;
   selectedDays: number | null = null;
   
   // Trust config
@@ -543,24 +544,15 @@ export class SmartRecommendationsComponent implements OnInit, AfterViewInit {
     this.mobileMenuOpen = false;
   }
 
-  // 📋 Open itinerary inline (expand card and show itinerary below)
+  // 📋 Open itinerary in side drawer
   openItinerary(rec: EnhancedRecommendation): void {
-    const destId = (rec.destination as any)._id || rec.destinationId;
-    const destName = rec.destination.state;
-    
-    // If already open for this destination, close it
-    if (this.expandedDestinationId === destId) {
-      this.expandedDestinationId = null;
-      this.activeItinerary = null;
-      this.selectedDays = null;
-      return;
-    }
-
-    // Close any previously expanded destination
-    this.expandedDestinationId = destId;
+    this.drawerDestination = rec;
     this.selectedDays = 3; // Default to 3 days
     this.itineraryLoading = true;
     this.activeItinerary = null;
+    this.isDrawerOpen = true;
+    
+    const destName = rec.destination.state;
     
     // Load itinerary for this destination
     this.itineraryService.generatePlan(destName, this.selectedDays, {
@@ -580,33 +572,27 @@ export class SmartRecommendationsComponent implements OnInit, AfterViewInit {
     });
   }
 
-  // 📋 Check if destination is expanded
-  isDestinationExpanded(rec: EnhancedRecommendation): boolean {
-    const destId = (rec.destination as any)._id || rec.destinationId;
-    return this.expandedDestinationId === destId;
-  }
-
-  // 📋 Close expanded destination
+  // 📋 Close drawer
   closeItinerary(): void {
-    this.expandedDestinationId = null;
+    this.isDrawerOpen = false;
+    this.drawerDestination = null;
     this.activeItinerary = null;
     this.selectedDays = null;
   }
 
-  // 📋 Check if any destination is active
-  isActiveDestination(rec: EnhancedRecommendation): boolean {
-    const destId = (rec.destination as any)._id || rec.destinationId;
-    return this.expandedDestinationId === destId;
+  // 📋 Placeholder methods (kept for compatibility)
+  isDestinationExpanded(rec: EnhancedRecommendation): boolean {
+    return false;
   }
 
-  // 📋 Get button label based on expansion state
-  getPlanTripButtonLabel(rec: EnhancedRecommendation): string {
-    const destId = (rec.destination as any)._id || rec.destinationId;
-    if (this.expandedDestinationId === destId) {
-      return 'Hide Itinerary';
-    }
-    return 'Plan Trip';
+  isActiveDestination(rec: EnhancedRecommendation): boolean {
+    return false;
   }
+
+  getPlanTripButtonLabel(rec: EnhancedRecommendation): string {
+    return 'Plan ' + (this.selectedDays || 3) + ' Days →';
+  }
+
 
   // 🏨 Open hotel booking (from itinerary CTA)
   openHotelBooking(): void {
