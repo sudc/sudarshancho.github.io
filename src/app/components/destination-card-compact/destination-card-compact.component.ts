@@ -13,6 +13,7 @@ import { EnhancedRecommendation } from '../../core/engines/recommendation/recomm
 export class DestinationCardCompactComponent implements OnInit {
   @Input() recommendation!: EnhancedRecommendation;
   @Output() bookingClicked = new EventEmitter<EnhancedRecommendation>();
+  @Output() planTripClicked = new EventEmitter<EnhancedRecommendation>();
 
   private router = inject(Router);
 
@@ -129,17 +130,11 @@ export class DestinationCardCompactComponent implements OnInit {
       console.log(`🎴 [Card] ACTION: Expanding card for ${city}...`);
       this.toggleExpanded();
     } else if (this.selectedDays) {
-      // Second click: navigate to planner with destination and days
+      // Second click: emit planTripClicked event (for itinerary panel integration)
       const destination = this.recommendation.destination.state.toLowerCase();
-      console.log(`🎴 [Card] ACTION: Navigating to planner`);
-      console.log(`🎴 [Card] → destination=${destination}, days=${this.selectedDays}, source=smart`);
-      this.router.navigate(['/planner'], {
-        queryParams: {
-          destination: destination,
-          days: this.selectedDays,
-          source: 'smart'
-        }
-      });
+      console.log(`🎴 [Card] ACTION: Emitting planTripClicked event`);
+      console.log(`🎴 [Card] → destination=${destination}, days=${this.selectedDays}`);
+      this.planTripClicked.emit(this.recommendation);
     }
   }
 

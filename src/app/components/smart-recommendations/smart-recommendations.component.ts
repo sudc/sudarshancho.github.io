@@ -12,6 +12,8 @@ import {
 import { DestinationScoringEngine } from '../../core/engines/destination-scoring/destination-scoring.engine';
 import { TripReadinessEngine } from '../../core/engines/trip-readiness/trip-readiness.engine';
 import { TrustConfigService } from '../../core/services/trust-config.service';
+import { ItineraryService } from '../../core/services/itinerary/itinerary.service';
+import { ItineraryPlan } from '../../core/models/itinerary.model';
 
 @Component({
   selector: 'app-smart-recommendations',
@@ -26,6 +28,13 @@ export class SmartRecommendationsComponent implements OnInit, AfterViewInit {
   private ngZone = inject(NgZone);
   private cdr = inject(ChangeDetectorRef);
   private trustConfigService = inject(TrustConfigService);
+  private itineraryService = inject(ItineraryService);
+  
+  // Itinerary state
+  itineraryPanelOpen = false;
+  activeItinerary: ItineraryPlan | null = null;
+  activeDestinationId: string | null = null;
+  itineraryLoading = false;
   
   // Trust config
   trustBadge = 'Powered by trusted travel partners';
@@ -543,5 +552,60 @@ export class SmartRecommendationsComponent implements OnInit, AfterViewInit {
   // 📱 Close mobile menu
   closeMobileMenu(): void {
     this.mobileMenuOpen = false;
+  }
+
+  // 📋 Open itinerary panel for destination
+  openItinerary(rec: EnhancedRecommendation): void {
+    const destId = (rec.destination as any)._id || rec.destinationId;
+    
+    // If already open for this destination, just close
+    if (this.activeDestinationId === destId && this.itineraryPanelOpen) {
+      this.itineraryPanelOpen = false;
+      return;
+    }
+
+    // Load itinerary for this destination
+    this.itineraryLoading = true;
+    this.activeDestinationId = destId;
+    
+    this.itineraryService.generateItinerary({
+      destination: rec.destination,
+      pace: 'moderate',
+      interests: this.preferences.categories
+    }).subscribe({
+      next: (itinerary) => {
+        this.activeItinerary = itinerary;
+        this.itineraryPanelOpen = true;
+        this.itineraryLoading = false;
+        this.cdr.markForCheck();
+      },
+      error: (err) => {
+        console.error('Error loading itinerary:', err);
+        this.itineraryLoading = false;
+        this.cdr.markForCheck();
+      }
+    });
+  }
+
+  // 📋 Close itinerary panel
+  closeItinerary(): void {
+    this.itineraryPanelOpen = false;
+    this.activeItinerary = null;
+    this.activeDestinationId = null;
+  }
+
+  // 📋 Get button label based on panel state
+  getPlanTripButtonLabel(rec: EnhancedRecommendation): string {
+    const destId = (rec.destination as any)._id || rec.destinationId;
+    if (this.activeDestinationId === destId && this.itineraryPanelOpen) {
+      return 'Hide Itinerary';
+    }
+    return 'Plan Trip';
+  }
+
+  // 📋 Check if card is active (has open itinerary)
+  isActiveDestination(rec: EnhancedRecommendation): boolean {
+    const destId = (rec.destination as any)._id || rec.destinationId;
+    return this.activeDestinationId === destId && this.itineraryPanelOpen;
   }
 }

@@ -103,13 +103,67 @@
       [resultCount]="recommendations.length">
     </app-result-summary>
 
-    <!-- Simple 3x2 Card Layout -->
-    <div class="cards-container">
-      <app-destination-card-compact
-        *ngFor="let rec of (recommendations | slice:0:6)"
-        [recommendation]="rec"
-        (bookingClicked)="openBookingModal($event)">
-      </app-destination-card-compact>
+    <!-- RECOMMENDATIONS + ITINERARY PANEL LAYOUT -->
+    <div class="recommendations-layout">
+      <!-- RECOMMENDATIONS CARDS (Left side or full width) -->
+      <div class="cards-section" [class.with-panel]="itineraryPanelOpen">
+        <div class="cards-container">
+          <app-destination-card-compact
+            *ngFor="let rec of (recommendations | slice:0:6)"
+            [recommendation]="rec"
+            [class.active]="isActiveDestination(rec)"
+            (bookingClicked)="openBookingModal($event)"
+            (planTripClicked)="openItinerary($event)">
+          </app-destination-card-compact>
+        </div>
+      </div>
+
+      <!-- ITINERARY SIDE PANEL (Desktop) / BOTTOM SHEET (Mobile) -->
+      <div class="itinerary-panel" 
+        [class.open]="itineraryPanelOpen"
+        [class.loading]="itineraryLoading">
+        
+        <!-- Panel Header -->
+        <div class="panel-header" *ngIf="itineraryPanelOpen">
+          <h3>📋 Your Itinerary</h3>
+          <button class="close-btn" (click)="closeItinerary()">✕</button>
+        </div>
+
+        <!-- Panel Content -->
+        <div class="panel-content" *ngIf="itineraryPanelOpen">
+          <!-- Loading State -->
+          <div *ngIf="itineraryLoading" class="itinerary-loading">
+            <div class="spinner"></div>
+            <p>Generating itinerary...</p>
+          </div>
+
+          <!-- Itinerary Content -->
+          <div *ngIf="!itineraryLoading && activeItinerary" class="itinerary-content">
+            <div class="itinerary-days">
+              <div *ngFor="let day of activeItinerary.itinerary" class="day-item">
+                <div class="day-header">
+                  <span class="day-number">Day {{ day.day }}</span>
+                  <span class="day-title">{{ day.title }}</span>
+                </div>
+                <p class="day-description">{{ day.description }}</p>
+                <div *ngIf="day.activities && day.activities.length > 0" class="activities">
+                  <div *ngFor="let activity of day.activities" class="activity">
+                    <span class="activity-emoji">{{ activity.emoji }}</span>
+                    <span class="activity-name">{{ activity.name }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- CTA Buttons -->
+            <div class="panel-actions">
+              <button class="action-btn hotels">🏨 Book Hotels</button>
+              <button class="action-btn bus">🚌 Book Bus</button>
+              <button class="action-btn essentials">🧳 Buy Essentials</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
