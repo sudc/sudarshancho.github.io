@@ -377,9 +377,13 @@ export class SmartRecommendationsComponent implements OnInit, AfterViewInit {
           console.log('✅ [LOADER] Cards ready for user interaction (click to expand)');
         } else {
           // Engine returned empty results - fallback to showing all available destinations
-          console.log('⚠️ [LOADER] No recommendations found - showing all available destinations');
-          this.recommendations = [];
+          console.log('⚠️ [LOADER] No recommendations found - showing sample destinations');
+          // Fallback: Show popular destinations when engine returns no results
+          this.recommendations = this.getSampleDestinations();
           this.uiState.hasResults = true;
+          if (this.recommendations.length > 0) {
+            console.log('✅ [LOADER] Showing', this.recommendations.length, 'sample destinations as fallback');
+          }
         }
         this.cdr.markForCheck();
       });
@@ -626,5 +630,109 @@ export class SmartRecommendationsComponent implements OnInit, AfterViewInit {
   // Get current active destination for display
   get activeDestination(): string {
     return this.activeItinerary?.destination || '';
+  }
+
+  // 🎯 Get sample destinations as fallback when engine returns 0 results
+  private getSampleDestinations(): EnhancedRecommendation[] {
+    const sampleDestinations = [
+      {
+        destination: {
+          state: 'Goa',
+          region: 'West Coast',
+          budget: 'budget',
+          bestMonths: ['Oct', 'Nov', 'Dec', 'Jan', 'Feb'],
+          categories: ['Beach', 'Relaxation', 'Nightlife'],
+          climate: 'Tropical',
+          agoda: 'goa'
+        },
+        displayScore: 75,
+        overallRecommendationScore: 75,
+        recommendationType: 'recommended' as const,
+        warnings: [],
+        destinationId: 'goa'
+      },
+      {
+        destination: {
+          state: 'Manali',
+          region: 'Himalayas',
+          budget: 'moderate',
+          bestMonths: ['Mar', 'Apr', 'May', 'Sep', 'Oct'],
+          categories: ['Mountain', 'Adventure', 'Nature'],
+          climate: 'Temperate',
+          agoda: 'manali'
+        },
+        displayScore: 72,
+        overallRecommendationScore: 72,
+        recommendationType: 'recommended' as const,
+        warnings: [],
+        destinationId: 'manali'
+      },
+      {
+        destination: {
+          state: 'Jaipur',
+          region: 'Rajasthan',
+          budget: 'moderate',
+          bestMonths: ['Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar'],
+          categories: ['Heritage', 'Culture', 'History'],
+          climate: 'Desert',
+          agoda: 'jaipur'
+        },
+        displayScore: 70,
+        overallRecommendationScore: 70,
+        recommendationType: 'recommended' as const,
+        warnings: [],
+        destinationId: 'jaipur'
+      },
+      {
+        destination: {
+          state: 'Kerala',
+          region: 'South India',
+          budget: 'moderate',
+          bestMonths: ['Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov'],
+          categories: ['Backwaters', 'Nature', 'Relaxation'],
+          climate: 'Tropical',
+          agoda: 'kerala'
+        },
+        displayScore: 68,
+        overallRecommendationScore: 68,
+        recommendationType: 'consider' as const,
+        warnings: [],
+        destinationId: 'kerala'
+      },
+      {
+        destination: {
+          state: 'Ladakh',
+          region: 'Himalayas',
+          budget: 'premium',
+          bestMonths: ['Jun', 'Jul', 'Aug', 'Sep'],
+          categories: ['Adventure', 'Mountain', 'Spiritual'],
+          climate: 'Alpine',
+          agoda: 'ladakh'
+        },
+        displayScore: 65,
+        overallRecommendationScore: 65,
+        recommendationType: 'consider' as const,
+        warnings: [],
+        destinationId: 'ladakh'
+      },
+      {
+        destination: {
+          state: 'Andaman',
+          region: 'Islands',
+          budget: 'premium',
+          bestMonths: ['Nov', 'Dec', 'Jan', 'Feb', 'Mar'],
+          categories: ['Beach', 'Island', 'Wildlife'],
+          climate: 'Tropical',
+          agoda: 'andaman'
+        },
+        displayScore: 62,
+        overallRecommendationScore: 62,
+        recommendationType: 'consider' as const,
+        warnings: [],
+        destinationId: 'andaman'
+      }
+    ];
+
+    return sampleDestinations.slice(0, 6);
   }
 }
