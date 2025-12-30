@@ -655,20 +655,6 @@ $text-muted: #6b7280;
   }
 }
 
-    .period {
-      margin: 0;
-      font-size: 13px;
-      line-height: 1.5;
-      color: $text-muted;
-
-      strong {
-        color: $text-main;
-        font-weight: 600;
-      }
-    }
-  }
-}
-
 .itinerary-ctas {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
