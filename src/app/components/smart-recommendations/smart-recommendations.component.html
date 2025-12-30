@@ -133,22 +133,22 @@
             <div class="itinerary-days">
               <div *ngFor="let day of activeItinerary.itinerary" class="day-item">
                 <div class="day-header">
-                  <span class="day-number">Day {{day.day}}</span>
+                  <span class="day-number">{{day.day}}</span>
                   <span class="day-title">{{day.title}}</span>
                 </div>
-                <div class="day-content">
+                <div class="day-content" [class.expanded]="true">
                   <p class="day-description">{{day.description}}</p>
                   <div *ngIf="day.places && day.places.length > 0" class="places">
-                    <h5>Places to visit:</h5>
+                    <div class="section-title">Places to visit</div>
                     <ul>
                       <li *ngFor="let place of day.places">{{place}}</li>
                     </ul>
                   </div>
                   <div *ngIf="day.activities && day.activities.length > 0" class="activities">
-                    <h5>Activities:</h5>
-                    <ul>
-                      <li *ngFor="let activity of day.activities">{{activity}}</li>
-                    </ul>
+                    <div class="section-title">Activities</div>
+                    <div class="activity-list">
+                      <span *ngFor="let activity of day.activities" class="activity-item">{{activity}}</span>
+                    </div>
                   </div>
                 </div>
               </div>
