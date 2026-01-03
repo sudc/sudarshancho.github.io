@@ -103,6 +103,93 @@ export const SAMPLE_ITINERARIES: ItineraryDatabase = {
       bestTime: 'October to March',
       budget: '₹15,000 - ₹25,000 per person'
     },
+    '4': {
+      destination: 'Goa',
+      destinationEmoji: '🏖️',
+      days: 4,
+      title: '4-Day Goa Beach Paradise',
+      description: 'Extended beach exploration with culture and adventure',
+      itinerary: [
+        {
+          day: 1,
+          title: 'Arrival & Baga Beach',
+          emoji: '🌅',
+          description: 'Arrive, check-in, and explore the vibrant Baga Beach',
+          places: ['Baga Beach', 'Calangute Beach', 'Beach shacks for dinner'],
+          activities: ['Beach walk', 'Water sports', 'Sunset viewing'],
+          ctas: [
+            {
+              type: 'hotel',
+              label: 'Hotels near Baga',
+              affiliate: 'agoda',
+              emoji: '🏨'
+            },
+            {
+              type: 'essential',
+              label: 'Beach gear & sunscreen',
+              affiliate: 'amazon',
+              emoji: '☀️'
+            }
+          ]
+        },
+        {
+          day: 2,
+          title: 'North Goa Adventure',
+          emoji: '🗺️',
+          description: 'Explore forts, beaches, and water sports',
+          places: ['Fort Aguada', 'Anjuna Beach', 'Chapora Fort', 'Markets'],
+          activities: ['Fort exploration', 'Water sports', 'Sunset at Chapora'],
+          ctas: [
+            {
+              type: 'activity',
+              label: 'Water sports packages',
+              affiliate: 'getyourguide',
+              emoji: '🏄'
+            }
+          ]
+        },
+        {
+          day: 3,
+          title: 'Spice Plantations & Wildlife',
+          emoji: '🌿',
+          description: 'Explore inland plantations and nature reserves',
+          places: ['Spice plantations', 'Bird sanctuary', 'Backwaters'],
+          activities: ['Plantation tour', 'Bird watching', 'Boat ride'],
+          ctas: [
+            {
+              type: 'activity',
+              label: 'Plantation tours',
+              affiliate: 'getyourguide',
+              emoji: '🌾'
+            }
+          ]
+        },
+        {
+          day: 4,
+          title: 'South Goa Relaxation & Departure',
+          emoji: '🌴',
+          description: 'Relax at laid-back southern beaches and prepare to leave',
+          places: ['Palolem Beach', 'Colva Beach', 'Shopping markets'],
+          activities: ['Beach relaxation', 'Shopping', 'Sunset dinner'],
+          ctas: [
+            {
+              type: 'hotel',
+              label: 'Late checkout options',
+              affiliate: 'agoda',
+              emoji: '🏨'
+            },
+            {
+              type: 'transport',
+              label: 'Airport transfers',
+              affiliate: 'abhibus',
+              emoji: '✈️'
+            }
+          ]
+        }
+      ],
+      bestTime: 'October to March',
+      budget: '₹20,000 - ₹32,000 per person'
+    },
     '5': {
       destination: 'Goa',
       destinationEmoji: '🏖️',
