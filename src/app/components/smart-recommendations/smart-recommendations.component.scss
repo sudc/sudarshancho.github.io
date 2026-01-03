@@ -1134,4 +1134,36 @@ $text-muted: #6b7280;
   }
 }
 
+/* ========== DRAWER EMPTY STATE ========== */
+.drawer-empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  padding: 2rem 1.5rem;
+  background: linear-gradient(135deg, #f8f9fa 0%, #f0f4ff 100%);
 
+  .empty-state-content {
+    text-align: center;
+
+    .empty-icon {
+      font-size: 48px;
+      margin: 0 0 1rem 0;
+      display: block;
+    }
+
+    .empty-message {
+      font-size: 16px;
+      font-weight: 700;
+      color: $text-main;
+      margin: 0 0 0.5rem 0;
+    }
+
+    .empty-hint {
+      font-size: 13px;
+      color: $text-muted;
+      margin: 0;
+      line-height: 1.5;
+    }
+  }
+}

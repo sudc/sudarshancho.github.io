@@ -139,7 +139,7 @@
           *ngFor="let days of [3, 4, 5, 7]"
           class="day-pill"
           [class.active]="selectedDays === days"
-          (click)="selectedDays = days">
+          (click)="onDaySelected(days)">
           {{days}} Days
         </button>
       </div>
@@ -181,6 +181,15 @@
           <button class="cta-btn hotels" (click)="openHotelBooking()">🏨 Book Hotels</button>
           <button class="cta-btn bus" (click)="openBusBooking()">🚌 Book Bus</button>
           <button class="cta-btn essentials" (click)="openEssentialsShopping()">🧳 Buy Essentials</button>
+        </div>
+      </div>
+
+      <!-- Empty State - when itinerary fails to load -->
+      <div *ngIf="!itineraryLoading && !activeItinerary" class="drawer-empty-state">
+        <div class="empty-state-content">
+          <p class="empty-icon">⚠️</p>
+          <p class="empty-message">Unable to load itinerary</p>
+          <p class="empty-hint">Try selecting a different duration or destination</p>
         </div>
       </div>
     </div>

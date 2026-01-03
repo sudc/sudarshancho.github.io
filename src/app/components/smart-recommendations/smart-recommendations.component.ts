@@ -572,6 +572,40 @@ export class SmartRecommendationsComponent implements OnInit, AfterViewInit {
     });
   }
 
+  // 📋 Handle day selection change - reload itinerary with new duration
+  onDaySelected(days: number): void {
+    console.log(`📅 [Day Selection] Changed to ${days} days`);
+    
+    if (!this.drawerDestination) {
+      console.warn('No destination selected');
+      return;
+    }
+
+    this.selectedDays = days;
+    this.itineraryLoading = true;
+    this.activeItinerary = null;
+
+    const destName = this.drawerDestination.destination.state;
+    
+    // Load itinerary with new duration
+    this.itineraryService.generatePlan(destName, days, {
+      travelType: this.preferences.categories as any,
+      pace: 'moderate'
+    }).subscribe({
+      next: (itinerary: any) => {
+        console.log(`✅ [Day Selection] Itinerary loaded for ${days} days`, itinerary);
+        this.activeItinerary = itinerary;
+        this.itineraryLoading = false;
+        this.cdr.markForCheck();
+      },
+      error: (err: any) => {
+        console.error(`❌ [Day Selection] Error loading ${days}-day itinerary:`, err);
+        this.itineraryLoading = false;
+        this.cdr.markForCheck();
+      }
+    });
+  }
+
   // 📋 Close drawer
   closeItinerary(): void {
     this.isDrawerOpen = false;

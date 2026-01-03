@@ -1297,13 +1297,57 @@ export const SAMPLE_ITINERARIES: ItineraryDatabase = {
 };
 
 /**
+ * Map of state/region names to cities with itinerary data
+ */
+const STATE_TO_CITY_MAP: Record<string, string> = {
+  'karnataka': 'bangalore',
+  'goa': 'goa',
+  'delhi': 'delhi',
+  'maharashtra': 'mumbai',
+  'rajasthan': 'jaipur',
+  'himachal pradesh': 'manali',
+  'uttar pradesh': 'agra',
+  'uttarakhand': 'rishikesh',
+  'kerala': 'kochi'
+};
+
+/**
  * Get itinerary for a destination and duration
+ * Falls back to state mapping if exact match not found
  */
 export function getItinerary(destination: string, days: number) {
-  const dest = destination.toLowerCase();
+  const dest = destination.toLowerCase().trim();
+  
+  // Try direct match first
   if (SAMPLE_ITINERARIES[dest] && SAMPLE_ITINERARIES[dest][days]) {
     return SAMPLE_ITINERARIES[dest][days];
   }
+  
+  // Try fallback to state-to-city mapping
+  const mappedCity = STATE_TO_CITY_MAP[dest];
+  if (mappedCity && SAMPLE_ITINERARIES[mappedCity] && SAMPLE_ITINERARIES[mappedCity][days]) {
+    return SAMPLE_ITINERARIES[mappedCity][days];
+  }
+  
+  // If specific days duration not available, try default (3 days)
+  if (SAMPLE_ITINERARIES[dest] && SAMPLE_ITINERARIES[dest]['3']) {
+    return SAMPLE_ITINERARIES[dest]['3'];
+  }
+  
+  if (mappedCity && SAMPLE_ITINERARIES[mappedCity] && SAMPLE_ITINERARIES[mappedCity]['3']) {
+    return SAMPLE_ITINERARIES[mappedCity]['3'];
+  }
+  
+  // Last resort: return first available destination (should not happen in production)
+  const firstKey = Object.keys(SAMPLE_ITINERARIES)[0];
+  if (firstKey) {
+    const firstDuration = Object.keys(SAMPLE_ITINERARIES[firstKey])[0];
+    if (firstDuration) {
+      console.warn(`⚠️ No itinerary found for "${destination}" with ${days} days. Returning fallback.`);
+      return SAMPLE_ITINERARIES[firstKey][firstDuration];
+    }
+  }
+  
   return null;
 }
 
@@ -1320,12 +1364,22 @@ export function getAvailableDestinations() {
 /**
  * Get available durations for a destination
  */
-export function getAvailableDurations(destination: string) {
-  const dest = destination.toLowerCase();
+export function getAvailableDurations(destination: string): number[] {
+  const dest = destination.toLowerCase().trim();
+  
+  // Try direct match first
   if (SAMPLE_ITINERARIES[dest]) {
     return Object.keys(SAMPLE_ITINERARIES[dest])
       .map(d => parseInt(d, 10))
       .sort((a, b) => a - b);
   }
-  return [];
-}
+  
+  // Try fallback to state-to-city mapping
+  const mappedCity = STATE_TO_CITY_MAP[dest];
+  if (mappedCity && SAMPLE_ITINERARIES[mappedCity]) {
+    return Object.keys(SAMPLE_ITINERARIES[mappedCity])
+      .map(d => parseInt(d, 10))
+      .sort((a, b) => a - b);
+  }
+  
+  return [];}
