@@ -101,26 +101,21 @@ export class DestinationCardCompactComponent implements OnInit {
   }
 
   /**
-   * Select number of days
+   * Select number of days (deprecated - moved to drawer)
+   * Kept for backward compatibility but no longer emits events
    */
   selectDays(days: number): void {
     this.selectedDays = this.selectedDays === days ? null : days;
     const city = this.recommendation?.destination?.state;
-    console.log(`🎴 [Card] ${city} - Days toggled: ${days} → ${this.selectedDays}`);
-    console.log(`🎴 [Card] ${city} - Button will now say: "${this.getCtaLabel()}"`);
+    console.log(`🎴 [Card] Note: Day selection moved to drawer for ${city}`);
   }
 
   /**
-   * Get CTA button label based on expansion state
+   * Get CTA button label
+   * Always "Plan This Trip" since we skip inline expansion
    */
   getCtaLabel(): string {
-    if (!this.isExpanded) {
-      return 'Plan This Trip';
-    }
-    if (!this.selectedDays) {
-      return 'Select Days Above';
-    }
-    return `View ${this.selectedDays}-Day Itinerary →`;
+    return 'Plan This Trip';
   }
 
   /**

@@ -23,31 +23,28 @@
     </span>
   </div>
 
-  <!-- EXPANSION SECTION: Planning UI -->
+  <!-- EXPANSION SECTION: Preview Content (optional, header click) -->
   <div class="expansion-content" *ngIf="isExpanded">
     <!-- Step Header -->
     <div class="expansion-header">
-      <h4>🧭 Start Planning Your {{ recommendation.destination.state }} Trip</h4>
-      <p class="expansion-subtitle">How many days are you thinking?</p>
+      <h4>✨ Why Visit {{ recommendation.destination.state }}?</h4>
+      <p class="expansion-subtitle">Perfect for: {{ (topBadges | join: ', ') || 'exploration' }}</p>
     </div>
 
-    <!-- Days Selector -->
-    <div class="days-selector">
-      <button
-        *ngFor="let days of dayOptions"
-        [class.selected]="selectedDays === days"
-        (click)="selectDays(days)"
-        class="day-option"
-      >
-        {{ days }}<span class="day-label">days</span>
-      </button>
+    <!-- Day Selection Note -->
+    <div class="day-selection-hint">
+      <p>💡 <strong>Choose trip length in the drawer</strong></p>
+      <p style="font-size: 12px; color: #6b7280; margin: 0;">
+        Select 3–7 days after opening to see customized itinerary
+      </p>
     </div>
 
     <!-- Quick Prep Section -->
-    <div class="quick-prep" *ngIf="selectedDays">
+    <div class="quick-prep">
       <h5>📦 Quick Prep</h5>
       <button class="essentials-link" (click)="onEssentialsClick()">
         🧳 Travel Essentials (Amazon)
+
       </button>
     </div>
   </div>

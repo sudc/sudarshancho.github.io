@@ -221,6 +221,27 @@
   color: #6b7280;
 }
 
+/* ========== DAY SELECTION HINT ========== */
+.day-selection-hint {
+  background: #fef3c7;
+  border-left: 4px solid #f59e0b;
+  border-radius: 6px;
+  padding: 12px;
+  margin: 4px 0;
+
+  p {
+    margin: 0;
+    font-size: 13px;
+    color: #92400e;
+    line-height: 1.4;
+
+    &:first-child {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+  }
+}
+
 .days-selector {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));

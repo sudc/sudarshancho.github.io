@@ -9,6 +9,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BaseEngine, BaseEngineConfig, BaseEngineResult } from '../base.engine';
 import { Destination } from '../destination/destinations.data';
+import { FALLBACK_DESTINATIONS } from '../../data/fallback-destinations';
 import { environment } from '../../../../environments/environment';
 
 export interface UserPreferences {
@@ -72,6 +73,7 @@ export class DestinationScoringEngine extends BaseEngine<DestinationScoringInput
 
     // 🚀 LOAD DATA FROM MONGODB BACKEND
     let destinations: Destination[] = [];
+    let usingFallback = false;
     
     try {
       const response = await this.http.get<Destination[]>(
@@ -80,19 +82,16 @@ export class DestinationScoringEngine extends BaseEngine<DestinationScoringInput
       
       if (response && response.length > 0) {
         destinations = response;
+        console.log(`✅ [Scoring] Loaded ${destinations.length} destinations from MongoDB backend`);
       } else {
         throw new Error('Empty response from backend - no destinations available');
       }
     } catch (err: any) {
-      console.error('❌ MongoDB backend failed:', err.message);
-      this.logError(`Failed to load destinations from backend: ${err.message}`);
-      return {
-        engineName: this.config.name,
-        timestamp: new Date(),
-        success: false,
-        recommendations: [],
-        totalDestinationsScored: 0
-      };
+      console.warn('⚠️ [Scoring] MongoDB backend failed:', err.message);
+      console.log('⚠️ [Scoring] Using fallback destinations for recommendations');
+      this.log(`Failed to load from backend: ${err.message}. Using fallback destinations.`);
+      destinations = FALLBACK_DESTINATIONS;
+      usingFallback = true;
     }
 
     const scored: ScoredDestination[] = [];
