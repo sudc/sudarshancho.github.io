@@ -125,33 +125,30 @@ export class DestinationCardCompactComponent implements OnInit {
 
   /**
    * Check if CTA button should be disabled
+   * Always enabled since we skip inline expansion and go straight to drawer
    */
   isCtaDisabled(): boolean {
-    if (!this.isExpanded) {
-      return false;
-    }
-    return !this.selectedDays;
+    return false;
   }
 
   /**
-   * Handle CTA button click - navigates to planner with context
+   * Handle CTA button click - directly opens drawer with itinerary
+   * Skips inline expansion to prevent layout shifts
    */
   onCtaClick(): void {
     const city = this.recommendation?.destination?.state;
     console.log(`🎴 [Card] CTA button clicked on ${city}`);
-    console.log(`🎴 [Card] State: isExpanded=${this.isExpanded}, selectedDays=${this.selectedDays}`);
     
-    if (!this.isExpanded) {
-      // First click: expand the card
-      console.log(`🎴 [Card] ACTION: Expanding card for ${city}...`);
-      this.toggleExpanded();
-    } else if (this.selectedDays) {
-      // Second click: emit planTripClicked event (for itinerary panel integration)
-      const destination = this.recommendation.destination.state.toLowerCase();
-      console.log(`🎴 [Card] ACTION: Emitting planTripClicked event`);
-      console.log(`🎴 [Card] → destination=${destination}, days=${this.selectedDays}`);
-      this.planTripClicked.emit(this.recommendation);
-    }
+    // Get destination name for itinerary lookup
+    const destination = this.recommendation.destination;
+    console.log(`🎴 [Card] ACTION: Opening drawer for ${destination.state}`);
+    console.log(`🎴 [Card] → destination.name=${destination.name}, destination.state=${destination.state}`);
+    
+    // Default to 3 days
+    this.selectedDays = 3;
+    
+    // Emit event immediately (drawer handles expansion, no inline layout shift)
+    this.planTripClicked.emit(this.recommendation);
   }
 
   /**
