@@ -13,6 +13,7 @@ import { DestinationScoringEngine } from '../../core/engines/destination-scoring
 import { TripReadinessEngine } from '../../core/engines/trip-readiness/trip-readiness.engine';
 import { TrustConfigService } from '../../core/services/trust-config.service';
 import { ItineraryService } from '../../core/services/itinerary/itinerary.service';
+import { DestinationHeroService } from '../../core/services/destination-hero.service'; // ✅ NEW
 import { ItineraryPlan } from '../../core/models/itinerary.model';
 
 @Component({
@@ -29,6 +30,7 @@ export class SmartRecommendationsComponent implements OnInit, AfterViewInit {
   private cdr = inject(ChangeDetectorRef);
   private trustConfigService = inject(TrustConfigService);
   private itineraryService = inject(ItineraryService);
+  private heroService = inject(DestinationHeroService); // ✅ NEW
   
   // Drawer state (side panel for itinerary)
   isDrawerOpen = false;
@@ -36,6 +38,7 @@ export class SmartRecommendationsComponent implements OnInit, AfterViewInit {
   itineraryLoading = false;
   activeItinerary: ItineraryPlan | null = null;
   selectedDays: number | null = null;
+  drawerMode: 'itinerary' | 'explore' = 'itinerary'; // ✅ NEW: Track drawer mode
   
   // Trust config
   trustBadge = 'Powered by trusted travel partners';
@@ -552,7 +555,10 @@ export class SmartRecommendationsComponent implements OnInit, AfterViewInit {
     this.activeItinerary = null;
     this.isDrawerOpen = true;
     
-    const destName = rec.destination.state;
+    // ✅ TRY BY DESTINATION NAME FIRST (not state)
+    // e.g., "Bangalore", "Coorg", "Goa" - actual cities with itineraries
+    let destName = rec.destination.name;
+    console.log(`📍 [Itinerary] Trying to load itinerary for: ${destName}`);
     
     // Load itinerary for this destination
     this.itineraryService.generatePlan(destName, this.selectedDays, {
@@ -560,12 +566,25 @@ export class SmartRecommendationsComponent implements OnInit, AfterViewInit {
       pace: 'moderate'
     }).subscribe({
       next: (itinerary: any) => {
-        this.activeItinerary = itinerary;
-        this.itineraryLoading = false;
-        this.cdr.markForCheck();
+        if (itinerary) {
+          // ✅ Itinerary exists - show it
+          console.log(`✅ [Itinerary] Found itinerary for ${destName}`);
+          this.drawerMode = 'itinerary';
+          this.activeItinerary = itinerary;
+          this.itineraryLoading = false;
+          this.cdr.markForCheck();
+        } else {
+          // ❌ No itinerary - switch to explore mode
+          console.log(`⚠️ [Itinerary] No itinerary found for ${destName}. Switching to explore mode for ${rec.destination.state}`);
+          this.drawerMode = 'explore';
+          this.itineraryLoading = false;
+          this.cdr.markForCheck();
+        }
       },
       error: (err: any) => {
-        console.error('Error loading itinerary:', err);
+        console.error(`❌ [Itinerary] Error loading itinerary for ${destName}:`, err);
+        // Fallback to explore mode on error
+        this.drawerMode = 'explore';
         this.itineraryLoading = false;
         this.cdr.markForCheck();
       }
@@ -585,7 +604,8 @@ export class SmartRecommendationsComponent implements OnInit, AfterViewInit {
     this.itineraryLoading = true;
     this.activeItinerary = null;
 
-    const destName = this.drawerDestination.destination.state;
+    // ✅ Use destination name (not state) for itinerary lookup
+    const destName = this.drawerDestination.destination.name;
     
     // Load itinerary with new duration
     this.itineraryService.generatePlan(destName, days, {
@@ -606,12 +626,19 @@ export class SmartRecommendationsComponent implements OnInit, AfterViewInit {
     });
   }
 
+  // ✅ NEW: Get drawer header background style (hero image)
+  getDrawerHeaderBackground(): any {
+    if (!this.drawerDestination) return {};
+    return this.heroService.getCardBackgroundStyle(this.drawerDestination.destination);
+  }
+
   // 📋 Close drawer
   closeItinerary(): void {
     this.isDrawerOpen = false;
     this.drawerDestination = null;
     this.activeItinerary = null;
     this.selectedDays = null;
+    this.drawerMode = 'itinerary'; // ✅ Reset mode
   }
 
   // 📋 Placeholder methods (kept for compatibility)

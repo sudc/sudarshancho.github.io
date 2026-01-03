@@ -124,17 +124,22 @@
 
     <!-- Drawer Panel -->
     <div class="drawer-panel">
-      <!-- Drawer Header -->
+      <!-- ✅ HERO IMAGE HEADER (Image-first drawer) -->
+      <div class="drawer-hero-image" *ngIf="drawerDestination" [ngStyle]="getDrawerHeaderBackground()">
+        <button class="drawer-close-btn" (click)="closeItinerary()">✕</button>
+      </div>
+
+      <!-- Drawer Header (Content below image) -->
       <div class="drawer-header" *ngIf="drawerDestination">
         <div class="header-content">
           <h2>{{drawerDestination.destination.state}}</h2>
-          <p class="trip-duration">{{selectedDays}}-Day Itinerary</p>
+          <p class="trip-duration" *ngIf="drawerMode === 'itinerary'">{{selectedDays}}-Day Itinerary</p>
+          <p class="trip-duration" *ngIf="drawerMode === 'explore'">Explore Region</p>
         </div>
-        <button class="close-btn" (click)="closeItinerary()">✕</button>
       </div>
 
-      <!-- Day Selector Pills -->
-      <div class="day-selector" *ngIf="!itineraryLoading">
+      <!-- Day Selector Pills (Only show in itinerary mode) -->
+      <div class="day-selector" *ngIf="!itineraryLoading && drawerMode === 'itinerary'">
         <button 
           *ngFor="let days of [3, 4, 5, 7]"
           class="day-pill"
@@ -150,8 +155,8 @@
         <p>Generating your itinerary...</p>
       </div>
 
-      <!-- Itinerary Content -->
-      <div *ngIf="!itineraryLoading && activeItinerary" class="drawer-content">
+      <!-- ============ ITINERARY MODE ============ -->
+      <div *ngIf="!itineraryLoading && drawerMode === 'itinerary' && activeItinerary" class="drawer-content">
         <div class="itinerary-days">
           <div *ngFor="let day of activeItinerary.itinerary" class="day-item">
             <div class="day-header">
@@ -184,8 +189,18 @@
         </div>
       </div>
 
-      <!-- Empty State - when itinerary fails to load -->
-      <div *ngIf="!itineraryLoading && !activeItinerary" class="drawer-empty-state">
+      <!-- ============ EXPLORE MODE (No itinerary for this state-level destination) ============ -->
+      <div *ngIf="!itineraryLoading && drawerMode === 'explore'" class="drawer-explore-state">
+        <div class="explore-state-content">
+          <p class="explore-icon">🗺️</p>
+          <p class="explore-message">Explore {{drawerDestination?.destination.state}}</p>
+          <p class="explore-hint">This is a region. Select a specific destination to view detailed itinerary</p>
+          <button class="explore-cta" (click)="closeItinerary()">← Back to Results</button>
+        </div>
+      </div>
+
+      <!-- Empty/Error State - when something goes wrong -->
+      <div *ngIf="!itineraryLoading && drawerMode === 'itinerary' && !activeItinerary" class="drawer-empty-state">
         <div class="empty-state-content">
           <p class="empty-icon">⚠️</p>
           <p class="empty-message">Unable to load itinerary</p>

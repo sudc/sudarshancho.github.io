@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, inject, OnInit } from '@angular
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { EnhancedRecommendation } from '../../core/engines/recommendation/recommendation.engine';
+import { DestinationHeroService } from '../../core/services/destination-hero.service';
 
 @Component({
   selector: 'app-destination-card-compact',
@@ -16,6 +17,7 @@ export class DestinationCardCompactComponent implements OnInit {
   @Output() planTripClicked = new EventEmitter<EnhancedRecommendation>();
 
   private router = inject(Router);
+  private heroService = inject(DestinationHeroService); // ✅ NEW: Hero service
 
   // Expansion state
   isExpanded = false;
@@ -25,6 +27,20 @@ export class DestinationCardCompactComponent implements OnInit {
   ngOnInit(): void {
     console.log(`🎴 [DestinationCard] Card rendered for: ${this.recommendation?.destination?.state}`);
     console.log(`🎴 [DestinationCard] Ready for user interaction (click to expand)`);
+  }
+
+  /**
+   * ✅ NEW: Get background style for hero image
+   */
+  getCardBackgroundStyle(): any {
+    return this.heroService.getCardBackgroundStyle(this.recommendation.destination);
+  }
+
+  /**
+   * ✅ NEW: Get popular places for explore mode
+   */
+  getPopularPlaces(): string[] {
+    return this.heroService.getPopularPlaces(this.recommendation.destination);
   }
 
   /**

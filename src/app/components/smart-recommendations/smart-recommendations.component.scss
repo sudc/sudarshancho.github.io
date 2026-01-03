@@ -499,6 +499,7 @@ $text-muted: #6b7280;
   transform: translateX(100%);
   transition: transform 0.3s ease;
   z-index: 1000;
+  overflow-y: auto;
 
   .itinerary-drawer.open & {
     transform: translateX(0);
@@ -518,6 +519,60 @@ $text-muted: #6b7280;
     .itinerary-drawer.open & {
       transform: translateY(0);
     }
+  }
+}
+
+/* ========== DRAWER HERO IMAGE (Image-first drawer design) ========== */
+.drawer-hero-image {
+  height: 200px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  flex-shrink: 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 1rem;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.15) 0%, transparent 100%);
+    pointer-events: none;
+  }
+}
+
+.drawer-close-btn {
+  position: relative;
+  z-index: 1;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.9);
+  color: $text-main;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.2s ease;
+  backdrop-filter: blur(8px);
+
+  &:hover {
+    background: white;
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  }
+
+  &:active {
+    transform: scale(0.95);
   }
 }
 
@@ -1133,7 +1188,60 @@ $text-muted: #6b7280;
     flex-direction: column;
   }
 }
+/* ========== DRAWER EXPLORE STATE ========== */
+.drawer-explore-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  padding: 2rem 1.5rem;
+  background: linear-gradient(135deg, #f0f4ff 0%, #e8ecff 100%);
 
+  .explore-state-content {
+    text-align: center;
+
+    .explore-icon {
+      font-size: 48px;
+      margin: 0 0 1rem 0;
+      display: block;
+    }
+
+    .explore-message {
+      font-size: 18px;
+      font-weight: 700;
+      color: $text-main;
+      margin: 0 0 0.75rem 0;
+    }
+
+    .explore-hint {
+      font-size: 14px;
+      color: $text-muted;
+      margin: 0 0 1.5rem 0;
+      line-height: 1.6;
+    }
+
+    .explore-cta {
+      padding: 0.8rem 1.5rem;
+      background: linear-gradient(135deg, $primary 0%, #2563eb 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+    }
+  }
+}
 /* ========== DRAWER EMPTY STATE ========== */
 .drawer-empty-state {
   display: flex;
